@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+<!-- Favicon -->
+  <!-- ═══ FAVICON ═══ -->
+  <link rel="icon" type="image/png" sizes="32x32" href="../imagens/favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="192x192" href="../imagens/favicon-192x192.png" />
+  <link rel="shortcut icon" href="../imagens/icone.png" type="image/png" />
+  <link rel="apple-touch-icon" href="../imagens/icone.png" />
+  <link rel="manifest" href="../imagens/site.webmanifest" />
+<!-- SEO -->
+<meta name="description" content="Orizon Consultoria — Sistema de Gestão Financeira de Contratos" />
+<meta name="robots" content="noindex, nofollow" />
+<title>Dashboard — Contratos · Orizon Consultoria</title>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;700;800;900&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="assets/cc-style.css"/>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+:root{
+  --primary:#1e40af;--accent:#3b82f6;--accent2:#a8d85f;
+  --bg:#080808;--bg2:#0d0d0d;--card:#111111;--card2:#161616;
+  --border:rgba(59,130,246,0.12);--border2:rgba(59,130,246,0.28);
+  --text:#f0f0f0;--muted:#666;--muted2:#333;
+  --red:#e74c3c;--orange:#f39c12;--blue:#3498db;--purple:#a78bfa;--green:#2ecc71;
+  --radius:14px;
+}
+.sb-av{background:linear-gradient(135deg,#1e40af,#3b82f6)!important;}
+body::before{content:'';position:fixed;inset:0;z-index:0;
+  background-image:linear-gradient(rgba(59,130,246,0.025) 1px,transparent 1px),linear-gradient(90deg,rgba(59,130,246,0.025) 1px,transparent 1px);
+  background-size:52px 52px;pointer-events:none;}
+body::after{content:'';position:fixed;top:-30%;left:50%;transform:translateX(-50%);
+  width:800px;height:600px;background:radial-gradient(ellipse,rgba(59,130,246,0.05) 0%,transparent 68%);pointer-events:none;z-index:0;}
+
+/* sidebar logo */
+.sb-head{padding:1.1rem 0.85rem 1rem;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:0.75rem;flex-shrink:0;transition:padding 0.22s cubic-bezier(0.4,0,0.2,1);}
+.sidebar.collapsed .sb-head{padding:0.9rem 0;justify-content:center;}
+.sb-logo-ico{width:44px;height:44px;border-radius:13px;background:linear-gradient(135deg,rgba(30,64,175,0.35),rgba(59,130,246,0.18));border:1px solid var(--border2);display:flex;align-items:center;justify-content:center;overflow:hidden;flex-shrink:0;box-shadow:0 2px 10px rgba(59,130,246,0.15);transition:width 0.22s,height 0.22s,border-radius 0.22s;}
+.sb-logo-ico img{width:44px;height:44px;object-fit:contain;}
+.sidebar.collapsed .sb-logo-ico{width:42px;height:42px;border-radius:12px;}
+.sidebar.collapsed .sb-logo-ico img{width:34px;height:34px;}
+.sb-logo-txt{overflow:hidden;white-space:nowrap;}
+.sb-logo-name{font-size:1.18rem;font-weight:900;line-height:1.2;letter-spacing:-0.3px;}
+.sb-logo-name span{color:var(--accent);}
+.sb-logo-sub{font-size:0.6rem;color:var(--accent);text-transform:uppercase;letter-spacing:2px;opacity:0.65;margin-top:0.1rem;}
+.sidebar.collapsed .sb-logo-txt{display:none;}
+
+/* topbar — compacto, tudo em uma linha */
+.topbar{position:relative;z-index:10;flex-shrink:0;background:rgba(9,9,9,0.97);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);padding:0 1.4rem;height:44px;display:flex;align-items:center;gap:1rem;}
+.tb-bc{display:flex;align-items:center;gap:0.4rem;flex-shrink:0;}
+.tb-bc span{font-size:0.82rem;font-weight:800;color:var(--text);}
+.tb-bc .tb-sep{color:var(--muted2);}
+.tb-bc .tb-sub{color:var(--muted);font-weight:500;}
+/* stats inline no topbar */
+.tb-stats{display:flex;align-items:center;gap:0;flex:1;padding:0 0.8rem;}
+.tb-st{display:flex;align-items:center;gap:0.35rem;padding:0 0.85rem;border-right:1px solid var(--muted2);font-size:0.68rem;color:var(--muted);white-space:nowrap;}
+.tb-st:first-child{padding-left:0;}
+.tb-st:last-child{border-right:none;}
+.tb-st strong{font-weight:800;}
+.tb-st.green strong{color:var(--accent);}
+.tb-st.blue strong{color:var(--blue);}
+.tb-st.orange strong{color:var(--orange);}
+.status-dot{width:5px;height:5px;border-radius:50%;flex-shrink:0;}
+.status-dot.green{background:var(--green);}
+.status-dot.pulse{animation:pulse 2s ease-in-out infinite;}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:0.5;transform:scale(0.8)}}
+.tb-right{display:flex;align-items:center;gap:0.45rem;flex-shrink:0;}
+.tb-date{font-size:0.65rem;color:var(--muted);font-weight:600;white-space:nowrap;margin-right:.3rem;}
+.btn{display:inline-flex;align-items:center;gap:.35rem;border-radius:7px;padding:.3rem .75rem;font-family:inherit;font-size:.72rem;font-weight:700;cursor:pointer;transition:all .18s;text-decoration:none;border:1px solid transparent;}
+.btn-ghost{background:rgba(255,255,255,.04);color:var(--muted);border-color:rgba(255,255,255,.08);}
+.btn-ghost:hover{background:rgba(255,255,255,.08);color:var(--text);border-color:rgba(255,255,255,.14);}
+.btn-primary{background:linear-gradient(135deg,var(--primary),var(--accent));color:#fff;border:none;box-shadow:0 3px 12px rgba(59,130,246,.2);}
+.btn-primary:hover{transform:translateY(-1px);box-shadow:0 5px 18px rgba(59,130,246,.32);}
+
+/* statusbar — removida, fusionada no topbar */
+.statusbar{display:none;}
+.sb-stat,.sb-div-v{display:none;}
+
+/* page header — substitui o hero exagerado */
+.page-header{flex-shrink:0;padding:.9rem 1.6rem;border-bottom:1px solid rgba(59,130,246,0.07);display:flex;align-items:center;justify-content:space-between;gap:1rem;background:rgba(10,10,10,0.6);}
+.ph-left{display:flex;flex-direction:column;gap:.1rem;}
+.ph-title{font-size:1.05rem;font-weight:900;letter-spacing:-.4px;line-height:1;}
+.ph-title em{font-style:normal;color:var(--accent);}
+.ph-sub{font-size:.65rem;color:var(--muted);font-weight:500;}
+.ph-kpis{display:flex;gap:.55rem;}
+.ph-kpi{background:var(--card);border:1px solid rgba(59,130,246,0.1);border-radius:10px;padding:.5rem .85rem;min-width:110px;transition:all .18s;cursor:default;}
+.ph-kpi:hover{border-color:rgba(59,130,246,0.25);background:rgba(59,130,246,0.05);}
+.ph-kpi-val{font-size:.95rem;font-weight:900;line-height:1;margin-bottom:.1rem;}
+.ph-kpi-lbl{font-size:.54rem;color:var(--muted);text-transform:uppercase;letter-spacing:.8px;font-weight:600;}
+.ph-kpi.green .ph-kpi-val{color:var(--accent);}
+.ph-kpi.blue .ph-kpi-val{color:var(--blue);}
+.ph-kpi.lime .ph-kpi-val{color:#a8d85f;}
+.ph-kpi.orange .ph-kpi-val{color:var(--orange);}
+
+/* hero antigo — esconder */
+.dash-hero{display:none;}
+
+/* content */
+.content{flex:1;overflow-y:auto;overflow-x:hidden;padding:1.4rem 1.6rem 2rem;}
+.sec-label{font-size:0.62rem;font-weight:800;text-transform:uppercase;letter-spacing:2px;color:rgba(255,255,255,0.3);display:flex;align-items:center;gap:0.55rem;margin-bottom:0.85rem;}
+.sec-label::after{content:'';flex:1;height:1px;background:rgba(255,255,255,0.06);}
+
+/* métricas — linha única discreta */
+.metric-strip{display:flex;flex-wrap:nowrap;gap:0;margin-bottom:1.2rem;background:var(--card);border:1px solid rgba(59,130,246,0.08);border-radius:10px;overflow:hidden;}
+.metric{flex:1;padding:.55rem .9rem;position:relative;border-right:1px solid rgba(255,255,255,.05);transition:background .18s;}
+.metric:last-child{border-right:none;}
+.metric:hover{background:rgba(59,130,246,0.05);}
+.metric-v{font-size:.82rem;font-weight:800;letter-spacing:-.3px;line-height:1;margin-bottom:.15rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.metric-l{font-size:.54rem;color:var(--muted);text-transform:uppercase;letter-spacing:.6px;font-weight:600;white-space:nowrap;}
+.c-accent{color:var(--accent);}
+.c-green{color:var(--green);}
+.c-blue{color:var(--blue);}
+.c-orange{color:var(--orange);}
+.c-muted{color:var(--muted);}
+
+/* chart cards */
+.chart-card{background:var(--card);border:1px solid rgba(59,130,246,0.08);border-radius:var(--radius);padding:1.25rem;position:relative;overflow:hidden;}
+.chart-card::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(59,130,246,0.15),transparent);}
+.chart-title{font-size:.8rem;font-weight:800;margin-bottom:1rem;display:flex;align-items:center;gap:.45rem;color:var(--text);}
+.chart-title-ico{width:26px;height:26px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:.82rem;flex-shrink:0;}
+.chart-title-ico.green{background:rgba(59,130,246,0.12);border:1px solid rgba(59,130,246,0.18);}
+.chart-title-ico.blue{background:rgba(52,152,219,0.12);border:1px solid rgba(52,152,219,0.18);}
+.chart-title-ico.purple{background:rgba(167,139,250,0.12);border:1px solid rgba(167,139,250,0.18);}
+.chart-title-ico.orange{background:rgba(243,156,18,0.12);border:1px solid rgba(243,156,18,0.18);}
+.chart-title-ico.red{background:rgba(231,76,60,0.12);border:1px solid rgba(231,76,60,0.18);}
+.chart-title-txt{flex:1;}
+.chart-title-sub{font-size:.6rem;color:var(--muted);font-weight:500;margin-top:.05rem;}
+.chart-wrap{position:relative;}
+.chart-wrap canvas{max-width:100%!important;}
+
+/* table cards */
+.tbl-card{background:var(--card);border:1px solid rgba(59,130,246,0.08);border-radius:var(--radius);padding:1.25rem;position:relative;overflow:hidden;}
+.tbl-card::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(59,130,246,0.15),transparent);}
+.tbl-row{display:flex;justify-content:space-between;align-items:center;padding:.5rem 0;border-bottom:1px solid rgba(255,255,255,.04);gap:.5rem;}
+.tbl-row:last-child{border-bottom:none;}
+.tbl-row-name{font-size:.8rem;font-weight:700;}
+.tbl-row-sub{font-size:.64rem;color:var(--muted);}
+.tbl-row-right{text-align:right;flex-shrink:0;}
+.tbl-row-val{font-size:.78rem;font-weight:700;}
+.tbl-btn{display:flex;align-items:center;justify-content:center;gap:.4rem;width:100%;margin-top:.85rem;padding:.5rem;background:rgba(255,255,255,.025);border:1px solid rgba(255,255,255,.07);border-radius:9px;color:var(--muted);font-size:.72rem;font-weight:700;cursor:pointer;text-decoration:none;transition:all .18s;}
+.tbl-btn:hover{background:rgba(59,130,246,.06);border-color:rgba(59,130,246,.2);color:var(--accent);}
+.tag{display:inline-flex;align-items:center;border-radius:99px;font-size:.58rem;font-weight:800;padding:.12rem .5rem;letter-spacing:.3px;}
+.tag-green{background:rgba(46,204,113,.15);color:var(--green);}
+.tag-orange{background:rgba(243,156,18,.15);color:var(--orange);}
+.tag-red{background:rgba(231,76,60,.15);color:var(--red);}
+.pbar{height:3px;background:rgba(255,255,255,.06);border-radius:99px;overflow:hidden;}
+.pbar-fill{height:100%;background:linear-gradient(90deg,var(--primary),var(--accent));border-radius:99px;transition:width .4s;}
+
+/* grids */
+.grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:1rem;margin-bottom:1rem;}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1rem;}
+.grid-2-1{display:grid;grid-template-columns:2fr 1fr;gap:1rem;margin-bottom:1rem;}
+@media(max-width:1100px){.grid-3{grid-template-columns:1fr 1fr;}}
+@media(max-width:768px){.grid-3,.grid-2,.grid-2-1{grid-template-columns:1fr;}.metric-strip{grid-template-columns:1fr 1fr;}}
+@media(max-width:900px){.statusbar{display:none;}.dash-hero{padding:1.5rem 1.2rem;flex-direction:column;}.hero-right{flex-direction:row;}.content{padding:1rem;}}
+</style>
+</head>
+<body>
+<div class="app">
+<aside class="sidebar" id="sidebar">
+  <div class="sb-head">
+    <div class="sb-logo-ico"><img src="../imagens/fundo.png" alt="Orizon"/></div>
+    <div class="sb-logo-txt">
+      <div class="sb-logo-name">Orizon <span>Consultoria</span></div>
+      <div class="sb-logo-sub">Contratos</div>
+    </div>
+  </div>
+  <nav class="sb-nav">
+    <div class="sb-sep">Visão Geral</div>
+    <a class="sb-item active" href="index.html"><span class="ico">📊</span><span class="lbl">Dashboard</span></a>
+    <div class="sb-sep">Controles</div>
+    <a class="sb-item" href="estagiarios.html"><span class="ico">🎓</span><span class="lbl">Estagiários</span></a>
+    <a class="sb-item" href="clt.html"><span class="ico">💼</span><span class="lbl">CLTs</span></a>
+    <div class="sb-sep">Gestão</div>
+    <a class="sb-item" href="financeiro-mensal.html"><span class="ico">📅</span><span class="lbl">Financeiro Mensal</span></a>
+    <a class="sb-item" href="relatorios.html"><span class="ico">📈</span><span class="lbl">Relatórios</span></a>
+    <a class="sb-item" href="balanco-financeiro.html"><span class="ico">💰</span><span class="lbl">Balanço Financeiro</span></a>
+    <a class="sb-item" href="despesas-fixas.html"><span class="ico">📌</span><span class="lbl">Despesas Fixas</span></a>
+    <div class="sb-sep">Equipe</div>
+    <a class="sb-item" href="consultores.html"><span class="ico">🏆</span><span class="lbl">Consultores</span></a>
+    <a class="sb-item" href="pipeline.html"><span class="ico">🔄</span><span class="lbl">Pipeline de Projetos</span></a>
+    <div class="sb-sep">Sistema</div>
+    <a class="sb-item" href="configuracoes.html"><span class="ico">⚙️</span><span class="lbl">Configurações</span></a>
+  </nav>
+  <div class="sb-foot">
+    <div class="sb-av"><img src="../imagens/fundo.png" alt="" style="width:18px;height:18px;object-fit:contain"/></div>
+    <div class="sb-uinfo"><div class="sb-uname" id="user-nome">—</div><div class="sb-urole" id="user-email">—</div></div>
+    <button class="sb-toggle" onclick="if(window.ccLogout)window.ccLogout()" title="Sair" style="margin-right:.2rem;opacity:.4">⏻</button>
+    <button class="sb-toggle" id="sb-toggle">◀</button>
+  </div>
+</aside>
+
+<div class="main">
+
+  <div class="topbar">
+    <div class="tb-bc">
+      <span>Dashboard</span>
+      <span class="tb-sep">·</span>
+      <span class="tb-sub">Contratos</span>
+    </div>
+    <div class="tb-stats">
+      <div class="tb-st green"><div class="status-dot green pulse"></div>Sistema: <strong>Online</strong></div>
+      <div class="tb-st green" id="stat-ativos">Contratos: <strong>—</strong></div>
+      <div class="tb-st blue" id="stat-rec">Comissão/mês: <strong>—</strong></div>
+      <div class="tb-st orange" id="stat-alertas">Alertas: <strong>—</strong></div>
+      <div class="tb-st" id="stat-hora" style="margin-left:auto;border-right:none;"></div>
+    </div>
+    <div class="tb-right">
+      <span id="tb-date" class="tb-date"></span>
+      <a href="estagiarios.html" class="btn btn-ghost">🎓 Estagiários</a>
+      <a href="clt.html" class="btn btn-ghost">💼 CLTs</a>
+      <a href="estagiarios.html" class="btn btn-primary">＋ Novo Contrato</a>
+    </div>
+  </div>
+
+  <!-- page header compacto com KPIs -->
+  <div class="page-header">
+    <div class="ph-left">
+      <div class="ph-title">Dashboard de <em>Contratos</em></div>
+      <div class="ph-sub">Receitas, períodos, alertas e projeções em tempo real</div>
+    </div>
+    <div class="ph-kpis">
+      <div class="ph-kpi blue" title="Comissão da Orizon sobre os contratos ativos"><div class="ph-kpi-val" id="hs-comissao">—</div><div class="ph-kpi-lbl">Comissão Orizon / mês</div></div>
+      <div class="ph-kpi lime" title="Comissão após descontar repasse de recrutadores"><div class="ph-kpi-val" id="hs-liquido">—</div><div class="ph-kpi-lbl">Líquido (após recrutadores)</div></div>
+      <div class="ph-kpi" style="opacity:.55" title="Soma das bolsas + salários pagos pelos clientes (não é receita da Orizon)"><div class="ph-kpi-val" id="hs-bruto" style="font-size:.75rem;color:var(--muted)">—</div><div class="ph-kpi-lbl">Bruto clientes (ref.)</div></div>
+      <div class="ph-kpi orange"><div class="ph-kpi-val" id="hs-alertas">—</div><div class="ph-kpi-lbl">Alertas</div></div>
+    </div>
+  </div>
+
+  <div class="content">
+
+    <div id="alertasArea"></div>
+
+    <div class="sec-label">Financeiro do Mês</div>
+    <div class="metric-strip" id="metricStrip"></div>
+
+    <div class="sec-label">Composição da Receita</div>
+    <div class="grid-2-1">
+      <div class="chart-card">
+        <div class="chart-title">
+          <div class="chart-title-ico green">💰</div>
+          <div class="chart-title-txt">Comissão por Empresa<div class="chart-title-sub">Comissão Orizon — top 8</div></div>
+        </div>
+        <div class="chart-wrap" style="height:220px"><canvas id="cEmpresas"></canvas></div>
+      </div>
+      <div class="chart-card">
+        <div class="chart-title">
+          <div class="chart-title-ico purple">🥧</div>
+          <div class="chart-title-txt">Composição da Comissão<div class="chart-title-sub">Estágio × CLT</div></div>
+        </div>
+        <div class="chart-wrap" style="height:220px"><canvas id="cTipos"></canvas></div>
+      </div>
+    </div>
+
+    <div class="sec-label">Distribuição</div>
+    <div class="grid-3">
+      <div class="chart-card">
+        <div class="chart-title">
+          <div class="chart-title-ico blue">📋</div>
+          <div class="chart-title-txt">Status dos Contratos<div class="chart-title-sub">Por situação</div></div>
+        </div>
+        <div class="chart-wrap" style="height:195px"><canvas id="cSituacao"></canvas></div>
+      </div>
+      <div class="chart-card">
+        <div class="chart-title">
+          <div class="chart-title-ico green">🎓</div>
+          <div class="chart-title-txt">Faixas de Bolsa<div class="chart-title-sub">Estagiários ativos</div></div>
+        </div>
+        <div class="chart-wrap" style="height:195px"><canvas id="cBolsas"></canvas></div>
+      </div>
+      <div class="chart-card">
+        <div class="chart-title">
+          <div class="chart-title-ico blue">💼</div>
+          <div class="chart-title-txt">Faixas Salariais<div class="chart-title-sub">CLTs ativos</div></div>
+        </div>
+        <div class="chart-wrap" style="height:195px"><canvas id="cSalarios"></canvas></div>
+      </div>
+    </div>
+
+    <div class="sec-label">Períodos &amp; Projeção</div>
+    <div class="grid-2">
+      <div class="chart-card">
+        <div class="chart-title">
+          <div class="chart-title-ico orange">🗓️</div>
+          <div class="chart-title-txt">Status dos Períodos<div class="chart-title-sub">Estágios em andamento</div></div>
+        </div>
+        <div class="chart-wrap" style="height:195px"><canvas id="cPeriodos"></canvas></div>
+      </div>
+      <div class="chart-card">
+        <div class="chart-title">
+          <div class="chart-title-ico green">📈</div>
+          <div class="chart-title-txt">Projeção de Receita<div class="chart-title-sub">12 meses — conservador e otimista</div></div>
+        </div>
+        <div class="chart-wrap" style="height:195px"><canvas id="cProjecao"></canvas></div>
+      </div>
+    </div>
+
+    <div class="sec-label">Resumo Operacional</div>
+    <div class="grid-2">
+      <div class="tbl-card">
+        <div class="chart-title">
+          <div class="chart-title-ico red">🔔</div>
+          <div class="chart-title-txt">Próximos Vencimentos<div class="chart-title-sub">Períodos a expirar em breve</div></div>
+        </div>
+        <div id="tVenc"></div>
+        <a href="estagiarios.html" class="tbl-btn">Ver todos os estagiários →</a>
+      </div>
+      <div class="tbl-card">
+        <div class="chart-title">
+          <div class="chart-title-ico green">🏢</div>
+          <div class="chart-title-txt">Top Empresas por Comissão<div class="chart-title-sub">Comissão Orizon — ranking mensal</div></div>
+        </div>
+        <div id="tEmpresas"></div>
+        <a href="relatorios.html" class="tbl-btn">Relatório completo →</a>
+      </div>
+    </div>
+
+  </div>
+</div>
+</div>
+
+<div id="toast-ct"></div>
+<script src="assets/cc-auth.js"></script>
+<script src="assets/cc-core.js"></script>
+<script>
+function atualizaHora(){const el=document.getElementById('stat-hora');if(el){const n=new Date();el.textContent=n.toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit',second:'2-digit'});}}
+atualizaHora();setInterval(atualizaHora,1000);
+const tbDate=document.getElementById('tb-date');
+if(tbDate)tbDate.textContent=new Date().toLocaleDateString('pt-BR',{weekday:'short',day:'2-digit',month:'short',year:'numeric'});
+
+Chart.defaults.color='#777';
+Chart.defaults.borderColor='rgba(59,130,246,0.1)';
+Chart.defaults.font.family="'Sora',sans-serif";
+Chart.defaults.font.size=11;
+
+document.addEventListener('DOMContentLoaded',async()=>{
+  const cfg=CC.getConfig();
+  const all=CC.getContratos();
+  const ests=all.filter(c=>c.tipo==='estagiario');
+  const clts=all.filter(c=>c.tipo==='clt');
+  const atEst=ests.filter(c=>c.situacao==='ativo');
+  const atCLT=clts.filter(c=>c.situacao==='ativo');
+
+  // ── FINANCEIRO ──
+  // Valor bruto arrecadado = o que as empresas pagam (bolsa + salário)
+  const brutoEst = atEst.reduce((s,c)=>s+(c.bolsa||0),0);
+  const brutoCLT = atCLT.reduce((s,c)=>s+(c.salario||0),0);
+  const brutoTotal = brutoEst + brutoCLT;
+
+  // Comissão da Orizon = taxa aplicada sobre o bruto
+  const comissaoEst = atEst.reduce((s,c)=>s+Calc.receita(c),0);
+  const comissaoCLT = atCLT.reduce((s,c)=>s+Calc.receita(c),0);
+  const comissaoTotal = comissaoEst + comissaoCLT;
+
+  // Comissão de recrutadores = desconto sobre a comissão da Orizon
+  const comissaoRec = [...atEst,...atCLT].reduce((s,c)=>s+Calc.comissaoRecrutador(c),0);
+
+  // Líquido = comissão Orizon − comissão recrutadores
+  const liquido = comissaoTotal - comissaoRec;
+
+  // ── ALERTAS (apenas estagiários com período vencido/warn) ──
+  const alerts={warn:[],vencido:[]};
+  atEst.forEach(c=>Calc.periodos(c,cfg).forEach(p=>{
+    if(p.status==='warn')alerts.warn.push({c,p});
+    if(p.status==='vencido')alerts.vencido.push({c,p});
+  }));
+  const nAlerts=alerts.warn.length+alerts.vencido.length;
+
+  // ── HERO ──
+  document.getElementById('hs-bruto').textContent=Fmt.brl(brutoTotal);
+  document.getElementById('hs-comissao').textContent=Fmt.brl(comissaoTotal);
+  document.getElementById('hs-liquido').textContent=Fmt.brl(liquido);
+  document.getElementById('hs-alertas').textContent=nAlerts;
+
+  // ── STATUS BAR ──
+  document.getElementById('stat-ativos').innerHTML=`Contratos: <strong>${atEst.length+atCLT.length}</strong>`;
+  document.getElementById('stat-rec').innerHTML=`Comissão/mês: <strong>${Fmt.brl(comissaoTotal)}</strong>`;
+  document.getElementById('stat-alertas').innerHTML=`Alertas: <strong>${nAlerts}</strong>`;
+
+  // ── BANNER DE ALERTAS ──
+  if(nAlerts>0){
+    document.getElementById('alertasArea').innerHTML=`
+    <div style="background:rgba(243,156,18,.07);border:1px solid rgba(243,156,18,.25);border-radius:12px;padding:.75rem 1rem;margin-bottom:1rem;display:flex;align-items:center;gap:.7rem;font-size:.76rem;">
+      <span style="font-size:1rem">⚠️</span>
+      <div><strong style="color:var(--orange)">${nAlerts} alerta${nAlerts>1?'s':''}</strong>
+      <span style="color:var(--muted);margin-left:.4rem">${alerts.vencido.length} período${alerts.vencido.length!==1?'s':''} vencido${alerts.vencido.length!==1?'s':''}, ${alerts.warn.length} a vencer em breve</span></div>
+      <a href="estagiarios.html" style="margin-left:auto;font-size:.7rem;color:var(--orange);font-weight:700;text-decoration:none;flex-shrink:0;">Ver detalhes →</a>
+    </div>`;
+  }
+
+  // ── MÉTRICAS FINANCEIRAS ──
+  const taxaMediaEst = atEst.length ? atEst.reduce((s,c)=>s+(c.taxa||0),0)/atEst.length : 0;
+  const taxaMediaCLT = atCLT.length ? atCLT.reduce((s,c)=>s+(c.taxa||0),0)/atCLT.length : 0;
+
+  document.getElementById('metricStrip').innerHTML=[
+    {v:Fmt.brl(comissaoTotal),    l:'Comissão Orizon/mês',    cls:'c-blue',    tip:'Receita da Orizon — taxa aplicada sobre as bolsas/salários'},
+    {v:Fmt.brl(liquido),          l:'Lucro líquido/mês',      cls:'c-green',   tip:'Comissão − repasses de recrutadores'},
+    {v:Fmt.brl(comissaoRec),      l:'Repasse recrutadores',   cls:'c-orange',  tip:'Comissões a pagar aos recrutadores'},
+    {v:Fmt.brl(comissaoTotal*12), l:'Projeção anual',         cls:'c-accent',  tip:'Comissão atual × 12'},
+    {v:Fmt.brl(brutoTotal),       l:'Bruto clientes (ref.)',  cls:'c-muted',   tip:'Soma das bolsas + salários — valor que os clientes pagam aos funcionários, não é receita da Orizon'},
+    {v:atEst.length,              l:'Estagiários ativos',     cls:'c-muted'},
+    {v:atCLT.length,              l:'CLTs ativos',            cls:'c-muted'},
+    {v:taxaMediaEst.toFixed(1)+'% / '+taxaMediaCLT.toFixed(1)+'%', l:'Taxa média Est / CLT', cls:'c-muted'},
+  ].map(k=>`<div class="metric" title="${k.tip||''}"><div class="metric-v ${k.cls}">${k.v}</div><div class="metric-l">${k.l}</div></div>`).join('');
+
+  // Empresas: mostra bruto arrecadado (o que cada empresa paga)
+  const empMap={};
+  all.filter(c=>c.situacao==='ativo').forEach(c=>{
+    if(!empMap[c.empresa])empMap[c.empresa]={brutoEst:0,brutoCLT:0,comEst:0,comCLT:0};
+    if(c.tipo==='estagiario'){empMap[c.empresa].brutoEst+=(c.bolsa||0);empMap[c.empresa].comEst+=Calc.receita(c);}
+    else{empMap[c.empresa].brutoCLT+=(c.salario||0);empMap[c.empresa].comCLT+=Calc.receita(c);}
+  });
+  const empSort=Object.entries(empMap).sort((a,b)=>(b[1].comEst+b[1].comCLT)-(a[1].comEst+a[1].comCLT)).slice(0,8);
+  new Chart(document.getElementById('cEmpresas'),{type:'bar',data:{labels:empSort.map(([e])=>e.length>16?e.slice(0,14)+'…':e),datasets:[{label:'Bruto Estágio',data:empSort.map(([,v])=>v.brutoEst),backgroundColor:'rgba(59,130,246,.6)',borderRadius:4},{label:'Bruto CLT',data:empSort.map(([,v])=>v.brutoCLT),backgroundColor:'rgba(52,152,219,.6)',borderRadius:4},{label:'Comissão Est.',data:empSort.map(([,v])=>v.comEst),backgroundColor:'rgba(168,216,95,.75)',borderRadius:4},{label:'Comissão CLT',data:empSort.map(([,v])=>v.comCLT),backgroundColor:'rgba(46,204,113,.75)',borderRadius:4}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{boxWidth:10,padding:8,font:{size:10}}},tooltip:{callbacks:{label:ctx=>`${ctx.dataset.label}: ${Fmt.brl(ctx.raw)}`}}},scales:{x:{stacked:true,grid:{color:'rgba(255,255,255,.04)'}},y:{stacked:true,grid:{color:'rgba(255,255,255,.04)'},ticks:{callback:v=>Fmt.brl(v)}}}}});
+
+  // Composição: mostra bruto e comissão lado a lado
+  new Chart(document.getElementById('cTipos'),{type:'doughnut',data:{labels:['Comissão Estágio','Comissão CLT'],datasets:[{data:[comissaoEst,comissaoCLT],backgroundColor:['rgba(59,130,246,.8)','rgba(52,152,219,.8)'],borderColor:['#3b82f6','#3498db'],borderWidth:2,hoverOffset:6}]},options:{responsive:true,maintainAspectRatio:false,cutout:'68%',plugins:{legend:{position:'bottom',labels:{boxWidth:10,padding:10}},tooltip:{callbacks:{label:ctx=>`${ctx.label}: ${Fmt.brl(ctx.raw)} (${comissaoTotal?Math.round(ctx.raw/comissaoTotal*100):0}%)`}}}},plugins:[{id:'ct',afterDraw(ch){const{ctx,chartArea:{width:w,height:h,left:l,top:t}}=ch;ctx.save();ctx.font=`900 13px 'Sora',sans-serif`;ctx.fillStyle='#3b82f6';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(Fmt.brl(comissaoTotal),l+w/2,t+h/2-7);ctx.font=`600 9px 'Sora',sans-serif`;ctx.fillStyle='#777';ctx.fillText('comissão/mês',l+w/2,t+h/2+9);ctx.restore();}}]});
+
+  const sit={};all.forEach(c=>{sit[c.situacao]=(sit[c.situacao]||0)+1;});
+  const sitCores={ativo:'rgba(46,204,113,.8)',cancelado:'rgba(231,76,60,.8)',efetivado:'rgba(52,152,219,.8)',concluido:'rgba(167,139,250,.8)',desligado:'rgba(231,76,60,.6)',licenca:'rgba(243,156,18,.8)'};
+  new Chart(document.getElementById('cSituacao'),{type:'doughnut',data:{labels:Object.keys(sit),datasets:[{data:Object.values(sit),backgroundColor:Object.keys(sit).map(s=>sitCores[s]||'rgba(120,120,120,.5)'),borderWidth:1,hoverOffset:5}]},options:{responsive:true,maintainAspectRatio:false,cutout:'58%',plugins:{legend:{position:'bottom',labels:{boxWidth:10,padding:8,font:{size:10}}},tooltip:{callbacks:{label:ctx=>`${ctx.label}: ${ctx.raw}`}}}}});
+
+  const fb=[{l:'até R$700',n:atEst.filter(c=>c.bolsa<=700).length},{l:'R$701–1K',n:atEst.filter(c=>c.bolsa>700&&c.bolsa<=1000).length},{l:'R$1K–1.5K',n:atEst.filter(c=>c.bolsa>1000&&c.bolsa<=1500).length},{l:'>R$1.5K',n:atEst.filter(c=>c.bolsa>1500).length}];
+  new Chart(document.getElementById('cBolsas'),{type:'bar',data:{labels:fb.map(f=>f.l),datasets:[{label:'Estagiários',data:fb.map(f=>f.n),backgroundColor:fb.map((_,i)=>`rgba(59,130,246,${0.75-i*0.15})`),borderRadius:6}]},options:{responsive:true,maintainAspectRatio:false,indexAxis:'y',plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>`${ctx.raw} estagiário(s)`}}},scales:{x:{grid:{color:'rgba(255,255,255,.04)'},ticks:{stepSize:1}},y:{grid:{display:false}}}}});
+
+  const fs=[{l:'até R$2K',n:atCLT.filter(c=>c.salario<=2000).length},{l:'R$2K–3.5K',n:atCLT.filter(c=>c.salario>2000&&c.salario<=3500).length},{l:'R$3.5K–5K',n:atCLT.filter(c=>c.salario>3500&&c.salario<=5000).length},{l:'>R$5K',n:atCLT.filter(c=>c.salario>5000).length}];
+  new Chart(document.getElementById('cSalarios'),{type:'bar',data:{labels:fs.map(f=>f.l),datasets:[{label:'CLTs',data:fs.map(f=>f.n),backgroundColor:fs.map((_,i)=>`rgba(52,152,219,${0.75-i*0.15})`),borderRadius:6}]},options:{responsive:true,maintainAspectRatio:false,indexAxis:'y',plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>`${ctx.raw} CLT(s)`}}},scales:{x:{grid:{color:'rgba(255,255,255,.04)'},ticks:{stepSize:1}},y:{grid:{display:false}}}}});
+
+  const ps={ok:0,ativo:0,warn:0,vencido:0,futuro:0};
+  atEst.forEach(c=>Calc.periodos(c,cfg).forEach(p=>ps[p.status]++));
+  new Chart(document.getElementById('cPeriodos'),{type:'doughnut',data:{labels:['Concluídos ✓','Ativos ▶','A Vencer ⚠️','Vencidos ✕','Futuros'],datasets:[{data:[ps.ok,ps.ativo,ps.warn,ps.vencido,ps.futuro],backgroundColor:['rgba(46,204,113,.75)','rgba(59,130,246,.75)','rgba(243,156,18,.75)','rgba(231,76,60,.75)','rgba(255,255,255,.08)'],borderWidth:1,hoverOffset:5}]},options:{responsive:true,maintainAspectRatio:false,cutout:'55%',plugins:{legend:{position:'right',labels:{boxWidth:10,padding:8,font:{size:10}}},tooltip:{callbacks:{label:ctx=>`${ctx.label}: ${ctx.raw}`}}}}});
+
+  const meses=Array.from({length:12},(_,i)=>{const d=new Date();d.setMonth(d.getMonth()+i);return d.toLocaleDateString('pt-BR',{month:'short',year:'2-digit'});});
+  new Chart(document.getElementById('cProjecao'),{type:'line',data:{labels:meses,datasets:[{label:'Comissão conservador (+1,5%/mês)',data:meses.map((_,i)=>Math.round(comissaoTotal*Math.pow(1.015,i))),borderColor:'#3b82f6',backgroundColor:'rgba(59,130,246,.1)',tension:.4,fill:true,pointRadius:3,borderWidth:2},{label:'Comissão otimista (+3%/mês)',data:meses.map((_,i)=>Math.round(comissaoTotal*Math.pow(1.03,i))),borderColor:'rgba(52,152,219,.6)',backgroundColor:'transparent',tension:.4,fill:false,pointRadius:2,borderWidth:1.5,borderDash:[4,3]}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{boxWidth:10,padding:10}},tooltip:{callbacks:{label:ctx=>`${ctx.dataset.label}: ${Fmt.brl(ctx.raw)}`}}},scales:{x:{grid:{color:'rgba(255,255,255,.04)'}},y:{grid:{color:'rgba(255,255,255,.04)'},ticks:{callback:v=>Fmt.brl(v)}}}}});
+
+  const prox=[];
+  atEst.forEach(c=>{const p=Calc.periodos(c,cfg).find(x=>['ativo','warn','vencido'].includes(x.status));if(p)prox.push({nome:c.nome,empresa:c.empresa,fim:p.fim,dias:p.dias,num:p.num,status:p.status});});
+  prox.sort((a,b)=>a.dias-b.dias);
+  document.getElementById('tVenc').innerHTML=prox.length===0
+    ?'<div style="padding:1.5rem;text-align:center;color:var(--muted);font-size:.78rem;">✅ Nenhum vencimento próximo</div>'
+    :prox.slice(0,6).map(p=>`<div class="tbl-row"><div><div class="tbl-row-name">${p.nome.split(' ').slice(0,2).join(' ')}</div><div class="tbl-row-sub">${p.empresa} · ${p.num}º período</div></div><div class="tbl-row-right"><div class="tbl-row-val">${Fmt.dt(p.fim)}</div><span class="tag ${p.status==='vencido'?'tag-red':p.status==='warn'?'tag-orange':'tag-green'}" style="margin-top:.2rem">${p.dias<0?Math.abs(p.dias)+'d atrás':p.dias+'d'}</span></div></div>`).join('');
+
+  document.getElementById('tEmpresas').innerHTML=empSort.slice(0,6).map(([e,v])=>{
+    const bruto=v.brutoEst+v.brutoCLT;const com=v.comEst+v.comCLT;
+    const maxC=empSort[0]?(empSort[0][1].comEst+empSort[0][1].comCLT):1;
+    return `<div style="margin-bottom:.85rem">
+      <div style="display:flex;justify-content:space-between;font-size:.78rem;margin-bottom:.25rem">
+        <span style="font-weight:700">${e}</span>
+        <span style="color:var(--accent);font-weight:800">${Fmt.brl(com)}/mês</span>
+      </div>
+      <div class="pbar"><div class="pbar-fill" style="width:${Math.round(com/maxC*100)}%"></div></div>
+      <div style="font-size:.6rem;color:var(--muted);margin-top:.25rem;display:flex;gap:.6rem">
+        <span>Comissão Orizon: <strong style="color:var(--accent)">${Fmt.brl(com)}</strong></span>
+        <span style="opacity:.5">Bruto cliente: <strong style="color:var(--muted)">${Fmt.brl(bruto)}</strong></span>
+      </div>
+    </div>`;}).join('');
+});
+</script>
+</body>
+</html>

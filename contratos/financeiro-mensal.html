@@ -1,0 +1,862 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+<!-- Favicon -->
+  <!-- ═══ FAVICON ═══ -->
+  <link rel="icon" type="image/png" sizes="32x32" href="../imagens/favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="192x192" href="../imagens/favicon-192x192.png" />
+  <link rel="shortcut icon" href="../imagens/icone.png" type="image/png" />
+  <link rel="apple-touch-icon" href="../imagens/icone.png" />
+  <link rel="manifest" href="../imagens/site.webmanifest" />
+<!-- SEO -->
+<meta name="description" content="Orizon Consultoria — Sistema de Gestão Financeira de Contratos" />
+<meta name="robots" content="noindex, nofollow" />
+<title>Financeiro Mensal — Contratos · Orizon Consultoria</title>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;700;800;900&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="assets/cc-style.css"/>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+:root{
+  --primary:#1e40af;--accent:#3b82f6;--accent2:#a8d85f;
+  --bg:#080808;--bg2:#0d0d0d;--card:#111111;--card2:#161616;
+  --border:rgba(59,130,246,0.12);--border2:rgba(59,130,246,0.28);
+  --text:#f0f0f0;--muted:#666;--muted2:#333;
+  --red:#e74c3c;--orange:#f39c12;--blue:#3498db;--green:#2ecc71;
+  --radius:14px;
+}
+body::before{content:'';position:fixed;inset:0;z-index:0;
+  background-image:linear-gradient(rgba(59,130,246,0.025) 1px,transparent 1px),linear-gradient(90deg,rgba(59,130,246,0.025) 1px,transparent 1px);
+  background-size:52px 52px;pointer-events:none;}
+
+/* sidebar logo */
+.sb-head{padding:1.1rem 0.85rem 1rem;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:0.75rem;flex-shrink:0;}
+.sb-logo-ico{width:44px;height:44px;border-radius:13px;background:linear-gradient(135deg,rgba(30,64,175,0.35),rgba(59,130,246,0.18));border:1px solid var(--border2);display:flex;align-items:center;justify-content:center;overflow:hidden;flex-shrink:0;box-shadow:0 2px 10px rgba(59,130,246,0.15);}
+.sb-logo-ico img{width:44px;height:44px;object-fit:contain;}
+.sb-logo-txt{overflow:hidden;white-space:nowrap;}
+.sb-logo-name{font-size:1.18rem;font-weight:900;line-height:1.2;letter-spacing:-0.3px;}
+.sb-logo-name span{color:var(--accent);}
+.sb-logo-sub{font-size:0.6rem;color:var(--accent);text-transform:uppercase;letter-spacing:2px;opacity:0.65;margin-top:0.1rem;}
+
+/* topbar */
+.topbar{position:relative;z-index:10;flex-shrink:0;background:rgba(9,9,9,0.97);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);padding:0 1.6rem;height:54px;display:flex;align-items:center;gap:1rem;}
+.tb-bc{display:flex;align-items:center;gap:0.5rem;flex:1;min-width:0;}
+.tb-bc a{font-size:0.82rem;color:var(--muted);text-decoration:none;font-weight:600;}
+.tb-bc a:hover{color:var(--accent);}
+.sep{color:var(--muted2);font-size:0.8rem;}
+.tb-bc span{font-size:0.88rem;font-weight:800;color:var(--text);}
+.tb-right{display:flex;align-items:center;gap:0.55rem;flex-shrink:0;}
+.tb-date{font-size:0.7rem;color:var(--muted);font-weight:600;white-space:nowrap;margin-right:.4rem;}
+.btn{display:inline-flex;align-items:center;gap:.4rem;border-radius:9px;padding:.42rem .9rem;font-family:inherit;font-size:.76rem;font-weight:700;cursor:pointer;transition:all .18s;text-decoration:none;border:1px solid transparent;}
+.btn-ghost{background:rgba(255,255,255,.04);color:var(--muted);border-color:rgba(255,255,255,.08);}
+.btn-ghost:hover{background:rgba(255,255,255,.08);color:var(--text);border-color:rgba(255,255,255,.14);}
+.btn-primary{background:linear-gradient(135deg,var(--primary),var(--accent));color:#fff;border:none;box-shadow:0 4px 16px rgba(59,130,246,.2);}
+.btn-primary:hover{transform:translateY(-1px);box-shadow:0 6px 22px rgba(59,130,246,.32);}
+
+/* hero */
+.dash-hero{position:relative;overflow:hidden;padding:1.8rem 2rem 1.5rem;background:linear-gradient(160deg,rgba(8,14,3,1) 0%,rgba(12,20,5,1) 50%,rgba(8,12,3,1) 100%);border-bottom:1px solid rgba(59,130,246,0.1);display:flex;align-items:center;justify-content:space-between;gap:2rem;flex-wrap:wrap;flex-shrink:0;}
+.dash-hero::before{content:'';position:absolute;top:-60%;right:-10%;width:600px;height:600px;background:radial-gradient(ellipse,rgba(59,130,246,0.07) 0%,transparent 60%);pointer-events:none;}
+.hero-left{position:relative;z-index:1;}
+.hero-tag{display:inline-flex;align-items:center;gap:0.5rem;font-size:0.58rem;font-weight:800;letter-spacing:3px;text-transform:uppercase;color:var(--accent);background:rgba(59,130,246,0.1);border:1px solid rgba(59,130,246,0.2);border-radius:99px;padding:0.28rem 0.8rem;margin-bottom:0.7rem;}
+.hero-tag-dot{width:5px;height:5px;border-radius:50%;background:var(--accent);animation:pulse 2s ease-in-out infinite;}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(.8)}}
+.hero-title{font-size:1.6rem;font-weight:900;line-height:1.1;letter-spacing:-.8px;margin-bottom:.3rem;}
+.hero-title em{font-style:normal;color:var(--accent);}
+.hero-sub{font-size:.76rem;color:rgba(255,255,255,.35);line-height:1.6;}
+.hero-right{position:relative;z-index:1;display:flex;gap:.65rem;flex-wrap:wrap;align-items:center;}
+
+/* year selector */
+.year-sel-wrap{display:flex;align-items:center;gap:.5rem;}
+.year-sel-wrap label{font-size:.65rem;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:1px;}
+.year-sel{background:rgba(255,255,255,.05);border:1px solid var(--border2);border-radius:10px;color:var(--text);font-family:inherit;font-size:.85rem;font-weight:800;padding:.5rem .9rem;cursor:pointer;outline:none;}
+.year-sel:focus{border-color:var(--accent);}
+.year-nav{background:rgba(255,255,255,.05);border:1px solid var(--border);border-radius:8px;color:var(--muted);font-size:.9rem;width:30px;height:30px;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .15s;}
+.year-nav:hover{border-color:var(--border2);color:var(--accent);}
+
+/* content */
+.content{flex:1;overflow-y:auto;overflow-x:hidden;padding:1.4rem 1.6rem 2rem;}
+.sec-label{font-size:.62rem;font-weight:800;text-transform:uppercase;letter-spacing:2px;color:rgba(255,255,255,.3);display:flex;align-items:center;gap:.55rem;margin-bottom:.85rem;}
+.sec-label::after{content:'';flex:1;height:1px;background:rgba(255,255,255,.06);}
+
+/* KPI strip */
+.kpi-strip{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:.7rem;margin-bottom:1.4rem;}
+.kpi{background:var(--card);border:1px solid rgba(59,130,246,.08);border-radius:14px;padding:.9rem 1rem;position:relative;overflow:hidden;transition:all .2s;cursor:default;}
+.kpi::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(59,130,246,.04) 0%,transparent 60%);opacity:0;transition:opacity .2s;}
+.kpi:hover{border-color:rgba(59,130,246,.22);transform:translateY(-2px);}
+.kpi:hover::before{opacity:1;}
+.kpi-v{font-size:1.25rem;font-weight:900;letter-spacing:-.5px;line-height:1;margin-bottom:.2rem;}
+.kpi-l{font-size:.58rem;color:var(--muted);text-transform:uppercase;letter-spacing:.8px;font-weight:600;}
+.kpi-sub{font-size:.6rem;color:var(--muted);margin-top:.15rem;}
+.c-accent{color:var(--accent);}
+.c-blue{color:var(--blue);}
+.c-orange{color:var(--orange);}
+.c-green{color:var(--green);}
+.c-muted{color:var(--muted);}
+.c-red{color:var(--red);}
+
+/* chart cards */
+.chart-card{background:var(--card);border:1px solid rgba(59,130,246,.08);border-radius:var(--radius);padding:1.25rem;position:relative;overflow:hidden;}
+.chart-card::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(59,130,246,.15),transparent);}
+.chart-title{font-size:.8rem;font-weight:800;margin-bottom:1rem;display:flex;align-items:center;gap:.45rem;}
+.chart-title-ico{width:26px;height:26px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:.82rem;flex-shrink:0;}
+.chart-title-ico.green{background:rgba(59,130,246,.12);border:1px solid rgba(59,130,246,.18);}
+.chart-title-ico.blue{background:rgba(52,152,219,.12);border:1px solid rgba(52,152,219,.18);}
+.chart-title-ico.purple{background:rgba(167,139,250,.12);border:1px solid rgba(167,139,250,.18);}
+.chart-title-ico.orange{background:rgba(243,156,18,.12);border:1px solid rgba(243,156,18,.18);}
+.chart-title-txt{flex:1;}
+.chart-title-sub{font-size:.6rem;color:var(--muted);font-weight:500;margin-top:.05rem;}
+.chart-wrap canvas{max-width:100%!important;}
+
+/* grids */
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1rem;}
+.grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:1rem;margin-bottom:1rem;}
+
+/* month grid */
+.mes-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:.5rem;margin-bottom:1.2rem;}
+.mes-card{background:var(--card);border:1.5px solid rgba(59,130,246,.07);border-radius:11px;padding:.7rem .6rem;text-align:center;cursor:pointer;transition:all .2s;position:relative;}
+.mes-card:hover{border-color:rgba(59,130,246,.28);background:rgba(59,130,246,.04);}
+.mes-card.active{border-color:var(--accent);background:rgba(59,130,246,.1);box-shadow:0 0 0 1px rgba(59,130,246,.25);}
+.mes-card.futuro{opacity:.3;cursor:default;pointer-events:none;}
+.mes-card-nome{font-size:.62rem;font-weight:800;text-transform:uppercase;letter-spacing:.8px;color:var(--muted);margin-bottom:.3rem;}
+.mes-card.active .mes-card-nome{color:var(--accent);}
+.mes-card-val{font-size:.82rem;font-weight:900;color:var(--text);}
+.mes-card.active .mes-card-val{color:var(--accent);}
+.mes-card-bar{margin-top:.4rem;height:3px;background:rgba(255,255,255,.06);border-radius:99px;overflow:hidden;}
+.mes-card-bar-fill{height:100%;background:linear-gradient(90deg,var(--primary),var(--accent));border-radius:99px;transition:width .4s;}
+.mes-card-dot{width:5px;height:5px;border-radius:50%;background:var(--accent);position:absolute;top:.4rem;right:.4rem;display:none;}
+.mes-card.active .mes-card-dot{display:block;}
+
+/* detalhe mês */
+.detalhe-box{background:var(--card);border:1px solid var(--border2);border-radius:var(--radius);padding:1.25rem;margin-bottom:1rem;position:relative;overflow:hidden;}
+.detalhe-box::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(59,130,246,.3),transparent);}
+.detalhe-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem;gap:1rem;flex-wrap:wrap;}
+.detalhe-title{font-size:1rem;font-weight:900;color:var(--accent);}
+.detalhe-sub{font-size:.65rem;color:var(--muted);}
+.detalhe-kpis{display:flex;gap:1.5rem;flex-wrap:wrap;}
+.dk{text-align:center;}
+.dk-v{font-size:1rem;font-weight:900;}
+.dk-l{font-size:.58rem;color:var(--muted);text-transform:uppercase;letter-spacing:.8px;}
+
+/* tabela */
+.tbl-wrap{background:var(--card);border:1px solid rgba(59,130,246,.08);border-radius:var(--radius);overflow:hidden;}
+.tbl{width:100%;border-collapse:collapse;font-size:.76rem;}
+.tbl th{background:rgba(59,130,246,.06);padding:.55rem .9rem;text-align:left;font-size:.6rem;font-weight:800;text-transform:uppercase;letter-spacing:1px;color:var(--muted);border-bottom:1px solid var(--border);}
+.tbl td{padding:.55rem .9rem;border-bottom:1px solid rgba(255,255,255,.03);vertical-align:middle;}
+.tbl tbody tr:last-child td{border-bottom:none;}
+.tbl tbody tr:hover td{background:rgba(59,130,246,.03);}
+.tbl tfoot td{padding:.55rem .9rem;border-top:1px solid var(--border);background:rgba(59,130,246,.05);font-weight:800;}
+.fw8{font-weight:800;}
+.tag{display:inline-flex;align-items:center;border-radius:99px;font-size:.58rem;font-weight:800;padding:.12rem .5rem;letter-spacing:.3px;}
+.tag-green{background:rgba(46,204,113,.15);color:var(--green);}
+.tag-blue{background:rgba(52,152,219,.15);color:var(--blue);}
+.tag-orange{background:rgba(243,156,18,.15);color:var(--orange);}
+.tag-gray{background:rgba(255,255,255,.07);color:var(--muted);}
+.empty{text-align:center;color:var(--muted);padding:2rem;font-size:.76rem;}
+
+/* tabela anual */
+.tbl-anual-wrap{overflow-x:auto;}
+.var-pos{color:var(--green);font-size:.65rem;font-weight:700;}
+.var-neg{color:var(--red);font-size:.65rem;font-weight:700;}
+.var-zero{color:var(--muted);font-size:.65rem;}
+.bar-inline{display:inline-block;height:6px;border-radius:3px;background:linear-gradient(90deg,var(--primary),var(--accent));vertical-align:middle;margin-left:.4rem;transition:width .4s;}
+
+/* info box */
+.info-box{padding:.7rem 1rem;border-radius:10px;font-size:.72rem;font-weight:600;background:rgba(59,130,246,.07);border:1px solid rgba(59,130,246,.15);color:rgba(59,130,246,.9);margin-bottom:1rem;line-height:1.6;}
+
+.c-purple{color:#a78bfa;}
+.tag-purple{background:rgba(167,139,250,.15);color:#a78bfa;}
+
+/* Modal comissão */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:1000;display:flex;align-items:center;justify-content:center;padding:1rem;backdrop-filter:blur(4px);}
+.modal-box{background:var(--card);border:1px solid var(--border2);border-radius:18px;padding:1.8rem;width:100%;max-width:440px;box-shadow:0 24px 80px rgba(0,0,0,.6);animation:fadeUp .25s ease;}
+.modal-title{font-size:1rem;font-weight:900;margin-bottom:1.2rem;display:flex;align-items:center;gap:.5rem;}
+.modal-grid{display:grid;gap:.8rem;}
+.modal-actions{display:flex;gap:.6rem;justify-content:flex-end;margin-top:1.2rem;}
+.btn-purple{background:linear-gradient(135deg,#6d28d9,#a78bfa);color:#fff;border:none;box-shadow:0 4px 16px rgba(167,139,250,.25);}
+.btn-purple:hover{transform:translateY(-1px);}
+.comissao-list{display:flex;flex-direction:column;gap:.4rem;margin-top:.4rem;}
+.comissao-item{display:flex;align-items:center;justify-content:space-between;background:rgba(167,139,250,.06);border:1px solid rgba(167,139,250,.14);border-radius:9px;padding:.5rem .8rem;font-size:.76rem;}
+.comissao-item-info{display:flex;flex-direction:column;gap:.1rem;}
+.comissao-item-val{font-weight:900;color:#a78bfa;}
+.comissao-item-desc{font-size:.62rem;color:var(--muted);}
+.comissao-item-del{background:none;border:none;cursor:pointer;color:var(--muted);font-size:.85rem;padding:.1rem .3rem;border-radius:5px;transition:color .15s;}
+.comissao-item-del:hover{color:var(--red);}
+
+@media(max-width:900px){.grid-3,.grid-2{grid-template-columns:1fr;}.mes-grid{grid-template-columns:repeat(4,1fr);}}
+@media(max-width:600px){.mes-grid{grid-template-columns:repeat(3,1fr);}.kpi-strip{grid-template-columns:1fr 1fr;}.dash-hero{flex-direction:column;}}
+</style>
+</head>
+<body>
+<div class="app">
+<aside class="sidebar" id="sidebar">
+  <div class="sb-head">
+    <div class="sb-logo-ico"><img src="../imagens/fundo.png" alt="Orizon"/></div>
+    <div class="sb-logo-txt">
+      <div class="sb-logo-name">Orizon <span>Consultoria</span></div>
+      <div class="sb-logo-sub">Contratos</div>
+    </div>
+  </div>
+  <nav class="sb-nav">
+    <div class="sb-sep">Visão Geral</div>
+    <a class="sb-item" href="index.html"><span class="ico">📊</span><span class="lbl">Dashboard</span></a>
+    <div class="sb-sep">Controles</div>
+    <a class="sb-item" href="estagiarios.html"><span class="ico">🎓</span><span class="lbl">Estagiários</span></a>
+    <a class="sb-item" href="clt.html"><span class="ico">💼</span><span class="lbl">CLTs</span></a>
+    <div class="sb-sep">Gestão</div>
+    <a class="sb-item active" href="financeiro-mensal.html"><span class="ico">📅</span><span class="lbl">Financeiro Mensal</span></a>
+    <a class="sb-item" href="relatorios.html"><span class="ico">📈</span><span class="lbl">Relatórios</span></a>
+    <a class="sb-item" href="balanco-financeiro.html"><span class="ico">💰</span><span class="lbl">Balanço Financeiro</span></a>
+    <a class="sb-item" href="despesas-fixas.html"><span class="ico">📌</span><span class="lbl">Despesas Fixas</span></a>
+    <div class="sb-sep">Equipe</div>
+    <a class="sb-item" href="consultores.html"><span class="ico">🏆</span><span class="lbl">Consultores</span></a>
+    <a class="sb-item" href="pipeline.html"><span class="ico">🔄</span><span class="lbl">Pipeline de Projetos</span></a>
+    <div class="sb-sep">Sistema</div>
+    <a class="sb-item" href="configuracoes.html"><span class="ico">⚙️</span><span class="lbl">Configurações</span></a>
+  </nav>
+  <div class="sb-foot">
+    <div class="sb-av"><img src="../imagens/fundo.png" alt="EX" style="width:18px;height:18px;object-fit:contain"/></div>
+    <div class="sb-uinfo"><div class="sb-uname" id="user-nome">—</div><div class="sb-urole" id="user-email">—</div></div>
+    <button class="sb-toggle" onclick="if(window.ccLogout)window.ccLogout()" title="Sair" style="margin-right:.2rem;opacity:.4">⏻</button>
+    <button class="sb-toggle" id="sb-toggle">◀</button>
+  </div>
+</aside>
+
+<div class="main">
+  <div class="topbar">
+    <div class="tb-bc">
+      <a href="index.html">Dashboard</a>
+      <span class="sep"> / </span>
+      <span>Financeiro Mensal</span>
+    </div>
+    <div class="tb-right">
+      <span id="tb-date" class="tb-date"></span>
+      <button class="btn btn-ghost" onclick="exportarCSV()">📊 Exportar CSV</button>
+      <button class="btn btn-purple" onclick="abrirModalComissao()">🏆 Lançar Comissão</button>
+    </div>
+  </div>
+
+  <div class="dash-hero">
+    <div class="hero-left">
+      <div class="hero-tag"><span class="hero-tag-dot"></span>Histórico Financeiro</div>
+      <div class="hero-title">Receita <em>Mensal</em></div>
+      <div class="hero-sub">Estágio (recorrente) + CLT (colocação) + Comissões (recrutadores) · mês a mês</div>
+    </div>
+    <div class="hero-right">
+      <div class="year-sel-wrap">
+        <button class="year-nav" id="btnAnoAnterior" onclick="mudarAno(-1)">◀</button>
+        <div>
+          <label>Ano</label>
+          <select class="year-sel" id="anoSel" onchange="renderAnual()"></select>
+        </div>
+        <button class="year-nav" id="btnProxAno" onclick="mudarAno(+1)">▶</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="content">
+
+    <!-- KPIs -->
+    <div class="sec-label">Resumo do Ano</div>
+    <div class="kpi-strip" id="kpiStrip"></div>
+
+    <!-- Gráfico anual + pizza -->
+    <div class="sec-label">Evolução Mensal</div>
+    <div class="grid-2" style="margin-bottom:1rem">
+      <div class="chart-card">
+        <div class="chart-title">
+          <div class="chart-title-ico green">📈</div>
+          <div class="chart-title-txt">Receita por Mês
+            <div class="chart-title-sub">Estágio (recorrente) + CLT (colocação)</div>
+          </div>
+        </div>
+        <div class="chart-wrap" style="height:240px"><canvas id="cAnual"></canvas></div>
+      </div>
+      <div class="chart-card">
+        <div class="chart-title">
+          <div class="chart-title-ico blue">📊</div>
+          <div class="chart-title-txt">Comparativo com Ano Anterior
+            <div class="chart-title-sub" id="subtitleComparativo">vs. ano anterior</div>
+          </div>
+        </div>
+        <div class="chart-wrap" style="height:240px"><canvas id="cComparativo"></canvas></div>
+      </div>
+    </div>
+
+    <!-- Grade de meses clicáveis -->
+    <div class="sec-label">Selecionar Mês</div>
+    <div class="info-box">💡 Clique em um mês para ver o detalhamento de quais contratos geraram receita.</div>
+    <div class="mes-grid" id="mesGrid"></div>
+
+    <!-- Detalhe do mês selecionado -->
+    <div class="sec-label" id="detalheSec" style="display:none">Detalhamento · <span id="detalheNomeMes"></span></div>
+    <div id="detalheBox"></div>
+
+    <!-- Tabela anual completa -->
+    <div class="sec-label">Tabela Anual Completa</div>
+    <div class="tbl-wrap tbl-anual-wrap">
+      <table class="tbl" id="tblAnual">
+        <thead><tr>
+          <th>Mês</th>
+          <th>Estágio (recorrente)</th>
+          <th>CLT (colocação)</th>
+          <th>🏆 Comissões</th>
+          <th>Total Mês</th>
+          <th>vs Mês Ant.</th>
+          <th>Acumulado Ano</th>
+          <th>Estagiários</th>
+          <th>CLTs</th>
+        </tr></thead>
+        <tbody id="tblAnualBody"></tbody>
+        <tfoot id="tblAnualFoot"></tfoot>
+      </table>
+    </div>
+
+  </div>
+</div>
+</div>
+
+<!-- Modal Comissão -->
+<div id="modalComissao" class="modal-overlay" style="display:none" onclick="if(event.target===this)fecharModal()">
+  <div class="modal-box">
+    <div class="modal-title">🏆 Lançar Comissão de Recrutador</div>
+    <div class="modal-grid">
+      <div class="form-group" style="margin:0">
+        <label class="fl">Mês de Referência</label>
+        <input type="month" class="fi" id="comMes" style="background:var(--card2);border:1.5px solid var(--border);border-radius:10px;padding:.65rem .9rem;font-family:inherit;font-size:.82rem;color:var(--text);width:100%;outline:none"/>
+      </div>
+      <div class="form-group" style="margin:0">
+        <label class="fl">Consultor / Recrutador</label>
+        <input type="text" class="fi" id="comConsultor" placeholder="Ex: João Silva" style="background:var(--card2);border:1.5px solid var(--border);border-radius:10px;padding:.65rem .9rem;font-family:inherit;font-size:.82rem;color:var(--text);width:100%;outline:none"/>
+      </div>
+      <div class="form-group" style="margin:0">
+        <label class="fl">Valor da Comissão (R$)</label>
+        <input type="number" class="fi" id="comValor" placeholder="0,00" min="0" step="0.01" style="background:var(--card2);border:1.5px solid var(--border);border-radius:10px;padding:.65rem .9rem;font-family:inherit;font-size:.82rem;color:var(--text);width:100%;outline:none"/>
+      </div>
+      <div class="form-group" style="margin:0">
+        <label class="fl">Descrição (opcional)</label>
+        <input type="text" class="fi" id="comDesc" placeholder="Ex: Colocação Empresa X — Cargo Y" style="background:var(--card2);border:1.5px solid var(--border);border-radius:10px;padding:.65rem .9rem;font-family:inherit;font-size:.82rem;color:var(--text);width:100%;outline:none"/>
+      </div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" onclick="fecharModal()">Cancelar</button>
+      <button class="btn btn-purple" onclick="salvarComissao()">✓ Salvar Comissão</button>
+    </div>
+  </div>
+</div>
+
+<div id="toast-ct"></div>
+<script src="assets/cc-auth.js"></script>
+<script src="assets/cc-core.js"></script>
+<script>
+// ─────────────────────────────────────────────
+//  CONSTANTES
+// ─────────────────────────────────────────────
+const MESES_NOME = ['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'];
+const MESES_FULL = ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
+
+let contratos = [];
+let cfg       = {};
+let anoAtual  = new Date().getFullYear();
+let mesSel    = null; // 'YYYY-MM'
+let chartAnual      = null;
+let chartComparativo = null;
+
+// ─── Comissões (localStorage) ───
+function getComissoes() {
+  try { return JSON.parse(localStorage.getItem('ex_cc_comissoes') || '[]'); } catch { return []; }
+}
+function setComissoes(list) {
+  localStorage.setItem('ex_cc_comissoes', JSON.stringify(list));
+}
+function comissoesMes(anoMes) {
+  return getComissoes().filter(c => c.mes === anoMes);
+}
+function totalComissoesMes(anoMes) {
+  return comissoesMes(anoMes).reduce((s,c) => s + (c.valor||0), 0);
+}
+
+// ─────────────────────────────────────────────
+//  HELPERS
+// ─────────────────────────────────────────────
+function brl(v) {
+  return new Intl.NumberFormat('pt-BR',{style:'currency',currency:'BRL'}).format(v||0);
+}
+
+function addMesesDate(dateStr, n) {
+  // dateStr: 'YYYY-MM-DD' ou Date
+  const d = new Date(dateStr + (typeof dateStr === 'string' && dateStr.length===10 ? 'T00:00:00' : ''));
+  d.setMonth(d.getMonth() + n);
+  return d;
+}
+
+function anoMesStr(ano, mes) { // mes 0-based
+  return `${ano}-${String(mes+1).padStart(2,'0')}`;
+}
+
+// ─────────────────────────────────────────────
+//  CÁLCULO DE RECEITA POR MÊS
+// ─────────────────────────────────────────────
+/**
+ * Retorna { recEst, recClt, total, estQtd, cltQtd, contratos: [{...}] }
+ * anoMes: 'YYYY-MM'
+ */
+function receitaMes(anoMes) {
+  const [ano, mes] = anoMes.split('-').map(Number);
+  // Primeiro e último instante do mês
+  const inicioMes = new Date(ano, mes-1, 1);
+  const fimMes    = new Date(ano, mes, 0, 23, 59, 59); // último dia
+
+  let recEst = 0, recClt = 0, estQtd = 0, cltQtd = 0;
+  const detalhes = [];
+
+  contratos.forEach(c => {
+    if (c.tipo === 'estagiario') {
+      if (!c.inicio1) return;
+      const inicio = new Date(c.inicio1 + 'T00:00:00');
+
+      // Fim estimado: se ativo, considera até hoje; se encerrado, usa 24 meses
+      // Se tiver dataEncerramento, usa ele (campo futuro)
+      let fim;
+      if (c.dataEncerramento) {
+        fim = new Date(c.dataEncerramento + 'T23:59:59');
+      } else if (c.situacao === 'ativo') {
+        fim = new Date(); // ainda ativo
+      } else {
+        // encerrado/outros: usa fim natural do contrato (24 meses)
+        fim = addMesesDate(c.inicio1, 24);
+        fim.setHours(23,59,59);
+      }
+
+      // Estava ativo neste mês?
+      if (inicio <= fimMes && fim >= inicioMes) {
+        const rec = (c.bolsa || 0) * ((c.taxa || 0) / 100);
+        recEst += rec;
+        estQtd++;
+        detalhes.push({ tipo:'estagiario', nome:c.nome, empresa:c.empresa, base:c.bolsa, taxa:c.taxa, rec, situacao:c.situacao });
+      }
+    } else if (c.tipo === 'clt') {
+      // Taxa única: apenas no mês de admissão
+      if (c.admissao && c.admissao.slice(0,7) === anoMes) {
+        const rec = (c.salario || 0) * ((c.taxa || 0) / 100);
+        recClt += rec;
+        cltQtd++;
+        detalhes.push({ tipo:'clt', nome:c.nome, empresa:c.empresa, base:c.salario, taxa:c.taxa, rec, situacao:c.situacao });
+      }
+    }
+  });
+
+  const recComissao = totalComissoesMes(anoMes);
+
+  return { recEst, recClt, recComissao, total: recEst + recClt + recComissao, estQtd, cltQtd, detalhes };
+}
+
+/** Retorna array de 12 resultados para o ano */
+function receitaAno(ano) {
+  return Array.from({length:12}, (_,i) => ({
+    anoMes: anoMesStr(ano, i),
+    ...receitaMes(anoMesStr(ano, i))
+  }));
+}
+
+// ─────────────────────────────────────────────
+//  ANOS DISPONÍVEIS
+// ─────────────────────────────────────────────
+function anosDisponiveis() {
+  const anos = new Set();
+  const hoje = new Date().getFullYear();
+  contratos.forEach(c => {
+    const ref = c.tipo === 'estagiario' ? c.inicio1 : c.admissao;
+    if (ref) {
+      const a = parseInt(ref.slice(0,4));
+      if (!isNaN(a)) anos.add(a);
+      // estagiário pode se extender até a+2
+      if (c.tipo === 'estagiario') anos.add(a+1), anos.add(a+2);
+    }
+  });
+  anos.add(hoje);
+  return [...anos].sort();
+}
+
+// ─────────────────────────────────────────────
+//  RENDER ANUAL
+// ─────────────────────────────────────────────
+function renderAnual() {
+  anoAtual = parseInt(document.getElementById('anoSel').value);
+  mesSel   = null;
+  document.getElementById('detalheSec').style.display = 'none';
+  document.getElementById('detalheBox').innerHTML = '';
+
+  const dados = receitaAno(anoAtual);
+  const dadosAnt = receitaAno(anoAtual - 1);
+  const hoje = new Date();
+  const anoHoje = hoje.getFullYear();
+  const mesHoje = hoje.getMonth(); // 0-based
+
+  // ── KPIs ──
+  const totalAno   = dados.reduce((s,d) => s + d.total, 0);
+  const totalAnt   = dadosAnt.reduce((s,d) => s + d.total, 0);
+  const mesesComRec = dados.filter(d => d.total > 0 && (anoAtual < anoHoje || parseInt(d.anoMes.slice(5))-1 <= mesHoje));
+  const mediaAno   = mesesComRec.length ? totalAno / mesesComRec.length : 0;
+  const melhorMes  = dados.reduce((m,d) => d.total > m.total ? d : m, {total:0,anoMes:''});
+  const totalEst   = dados.reduce((s,d) => s + d.recEst, 0);
+  const totalClt   = dados.reduce((s,d) => s + d.recClt, 0);
+  const totalComissao = dados.reduce((s,d) => s + d.recComissao, 0);
+  const varVsAnt   = totalAnt ? ((totalAno - totalAnt) / totalAnt * 100) : null;
+
+  const kpis = [
+    { v: brl(totalAno),      l: 'Receita Total ' + anoAtual, cls: 'c-accent', sub: varVsAnt !== null ? (varVsAnt >= 0 ? `▲ ${varVsAnt.toFixed(1)}% vs ${anoAtual-1}` : `▼ ${Math.abs(varVsAnt).toFixed(1)}% vs ${anoAtual-1}`) : '' },
+    { v: brl(mediaAno),      l: 'Média Mensal',               cls: 'c-green',  sub: 'meses com receita' },
+    { v: brl(melhorMes.total||0), l: 'Melhor Mês',            cls: 'c-blue',   sub: melhorMes.anoMes ? MESES_FULL[parseInt(melhorMes.anoMes.slice(5))-1] : '—' },
+    { v: brl(totalEst),      l: 'Rec. Estágio',               cls: 'c-accent', sub: 'recorrente mensal' },
+    { v: brl(totalClt),      l: 'Rec. CLT',                   cls: 'c-blue',   sub: 'colocação (único)' },
+    { v: brl(totalComissao), l: 'Comissões',                  cls: 'c-purple', sub: 'recrutadores/consultores' },
+    { v: brl(totalAnt),      l: `Total ${anoAtual-1}`,        cls: 'c-muted',  sub: 'ano anterior' },
+  ];
+  document.getElementById('kpiStrip').innerHTML = kpis.map(k =>
+    `<div class="kpi"><div class="kpi-v ${k.cls}">${k.v}</div><div class="kpi-l">${k.l}</div>${k.sub?`<div class="kpi-sub">${k.sub}</div>`:''}</div>`
+  ).join('');
+
+  // ── Gráfico Barras Empilhadas ──
+  if (chartAnual) chartAnual.destroy();
+  const ctx = document.getElementById('cAnual').getContext('2d');
+  chartAnual = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: MESES_NOME,
+      datasets: [
+        { label: 'Estágio',   data: dados.map(d=>d.recEst),      backgroundColor: 'rgba(59,130,246,.75)',  borderColor:'#3b82f6', borderWidth:1.5, borderRadius:4 },
+        { label: 'CLT',       data: dados.map(d=>d.recClt),      backgroundColor: 'rgba(52,152,219,.7)',   borderColor:'#3498db', borderWidth:1.5, borderRadius:4 },
+        { label: 'Comissões', data: dados.map(d=>d.recComissao), backgroundColor: 'rgba(167,139,250,.75)', borderColor:'#a78bfa', borderWidth:1.5, borderRadius:4 },
+      ]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      interaction: { mode: 'index' },
+      plugins: {
+        legend: { position:'bottom', labels:{ boxWidth:10, padding:10, font:{size:10} } },
+        tooltip: { callbacks: { label: ctx => `${ctx.dataset.label}: ${brl(ctx.raw)}` } }
+      },
+      scales: {
+        x: { stacked:true, grid:{color:'rgba(255,255,255,.04)'}, ticks:{color:'#666',font:{size:10}} },
+        y: { stacked:true, grid:{color:'rgba(255,255,255,.04)'}, ticks:{color:'#666',font:{size:10}, callback:v=>'R$'+Intl.NumberFormat('pt-BR',{notation:'compact'}).format(v)} }
+      },
+      onClick: (_,els) => { if(els.length) selecionarMes(els[0].index); }
+    }
+  });
+
+  // ── Gráfico Comparativo ──
+  document.getElementById('subtitleComparativo').textContent = `${anoAtual} vs ${anoAtual-1}`;
+  if (chartComparativo) chartComparativo.destroy();
+  const ctx2 = document.getElementById('cComparativo').getContext('2d');
+  chartComparativo = new Chart(ctx2, {
+    type: 'line',
+    data: {
+      labels: MESES_NOME,
+      datasets: [
+        { label: String(anoAtual),   data: dados.map(d=>d.total),    borderColor:'#3b82f6', backgroundColor:'rgba(59,130,246,.08)', tension:.3, pointRadius:3, borderWidth:2, fill:true },
+        { label: String(anoAtual-1), data: dadosAnt.map(d=>d.total), borderColor:'rgba(52,152,219,.5)', backgroundColor:'transparent', tension:.3, pointRadius:2, borderWidth:1.5, borderDash:[4,3] },
+      ]
+    },
+    options: {
+      responsive:true, maintainAspectRatio:false,
+      plugins: {
+        legend:{position:'bottom',labels:{boxWidth:10,padding:10,font:{size:10}}},
+        tooltip:{callbacks:{label:ctx=>`${ctx.dataset.label}: ${brl(ctx.raw)}`}}
+      },
+      scales: {
+        x:{grid:{color:'rgba(255,255,255,.04)'},ticks:{color:'#666',font:{size:10}}},
+        y:{grid:{color:'rgba(255,255,255,.04)'},ticks:{color:'#666',font:{size:10},callback:v=>'R$'+Intl.NumberFormat('pt-BR',{notation:'compact'}).format(v)}}
+      }
+    }
+  });
+
+  // ── Grade de meses ──
+  const maxTotal = Math.max(...dados.map(d=>d.total), 1);
+  document.getElementById('mesGrid').innerHTML = MESES_NOME.map((nm, i) => {
+    const d   = dados[i];
+    const mes0 = i; // 0-based
+    const futuro = anoAtual === anoHoje ? mes0 > mesHoje : anoAtual > anoHoje;
+    const pct = (d.total / maxTotal * 100).toFixed(0);
+    return `<div class="mes-card${futuro?' futuro':''}" onclick="selecionarMes(${i})">
+      <div class="mes-card-dot"></div>
+      <div class="mes-card-nome">${nm}</div>
+      <div class="mes-card-val">${futuro ? '—' : brl(d.total)}</div>
+      <div class="mes-card-bar"><div class="mes-card-bar-fill" style="width:${futuro?0:pct}%"></div></div>
+    </div>`;
+  }).join('');
+
+  // ── Tabela anual ──
+  let acum = 0;
+  const tbody = document.getElementById('tblAnualBody');
+  let antTotal = 0;
+  tbody.innerHTML = dados.map((d, i) => {
+    const mes0 = i;
+    const futuro = anoAtual === anoHoje ? mes0 > mesHoje : anoAtual > anoHoje;
+    acum += d.total;
+    const var_ = antTotal > 0 ? ((d.total - antTotal) / antTotal * 100) : null;
+    const varHtml = futuro ? '<span class="var-zero">—</span>' : (var_ === null ? '<span class="var-zero">—</span>' : var_ >= 0
+      ? `<span class="var-pos">▲ ${var_.toFixed(1)}%</span>`
+      : `<span class="var-neg">▼ ${Math.abs(var_).toFixed(1)}%</span>`);
+    const barW = futuro ? 0 : Math.round(d.total / maxTotal * 80);
+    const row = `<tr style="cursor:${futuro?'default':'pointer'}" onclick="${futuro?'':('selecionarMes('+i+')')}">
+      <td class="fw8">${MESES_FULL[i]}</td>
+      <td class="c-accent">${futuro?'—':brl(d.recEst)}</td>
+      <td class="c-blue">${futuro?'—':brl(d.recClt)}</td>
+      <td class="c-purple">${futuro?'—':brl(d.recComissao)}</td>
+      <td class="fw8">${futuro?'—':brl(d.total)}<span class="bar-inline" style="width:${barW}px"></span></td>
+      <td>${varHtml}</td>
+      <td>${futuro?'—':brl(acum)}</td>
+      <td>${futuro?'—':d.estQtd}</td>
+      <td>${futuro?'—':d.cltQtd}</td>
+    </tr>`;
+    if (!futuro) antTotal = d.total;
+    return row;
+  }).join('');
+
+  const totalRecEst = dados.reduce((s,d)=>s+d.recEst,0);
+  const totalRecClt = dados.reduce((s,d)=>s+d.recClt,0);
+  const totalRecCom = dados.reduce((s,d)=>s+d.recComissao,0);
+  document.getElementById('tblAnualFoot').innerHTML = `<tr>
+    <td class="fw8">TOTAL ${anoAtual}</td>
+    <td class="c-accent fw8">${brl(totalRecEst)}</td>
+    <td class="c-blue fw8">${brl(totalRecClt)}</td>
+    <td class="c-purple fw8">${brl(totalRecCom)}</td>
+    <td class="fw8">${brl(totalAno)}</td>
+    <td>—</td><td>—</td><td>—</td><td>—</td>
+  </tr>`;
+}
+
+// ─────────────────────────────────────────────
+//  DETALHE DO MÊS
+// ─────────────────────────────────────────────
+function selecionarMes(idx) {
+  const anoMes = anoMesStr(anoAtual, idx);
+  const hoje = new Date();
+  const futuro = anoAtual > hoje.getFullYear() || (anoAtual === hoje.getFullYear() && idx > hoje.getMonth());
+  if (futuro) return;
+
+  mesSel = anoMes;
+
+  // Atualiza cards ativos
+  document.querySelectorAll('.mes-card').forEach((el, i) => el.classList.toggle('active', i === idx));
+
+  const d = receitaMes(anoMes);
+  const nomeMes = `${MESES_FULL[idx]} / ${anoAtual}`;
+
+  document.getElementById('detalheSec').style.display = 'flex';
+  document.getElementById('detalheNomeMes').textContent = nomeMes;
+
+  const box = document.getElementById('detalheBox');
+
+  // Detalhes dos estagiários
+  const ests = d.detalhes.filter(x=>x.tipo==='estagiario');
+  const clts = d.detalhes.filter(x=>x.tipo==='clt');
+  const coms = comissoesMes(anoMes);
+
+  box.innerHTML = `
+    <div class="detalhe-box">
+      <div class="detalhe-header">
+        <div>
+          <div class="detalhe-title">📅 ${nomeMes}</div>
+          <div class="detalhe-sub">Detalhamento de receita do mês</div>
+        </div>
+        <div class="detalhe-kpis">
+          <div class="dk"><div class="dk-v c-accent">${brl(d.recEst)}</div><div class="dk-l">Estágio</div></div>
+          <div class="dk"><div class="dk-v c-blue">${brl(d.recClt)}</div><div class="dk-l">CLT</div></div>
+          <div class="dk"><div class="dk-v c-purple">${brl(d.recComissao)}</div><div class="dk-l">Comissões</div></div>
+          <div class="dk"><div class="dk-v fw8">${brl(d.total)}</div><div class="dk-l">Total</div></div>
+          <div class="dk"><div class="dk-v">${d.estQtd}</div><div class="dk-l">Estagiários</div></div>
+          <div class="dk"><div class="dk-v">${d.cltQtd}</div><div class="dk-l">CLTs</div></div>
+        </div>
+      </div>
+
+      ${ests.length ? `
+      <div style="font-size:.7rem;font-weight:800;text-transform:uppercase;letter-spacing:1px;color:var(--muted);margin-bottom:.5rem;">🎓 Estagiários ativos no mês</div>
+      <div class="tbl-wrap" style="margin-bottom:1rem">
+        <table class="tbl">
+          <thead><tr><th>Nome</th><th>Empresa</th><th>Bolsa</th><th>Taxa</th><th>Receita/mês</th><th>Situação</th></tr></thead>
+          <tbody>${ests.map(e=>`<tr>
+            <td class="fw8">${e.nome}</td>
+            <td>${e.empresa}</td>
+            <td>${brl(e.base)}</td>
+            <td><span class="tag tag-green">${e.taxa}%</span></td>
+            <td class="c-accent fw8">${brl(e.rec)}</td>
+            <td><span class="tag ${e.situacao==='ativo'?'tag-green':'tag-gray'}">${e.situacao}</span></td>
+          </tr>`).join('')}</tbody>
+          <tfoot><tr>
+            <td colspan="4" class="fw8">Subtotal Estágio</td>
+            <td class="c-accent fw8">${brl(d.recEst)}</td>
+            <td></td>
+          </tr></tfoot>
+        </table>
+      </div>` : ''}
+
+      ${clts.length ? `
+      <div style="font-size:.7rem;font-weight:800;text-transform:uppercase;letter-spacing:1px;color:var(--muted);margin-bottom:.5rem;">💼 CLTs colocados no mês</div>
+      <div class="tbl-wrap">
+        <table class="tbl">
+          <thead><tr><th>Nome</th><th>Empresa</th><th>Salário</th><th>Taxa</th><th>Taxa Colocação</th><th>Situação</th></tr></thead>
+          <tbody>${clts.map(c=>`<tr>
+            <td class="fw8">${c.nome}</td>
+            <td>${c.empresa}</td>
+            <td>${brl(c.base)}</td>
+            <td><span class="tag tag-blue">${c.taxa}%</span></td>
+            <td class="c-blue fw8">${brl(c.rec)}</td>
+            <td><span class="tag ${c.situacao==='ativo'?'tag-green':'tag-gray'}">${c.situacao}</span></td>
+          </tr>`).join('')}</tbody>
+          <tfoot><tr>
+            <td colspan="4" class="fw8">Subtotal CLT</td>
+            <td class="c-blue fw8">${brl(d.recClt)}</td>
+            <td></td>
+          </tr></tfoot>
+        </table>
+      </div>` : ''}
+
+      ${!ests.length && !clts.length && !coms.length ? `<div class="empty">Nenhum contrato ativo ou comissão lançada neste mês.</div>` : ''}
+
+      ${coms.length ? `
+      <div style="font-size:.7rem;font-weight:800;text-transform:uppercase;letter-spacing:1px;color:var(--muted);margin-bottom:.5rem;margin-top:${ests.length||clts.length?'1rem':'0'}">🏆 Comissões de Recrutadores</div>
+      <div class="comissao-list">
+        ${coms.map(c=>`<div class="comissao-item">
+          <div class="comissao-item-info">
+            <span style="font-weight:800">${c.consultor||'—'}</span>
+            <span class="comissao-item-desc">${c.desc||'Sem descrição'}</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:.6rem">
+            <span class="comissao-item-val">${brl(c.valor)}</span>
+            <button class="comissao-item-del" onclick="excluirComissao('${c.id}')" title="Excluir">🗑</button>
+          </div>
+        </div>`).join('')}
+        <div style="text-align:right;font-size:.7rem;font-weight:800;color:#a78bfa;padding:.3rem .8rem">
+          Subtotal: ${brl(d.recComissao)}
+        </div>
+      </div>` : ''}
+    </div>
+  `;
+
+  document.getElementById('detalheBox').scrollIntoView({ behavior:'smooth', block:'nearest' });
+}
+
+// ─────────────────────────────────────────────
+//  EXPORTAR CSV
+// ─────────────────────────────────────────────
+function exportarCSV() {
+  const dados = receitaAno(anoAtual);
+  let acum = 0;
+  const rows = [['Mês','Receita Estágio','Receita CLT','Comissões','Total Mês','Acumulado Ano','Estagiários Ativos','CLTs Colocados']];
+  dados.forEach((d,i) => {
+    acum += d.total;
+    rows.push([MESES_FULL[i], d.recEst.toFixed(2).replace('.',','), d.recClt.toFixed(2).replace('.',','), d.recComissao.toFixed(2).replace('.',','), d.total.toFixed(2).replace('.',','), acum.toFixed(2).replace('.',','), d.estQtd, d.cltQtd]);
+  });
+  const csv = rows.map(r=>r.map(c=>`"${c}"`).join(';')).join('\n');
+  const a = Object.assign(document.createElement('a'),{
+    href: URL.createObjectURL(new Blob(['\ufeff'+csv],{type:'text/csv;charset=utf-8'})),
+    download: `financeiro_${anoAtual}.csv`
+  });
+  a.click(); URL.revokeObjectURL(a.href);
+  if(window.UI?.toast) UI.toast('CSV exportado!','ok');
+}
+
+// ─────────────────────────────────────────────
+//  NAVEGAÇÃO DE ANO
+// ─────────────────────────────────────────────
+function mudarAno(delta) {
+  const sel = document.getElementById('anoSel');
+  const idx = sel.selectedIndex + delta;
+  if (idx >= 0 && idx < sel.options.length) {
+    sel.selectedIndex = idx;
+    renderAnual();
+  }
+}
+
+// ─────────────────────────────────────────────
+//  MODAL COMISSÃO
+// ─────────────────────────────────────────────
+function abrirModalComissao() {
+  const modal = document.getElementById('modalComissao');
+  // pré-preenche com mês atual
+  const hoje = new Date();
+  document.getElementById('comMes').value = `${hoje.getFullYear()}-${String(hoje.getMonth()+1).padStart(2,'0')}`;
+  document.getElementById('comConsultor').value = '';
+  document.getElementById('comValor').value = '';
+  document.getElementById('comDesc').value = '';
+  modal.style.display = 'flex';
+}
+
+function fecharModal() {
+  document.getElementById('modalComissao').style.display = 'none';
+}
+
+function salvarComissao() {
+  const mes  = document.getElementById('comMes').value;
+  const cons = document.getElementById('comConsultor').value.trim();
+  const val  = parseFloat(document.getElementById('comValor').value);
+  const desc = document.getElementById('comDesc').value.trim();
+
+  if (!mes)       { if(window.UI?.toast) UI.toast('Selecione o mês','err'); return; }
+  if (!cons)      { if(window.UI?.toast) UI.toast('Informe o consultor','err'); return; }
+  if (!val || val <= 0) { if(window.UI?.toast) UI.toast('Valor inválido','err'); return; }
+
+  const lista = getComissoes();
+  lista.push({ id: Date.now().toString(36)+Math.random().toString(36).slice(2,5), mes, consultor: cons, valor: val, desc });
+  setComissoes(lista);
+
+  fecharModal();
+  if(window.UI?.toast) UI.toast('Comissão salva!','ok');
+  renderAnual();
+  // re-abre detalhe se estava no mesmo mês
+  if (mesSel === mes) {
+    const idx = parseInt(mes.slice(5)) - 1;
+    selecionarMes(idx);
+  }
+}
+
+function excluirComissao(id) {
+  if (!confirm('Excluir esta comissão?')) return;
+  setComissoes(getComissoes().filter(c => c.id !== id));
+  renderAnual();
+  if (mesSel) {
+    const idx = parseInt(mesSel.slice(5)) - 1;
+    selecionarMes(idx);
+  }
+}
+
+// ─────────────────────────────────────────────
+//  INIT
+// ─────────────────────────────────────────────
+document.addEventListener('DOMContentLoaded', async () => {
+  await new Promise(resolve => {
+    if (window._ccAccessToken !== undefined) { resolve(); return; }
+    const t = setInterval(() => { if (window._ccAccessToken !== undefined) { clearInterval(t); resolve(); } }, 50);
+    setTimeout(() => { clearInterval(t); resolve(); }, 5000);
+  });
+  // data topbar
+  document.getElementById('tb-date').textContent =
+    new Date().toLocaleDateString('pt-BR',{weekday:'short',day:'2-digit',month:'short',year:'numeric'});
+
+  // carrega contratos
+  contratos = CC.getContratos();
+  cfg       = CC.getConfig();
+
+  // tenta sync supabase
+  try {
+    contratos = await CC.getContratosAsync();
+    CC.set('contratos', contratos);
+  } catch(e) {}
+
+  // popula anos
+  const anos = anosDisponiveis();
+  const sel  = document.getElementById('anoSel');
+  anos.forEach(a => {
+    const op = document.createElement('option');
+    op.value = a; op.textContent = a;
+    if (a === new Date().getFullYear()) op.selected = true;
+    sel.appendChild(op);
+  });
+  anoAtual = parseInt(sel.value);
+
+  renderAnual();
+});
+</script>
+</body>
+</html>

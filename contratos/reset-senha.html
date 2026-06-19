@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <!-- ═══ FAVICON ═══ -->
+  <link rel="icon" type="image/png" sizes="32x32" href="../imagens/favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="192x192" href="../imagens/favicon-192x192.png" />
+  <link rel="shortcut icon" href="../imagens/icone.png" type="image/png" />
+  <link rel="apple-touch-icon" href="../imagens/icone.png" />
+  <link rel="manifest" href="../imagens/site.webmanifest" />
+<!-- SEO -->
+<meta name="description" content="Orizon Consultoria — Sistema de Gestão Financeira de Contratos" />
+<meta name="robots" content="noindex, nofollow" />
+<title>Redefinir Senha — DP · Orizon Consultoria</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;700;800;900&display=swap"/>
+<style>
+:root{--accent:#3b82f6;--primary:#1e40af;--bg:#080808;--card:#111;--card2:#161616;--border:rgba(59,130,246,.14);--border2:rgba(59,130,246,.32);--text:#f0f0f0;--muted:#666;--red:#e74c3c;--radius:16px}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Sora',sans-serif;font-size:14px}
+body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;background-image:linear-gradient(rgba(59,130,246,.022) 1px,transparent 1px),linear-gradient(90deg,rgba(59,130,246,.022) 1px,transparent 1px);background-size:52px 52px}
+.orb{position:fixed;border-radius:50%;filter:blur(120px);pointer-events:none;z-index:0}
+.orb1{width:500px;height:500px;background:rgba(30,64,175,.18);top:-100px;left:-100px}
+.page{position:relative;z-index:1;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:1.5rem}
+.card{width:100%;max-width:400px;background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:2.2rem 2rem;box-shadow:0 0 0 1px rgba(0,0,0,.6),0 32px 80px rgba(0,0,0,.5);animation:fadeUp .4s ease}
+@keyframes fadeUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
+.logo-wrap{text-align:center;margin-bottom:2rem}
+.logo-badge{display:inline-flex;align-items:center;justify-content:center;width:56px;height:56px;border-radius:16px;background:linear-gradient(135deg,var(--primary),var(--accent));font-size:1.4rem;font-weight:900;color:#fff;margin-bottom:.8rem;box-shadow:0 0 32px rgba(59,130,246,.25)}
+.logo-title{font-size:1.1rem;font-weight:800}.logo-title span{color:var(--accent)}
+.logo-sub{font-size:.68rem;color:var(--muted);margin-top:.2rem;text-transform:uppercase;letter-spacing:1.5px}
+.form-group{margin-bottom:1rem}
+label{display:block;font-size:.68rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:.4rem}
+.fi{width:100%;background:var(--card2);border:1.5px solid var(--border);border-radius:10px;padding:.7rem .9rem;font-family:inherit;font-size:.82rem;color:var(--text);outline:none;transition:border .15s}
+.fi:focus{border-color:var(--border2);box-shadow:0 0 0 3px rgba(59,130,246,.08)}
+.pw-wrap{position:relative}
+.pw-toggle{position:absolute;right:.75rem;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;color:var(--muted);font-size:.9rem}
+.btn-main{width:100%;padding:.8rem;border-radius:11px;border:none;cursor:pointer;font-family:inherit;font-size:.85rem;font-weight:800;background:linear-gradient(135deg,var(--primary),var(--accent));color:#fff;transition:all .15s;margin-top:.4rem;box-shadow:0 4px 20px rgba(59,130,246,.2)}
+.btn-main:hover{transform:translateY(-1px)}
+.btn-main:disabled{opacity:.5;cursor:not-allowed;transform:none}
+.msg{padding:.65rem .9rem;border-radius:9px;font-size:.72rem;font-weight:600;margin-bottom:1rem;display:none}
+.msg.err{background:rgba(231,76,60,.12);border:1px solid rgba(231,76,60,.3);color:#e74c3c}
+.msg.ok{background:rgba(59,130,246,.10);border:1px solid rgba(59,130,246,.3);color:#3b82f6}
+.msg.show{display:block}
+.spinner{display:none;width:18px;height:18px;border:2px solid rgba(255,255,255,.2);border-top-color:#fff;border-radius:50%;animation:spin .6s linear infinite;margin:0 auto}
+@keyframes spin{to{transform:rotate(360deg)}}
+.req{font-size:.63rem;color:var(--muted);margin-top:.3rem}
+.req span{color:var(--accent)}
+
+@media(max-width:480px){
+  .page{padding:0;align-items:flex-end}
+  .card{border-radius:20px 20px 0 0;padding:1.8rem 1.4rem 2rem;max-width:100%}
+  .btn-main{min-height:48px;font-size:.9rem}
+  .fi{font-size:16px!important}
+}
+</style>
+</head>
+<body>
+<div class="orb orb1"></div>
+<div class="page">
+  <div class="card">
+    <div class="logo-wrap">
+      <div class="logo-badge">NX</div>
+      <div class="logo-title">Orizon <span>Consultoria</span></div>
+      <div class="logo-sub">Redefinir Senha</div>
+    </div>
+
+    <div class="msg err" id="msgErr"></div>
+    <div class="msg ok"  id="msgOk"></div>
+
+    <div id="formArea">
+      <p style="font-size:.72rem;color:var(--muted);margin-bottom:1.2rem;line-height:1.6">
+        Defina uma nova senha para sua conta. Use no mínimo 8 caracteres.
+      </p>
+      <div class="form-group">
+        <label>Nova Senha</label>
+        <div class="pw-wrap">
+          <input class="fi" type="password" id="novaSenha" placeholder="Mínimo 8 caracteres" autocomplete="new-password"/>
+          <button class="pw-toggle" type="button" onclick="togglePw('novaSenha')">👁</button>
+        </div>
+        <div class="req" id="reqBar"></div>
+      </div>
+      <div class="form-group">
+        <label>Confirmar Senha</label>
+        <div class="pw-wrap">
+          <input class="fi" type="password" id="confirmarSenha" placeholder="Repita a senha"
+                 autocomplete="new-password" onkeydown="if(event.key==='Enter')redefinir()"/>
+          <button class="pw-toggle" type="button" onclick="togglePw('confirmarSenha')">👁</button>
+        </div>
+      </div>
+      <button class="btn-main" id="btnRedefinir" onclick="redefinir()">
+        <span id="btnTxt">Salvar Nova Senha</span>
+        <div class="spinner" id="sp"></div>
+      </button>
+    </div>
+
+    <div id="successArea" style="display:none;text-align:center">
+      <div style="font-size:2.5rem;margin-bottom:.8rem">✅</div>
+      <div style="font-weight:800;margin-bottom:.4rem">Senha redefinida!</div>
+      <div style="font-size:.72rem;color:var(--muted);margin-bottom:1.2rem">Você será redirecionado para o login.</div>
+      <button class="btn-main" onclick="irLogin()">Ir para o Login</button>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script>
+const SUPABASE_URL      = 'https://yunoxkembhskpnprffoi.supabase.co';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inl1bm94a2VtYmhza3BucHJmZm9pIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg5Nzg2MzksImV4cCI6MjA5NDU1NDYzOX0.WhkzrBCHThvJaMuLeo6oVPjrWvc_MvfCoyz9B90-Yms';
+const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+// Supabase injeta o token de reset como fragment (#access_token=...)
+// O SDK detecta automaticamente ao inicializar.
+sb.auth.onAuthStateChange((event) => {
+  if (event === 'PASSWORD_RECOVERY') {
+    // Usuário chegou via link de reset — formulário já está visível
+    console.log('[dp] Modo recuperação de senha ativo');
+  }
+});
+
+function togglePw(id) {
+  const el = document.getElementById(id);
+  el.type  = el.type === 'password' ? 'text' : 'password';
+}
+
+// Indicador de força da senha
+document.getElementById('novaSenha').addEventListener('input', function() {
+  const v = this.value;
+  const reqs = [
+    { ok: v.length >= 8,          txt: '8+ caracteres' },
+    { ok: /[A-Z]/.test(v),        txt: 'Maiúscula' },
+    { ok: /[0-9]/.test(v),        txt: 'Número' },
+    { ok: /[^A-Za-z0-9]/.test(v), txt: 'Símbolo' },
+  ];
+  document.getElementById('reqBar').innerHTML =
+    reqs.map(r => `<span style="margin-right:.5rem;color:${r.ok?'var(--accent)':'var(--muted)'}">${r.ok?'✓':'○'} ${r.txt}</span>`).join('');
+});
+
+async function redefinir() {
+  const nova      = document.getElementById('novaSenha').value;
+  const confirmar = document.getElementById('confirmarSenha').value;
+
+  if (nova.length < 8) { showErr('A senha deve ter pelo menos 8 caracteres.'); return; }
+  if (nova !== confirmar) { showErr('As senhas não coincidem.'); return; }
+
+  document.getElementById('btnRedefinir').disabled = true;
+  document.getElementById('sp').style.display = 'block';
+  document.getElementById('btnTxt').style.display = 'none';
+
+  const { error } = await sb.auth.updateUser({ password: nova });
+
+  if (error) {
+    document.getElementById('btnRedefinir').disabled = false;
+    document.getElementById('sp').style.display = 'none';
+    document.getElementById('btnTxt').style.display = 'inline';
+    showErr(`Erro: ${error.message}`);
+    return;
+  }
+
+  document.getElementById('formArea').style.display   = 'none';
+  document.getElementById('successArea').style.display = 'block';
+  setTimeout(irLogin, 3000);
+}
+
+function irLogin() {
+  const base = '/contratos/';
+  window.location.replace(base + 'login.html');
+}
+
+function showErr(msg) {
+  const el = document.getElementById('msgErr');
+  el.textContent = msg; el.classList.add('show');
+}
+</script>
+</body>
+</html>

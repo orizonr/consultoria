@@ -1,0 +1,703 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+<!-- Favicon -->
+  <!-- ═══ FAVICON ═══ -->
+  <link rel="icon" type="image/png" sizes="32x32" href="../imagens/favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="192x192" href="../imagens/favicon-192x192.png" />
+  <link rel="shortcut icon" href="../imagens/icone.png" type="image/png" />
+  <link rel="apple-touch-icon" href="../imagens/icone.png" />
+  <link rel="manifest" href="../imagens/site.webmanifest" />
+<!-- SEO -->
+<meta name="description" content="Orizon Consultoria — Sistema de Gestão Financeira de Contratos" />
+<meta name="robots" content="noindex, nofollow" />
+<title>CLTs — Contratos · Orizon Consultoria</title>
+<link rel="stylesheet" href="assets/cc-style.css"/>
+<style>.sb-head{padding:1.1rem 0.85rem 1rem;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:0.75rem;flex-shrink:0;}.sb-logo-ico{width:44px;height:44px;border-radius:13px;background:linear-gradient(135deg,rgba(30,64,175,0.35),rgba(59,130,246,0.18));border:1px solid rgba(59,130,246,0.28);display:flex;align-items:center;justify-content:center;overflow:hidden;flex-shrink:0;box-shadow:0 2px 10px rgba(59,130,246,0.15);}.sb-logo-ico img{width:44px;height:44px;object-fit:contain;}.sb-logo-txt{overflow:hidden;white-space:nowrap;}.sb-logo-name{font-size:1.18rem;font-weight:900;line-height:1.2;letter-spacing:-0.3px;}.sb-logo-name span{color:var(--accent);}.sb-logo-sub{font-size:0.6rem;color:var(--accent);text-transform:uppercase;letter-spacing:2px;opacity:0.65;margin-top:0.1rem;}.sb-av img{width:100%;height:100%;object-fit:contain;border-radius:inherit;}</style></head>
+<body>
+<div class="app">
+
+<aside class="sidebar" id="sidebar">
+  <div class="sb-head"><div class="sb-logo-ico"><img src="../imagens/fundo.png" alt="Orizon" style="width:44px;height:44px;object-fit:contain"/></div><div class="sb-logo-txt"><div class="sb-logo-name">Orizon <span>Consultoria</span></div><div class="sb-logo-sub">Contratos</div></div></div>
+  <nav class="sb-nav">
+    <div class="sb-sep">Visão Geral</div>
+    <a class="sb-item" href="index.html"><span class="ico">📊</span><span class="lbl">Dashboard</span></a>
+    <div class="sb-sep">Controles</div>
+    <a class="sb-item" href="estagiarios.html"><span class="ico">🎓</span><span class="lbl">Estagiários</span></a>
+    <a class="sb-item active" href="clt.html"><span class="ico">💼</span><span class="lbl">CLTs</span></a>
+    <div class="sb-sep">Gestão</div>
+    <a class="sb-item" href="financeiro-mensal.html"><span class="ico">📅</span><span class="lbl">Financeiro Mensal</span></a>
+    <a class="sb-item" href="relatorios.html"><span class="ico">📈</span><span class="lbl">Relatórios</span></a>
+    <a class="sb-item" href="balanco-financeiro.html"><span class="ico">💰</span><span class="lbl">Balanço Financeiro</span></a>
+    <a class="sb-item" href="despesas-fixas.html"><span class="ico">📌</span><span class="lbl">Despesas Fixas</span></a>
+    <div class="sb-sep">Equipe</div>
+    <a class="sb-item" href="consultores.html"><span class="ico">🏆</span><span class="lbl">Consultores</span></a>
+    <a class="sb-item" href="pipeline.html"><span class="ico">🔄</span><span class="lbl">Pipeline de Projetos</span></a>
+    <div class="sb-sep">Sistema</div>
+    <a class="sb-item" href="configuracoes.html"><span class="ico">⚙️</span><span class="lbl">Configurações</span></a>
+  </nav>
+  <div class="sb-foot"><div class="sb-av"><img src="../imagens/fundo.png" alt="EX" style="width:18px;height:18px;object-fit:contain"/></div><div class="sb-uinfo"><div class="sb-uname" id="user-nome">—</div><div class="sb-urole" id="user-email">—</div></div><button class="sb-toggle" onclick="if(window.ccLogout)window.ccLogout()" title="Sair" style="margin-right:.2rem;opacity:.4">⏻</button><button class="sb-toggle" id="sb-toggle">◀</button></div>
+</aside>
+
+<div class="main">
+  <div class="topbar">
+    <div class="tb-bc"><a href="index.html">Dashboard</a><span class="sep"> / </span><span>CLTs</span></div>
+    <div class="tb-right">
+      <span id="tb-date" class="tb-date"></span>
+      <button class="btn btn-ghost btn-sm" onclick="exportarCSV()">📊 CSV</button>
+      <button class="btn btn-ghost btn-sm" onclick="exportarWord()">📄 Word</button>
+      <button class="btn btn-primary btn-sm" onclick="abrirModal()">＋ Novo CLT</button>
+    </div>
+  </div>
+
+  <div class="content">
+    <div class="sec-hd">
+      <div>
+        <div class="sec-title">💼 Controle de <span>CLTs</span></div>
+        <div class="sec-sub">Taxa única de colocação · Receita bruta da empresa + sua comissão por colocação</div>
+      </div>
+    </div>
+
+    <div class="info-box blue">💡 Para CLTs, a empresa paga uma <strong>taxa única de colocação</strong> (% do salário) à Orizon. Você, como consultor, recebe uma comissão sobre essa taxa. Defina abaixo sua % ou valor fixo por colocação.</div>
+
+    <!-- KPIs -->
+    <div class="kpi-row" id="kpiArea"></div>
+    <div class="tbl-wrap" id="consultorArea" style="display:none;padding:1rem;margin-top:.8rem"></div>
+
+    <!-- Tabela -->
+    <div class="tbl-wrap" id="tblCLTWrap">
+      <div class="tbl-hd" onclick="toggleListaCLT()" style="cursor:pointer;user-select:none">
+        <span class="tbl-title">📋 Lista de CLTs</span>
+        <div class="tbl-actions" onclick="event.stopPropagation()">
+          <div class="search-box"><span>🔍</span><input placeholder="Buscar nome, empresa, agência ou cargo..." oninput="UI.filtrar('tbodyCLT',this.value)"/></div>
+          <select class="fi" id="filtSit" style="font-size:.72rem;padding:.32rem .6rem" onchange="renderTabela()">
+            <option value="">Todos</option>
+            <option value="ativo">Ativos</option>
+            <option value="desligado">Desligados</option>
+            <option value="licenca">Em Licença</option>
+          </select>
+          <button class="btn btn-ghost btn-sm" onclick="toggleListaCLT()" id="btnToggleListaCLT" style="font-size:.75rem">▼ Mostrar lista</button>
+        </div>
+      </div>
+      <div id="listaCorpoCLT" style="display:none">
+      <div class="tbl-scroll" style="-webkit-overflow-scrolling:touch">
+        <table>
+          <thead>
+            <tr>
+              <th>Colaborador</th>
+              <th>Empresa Cliente</th>
+              <th>Agência / Origem</th>
+              <th>Cargo</th>
+              <th>VT / Fretado</th>
+              <th>Salário Bruto</th>
+              <th>Taxa (%)</th>
+              <th>Receita Bruta (colocação)</th>
+              <th>Minha Comissão</th>
+              <th>Líquido p/ Empresa</th>
+              <th>Admissão</th>
+              <th>Tempo de Casa</th>
+              <th>Mês da Contratação</th>
+              <th>Situação</th>
+              <th>Ações</th>
+            </tr>
+          </thead>
+          <tbody id="tbodyCLT"></tbody>
+          <tfoot>
+            <tr>
+              <td colspan="5">TOTAIS</td>
+              <td id="tfSal"></td>
+              <td>—</td>
+              <td id="tfRec" class="c-accent" title="Soma da receita bruta gerada pelas colocações"></td>
+              <td colspan="2">—</td>
+              <td id="tfLiq" class="c-accent fw8" title="Líquido da empresa após minha comissão"></td>
+              <td colspan="2">—</td>
+              <td colspan="2"></td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+      </div>
+    </div>
+
+    <!-- Análise salarial -->
+    <div class="two-col" style="margin-top:1rem">
+      <div class="tbl-wrap" style="padding:1.1rem">
+        <div class="tbl-title" style="margin-bottom:.9rem">📊 Distribuição por Faixa Salarial</div>
+        <div id="faixaSalarial"></div>
+      </div>
+      <div class="tbl-wrap" style="padding:1.1rem">
+        <div class="tbl-title" style="margin-bottom:.9rem">🏢 Receita por Empresa</div>
+        <div id="recEmpresa"></div>
+      </div>
+    </div>
+
+    <!-- ═══ CONTROLE MENSAL ═══ -->
+    <div style="margin-top:2rem">
+      <div class="sec-hd" style="margin-bottom:1rem">
+        <div>
+          <div class="sec-title">📅 Controle Mensal de <span>CLTs</span></div>
+          <div class="sec-sub">Cada mês com suas próprias admissões e dashboard · Clique no mês para expandir</div>
+        </div>
+        <div style="display:flex;align-items:center;gap:.5rem">
+          <button class="btn btn-ghost btn-sm" onclick="anoMensal--;renderMensal()">◀</button>
+          <span id="anoMensalLabel" style="font-weight:800;font-size:1rem;min-width:50px;text-align:center"></span>
+          <button class="btn btn-ghost btn-sm" onclick="anoMensal++;renderMensal()">▶</button>
+        </div>
+      </div>
+      <div id="mensal-clt"></div>
+    </div>
+
+  </div>
+</div>
+</div>
+
+<!-- MODAL -->
+<div class="overlay" id="modalCLT">
+<div class="modal">
+  <div class="modal-hd">
+    <div class="modal-title" id="modalTitulo">＋ Novo CLT</div>
+    <button class="modal-close" onclick="UI.closeModal('modalCLT')">✕</button>
+  </div>
+  <div class="form-grid">
+    <div class="form-group fg-full"><label class="fl">Nome Completo *</label>
+      <input class="fi" id="mNome" placeholder="Nome completo do colaborador"/></div>
+    <div class="form-group fg-full"><label class="fl">Empresa Cliente *</label>
+      <input class="fi" id="mEmpresa" placeholder="Ex: Masterflake — empresa onde o contratado vai trabalhar"/>
+      <span style="font-size:.62rem;color:var(--muted);margin-top:.2rem">Empresa onde o profissional fica alocado</span>
+    </div>
+    <div class="form-group"><label class="fl">🏢 Agência / Origem da Vaga</label>
+      <input class="fi" id="mAgencia" placeholder="Ex: Exittus, Hunter, Direta..."/>
+      <span style="font-size:.62rem;color:var(--muted);margin-top:.2rem">Quem abriu a vaga ou intermediou o processo</span>
+    </div>
+    <div class="form-group"><label class="fl">Tipo de Origem</label>
+      <select class="fi" id="mTipoOrigem">
+        <option value="agencia">Agência (ex: Exittus)</option>
+        <option value="direta">Direta — empresa me contratou direto</option>
+        <option value="indicacao">Indicação</option>
+        <option value="outros">Outros</option>
+      </select>
+    </div>
+    <div class="form-group"><label class="fl">Cargo</label>
+      <input class="fi" id="mCargo" placeholder="Ex: Analista, Supervisor..."/></div>
+    <div class="form-group"><label class="fl">Vale Transporte</label>
+      <select class="fi" id="mVT">
+        <option value="nao">Não</option>
+        <option value="sim">Sim — valor em dinheiro</option>
+        <option value="fretado">Fretado</option>
+      </select>
+    </div>
+    <div class="form-group"><label class="fl">Valor VT (R$/mês)</label>
+      <input type="number" class="fi" id="mValorVT" value="0" min="0" step="0.01"/></div>
+    <div class="form-group"><label class="fl">Salário Bruto (R$/mês) *</label>
+      <input type="number" class="fi" id="mSalario" value="0" min="0" step="0.01" oninput="calcReceita()"/></div>
+    <div class="form-group"><label class="fl">Taxa cobrada da empresa (%)</label>
+      <input type="number" class="fi" id="mTaxa" value="50" min="0" max="100" step="1" oninput="calcReceita()"/>
+      <span style="font-size:.62rem;color:var(--muted);margin-top:.2rem">% do salário que a empresa paga à Orizon como taxa de colocação</span>
+    </div>
+    <div class="form-group"><label class="fl">Receita Bruta gerada (valor único)</label>
+      <input class="fi fi-calc" id="mReceita" readonly/></div>
+    <div class="form-group" style="grid-column:1/-1;border-top:1px solid var(--border);padding-top:.9rem;margin-top:.2rem">
+      <label class="fl" style="font-size:.7rem;color:var(--accent);font-weight:700;text-transform:uppercase;letter-spacing:.05em">💰 Minha Comissão nesta Colocação</label>
+    </div>
+    <div class="form-group"><label class="fl">Meu Nome / Identificação</label>
+      <input class="fi" id="mConsultor" placeholder="Ex: João Silva"/></div>
+    <div class="form-group"><label class="fl">Tipo de Comissão</label>
+      <select class="fi" id="mTipoComissao" onchange="calcReceita()">
+        <option value="none">Sem comissão definida</option>
+        <option value="pct">% da receita bruta gerada</option>
+        <option value="fixo">Valor fixo por colocação (R$)</option>
+      </select>
+    </div>
+    <div class="form-group" id="grpComissaoPct" style="display:none"><label class="fl">Percentual (%)</label>
+      <select class="fi" id="mComissaoPct" onchange="calcReceita()">
+        <option value="20">20%</option>
+        <option value="25">25%</option>
+        <option value="30">30%</option>
+        <option value="35">35%</option>
+        <option value="40">40%</option>
+        <option value="45">45%</option>
+      </select>
+      <span style="font-size:.62rem;color:var(--muted);margin-top:.2rem">% sobre a receita bruta que a empresa paga pela colocação</span>
+    </div>
+    <div class="form-group" id="grpComissaoFixo" style="display:none"><label class="fl">Valor Fixo (R$)</label>
+      <select class="fi" id="mComissaoFixo" onchange="calcReceita()">
+        <option value="20">R$ 20,00</option>
+        <option value="30">R$ 30,00</option>
+        <option value="40">R$ 40,00</option>
+        <option value="50">R$ 50,00</option>
+      </select>
+      <span style="font-size:.62rem;color:var(--muted);margin-top:.2rem">Valor fixo que recebo por esta colocação</span>
+    </div>
+    <div class="form-group"><label class="fl">Minha Comissão (calculado)</label>
+      <input class="fi fi-calc" id="mValorRec" readonly/></div>
+    <div class="form-group"><label class="fl">Líquido p/ empresa após minha comissão</label>
+      <input class="fi fi-calc" id="mLiqAgencia" readonly style="color:var(--accent);font-weight:700"/></div>
+    <div class="form-group"><label class="fl">Data de Admissão *</label>
+      <input type="date" class="fi" id="mAdmissao"/></div>
+    <div class="form-group"><label class="fl">Situação</label>
+      <select class="fi" id="mSituacao">
+        <option value="ativo">Ativo</option>
+        <option value="desligado">Desligado</option>
+        <option value="licenca">Em Licença</option>
+      </select>
+    </div>
+    <div class="form-group fg-full"><label class="fl">Observações</label>
+      <textarea class="fi" id="mObs" placeholder="Informações adicionais..."></textarea></div>
+  </div>
+  <div class="modal-ft">
+    <button class="btn btn-ghost" onclick="UI.closeModal('modalCLT')">Cancelar</button>
+    <button class="btn btn-primary" onclick="salvar()">✓ Salvar</button>
+  </div>
+</div>
+</div>
+
+<div id="toast-ct"></div>
+<script src="assets/cc-auth.js"></script>
+<script src="assets/cc-core.js"></script>
+<script>
+// ── Estado global ──
+let contratos = CC.getContratos();
+let cfg       = CC.getConfig();
+let editId    = null;
+
+function clts() { return contratos.filter(c=>c.tipo==='clt'); }
+
+function toggleListaCLT() {
+  const corpo = document.getElementById('listaCorpoCLT');
+  const btn   = document.getElementById('btnToggleListaCLT');
+  if (!corpo) return;
+  const aberto = corpo.style.display !== 'none';
+  corpo.style.display = aberto ? 'none' : '';
+  if (btn) btn.textContent = aberto ? '▼ Mostrar lista' : '▲ Ocultar lista';
+}
+
+// ── Calcula comissão do recrutador para um contrato ──
+function calcComissaoRec(c) {
+  const rec = Calc.receita(c);
+  if (c.tipoComissao === 'percentual' || c.tipoComissao === 'pct')  return rec * ((c.comissaoRec||0)/100);
+  if (c.tipoComissao === 'fixo') return c.comissaoFixo || 0;
+  // legado: se comissaoRec > 0 e sem tipoComissao, assume %
+  if (!c.tipoComissao && (c.comissaoRec||0) > 0) return rec * (c.comissaoRec/100);
+  return 0;
+}
+
+function renderKPIs() {
+  const lista  = clts();
+  const ativos = lista.filter(c=>c.situacao==='ativo');
+  const totSal = ativos.reduce((s,c)=>s+(c.salario||0),0);
+  const totColoc  = lista.reduce((s,c)=>s+Calc.receita(c),0);
+  const totComiss = lista.reduce((s,c)=>s+calcComissaoRec(c),0);
+  const totLiq    = totColoc - totComiss;
+  const hoje = new Date();
+  const mesAtual = `${hoje.getFullYear()}-${String(hoje.getMonth()+1).padStart(2,'0')}`;
+  const listasMes = lista.filter(c=>c.admissao&&c.admissao.slice(0,7)===mesAtual);
+  const colMes    = listasMes.reduce((s,c)=>s+Calc.receita(c),0);
+  const liqMes    = listasMes.reduce((s,c)=>s+Calc.receita(c)-calcComissaoRec(c),0);
+
+  document.getElementById('kpiArea').innerHTML = [
+    { v:ativos.length,                                          l:'CLTs Colocados (ativos)',                 cls:'c-blue' },
+    { v:Fmt.brl(totSal),                                        l:'Massa Salarial dos CLTs/mês',          cls:'c-text' },
+    { v:Fmt.brl(colMes),    sub:liqMes<colMes?`Líq. ${Fmt.brl(liqMes)}`:'',                     l:'Receita Bruta este mês',  cls:'c-green' },
+    { v:Fmt.brl(totColoc),  sub:totComiss>0?`Líq. empresa: ${Fmt.brl(totLiq)}`:'',               l:'Receita Bruta Total (histórico)', cls:'c-accent' },
+    { v:Fmt.brl(totComiss), sub:totComiss>0?`Receita bruta: ${Fmt.brl(totColoc)}`:'Configure sua comissão em cada colocação', l:'💰 Minha Comissão Total', cls:'c-accent' },
+    { v:lista.filter(c=>c.situacao==='desligado').length,       l:'Desligados',                  cls:'c-muted' },
+  ].map(k=>`<div class="kpi"><div class="kpi-v ${k.cls}">${k.v}</div><div class="kpi-l">${k.l}</div>${k.sub?`<div class="kpi-sub" style="font-size:.6rem;color:var(--muted);margin-top:.15rem">${k.sub}</div>`:''}</div>`).join('');
+
+  // Breakdown por recrutador
+  const recMap = {};
+  lista.forEach(c => {
+    if ((c.comissaoRec||0) > 0) {
+      const nome = (c.recrutador||'').trim() || 'Externo';
+      if (!recMap[nome]) recMap[nome] = { total:0, qtd:0 };
+      recMap[nome].total += calcComissaoRec(c);
+      recMap[nome].qtd++;
+    }
+  });
+  const recEntries = Object.entries(recMap).sort((a,b)=>b[1].total-a[1].total);
+  const recArea = document.getElementById('consultorArea');
+  if (!recArea) return;
+  if (recEntries.length === 0) {
+    recArea.style.display = 'none';
+    return;
+  }
+  recArea.style.display = '';
+  recArea.innerHTML = `
+    <div class="tbl-title" style="margin-bottom:.7rem">👤 Comissões por Consultor Externo</div>
+    <div style="display:flex;flex-wrap:wrap;gap:.6rem">
+      ${recEntries.map(([nome,d])=>`
+        <div style="background:rgba(243,156,18,.07);border:1px solid rgba(243,156,18,.2);border-radius:10px;padding:.7rem 1rem;min-width:160px">
+          <div style="font-size:.78rem;font-weight:800;margin-bottom:.2rem">${nome}</div>
+          <div style="font-size:1.1rem;font-weight:900;color:var(--orange)">${Fmt.brl(d.total)}</div>
+          <div style="font-size:.6rem;color:var(--muted);margin-top:.1rem">${d.qtd} colocação(ões)</div>
+        </div>`).join('')}
+    </div>`;
+}
+
+function renderTabela() {
+  const filtSit = document.getElementById('filtSit').value;
+  let lista = clts();
+  if (filtSit) lista = lista.filter(c=>c.situacao===filtSit);
+  let totSal=0, totRec=0, totLiq=0;
+  const stCls = { ativo:'tag-green', desligado:'tag-red', licenca:'tag-orange' };
+  const stTxt = { ativo:'Ativo', desligado:'Desligado', licenca:'Em Licença' };
+  document.getElementById('tbodyCLT').innerHTML = lista.length === 0
+    ? `<tr><td colspan="12"><div class="empty"><span class="ico">💼</span><p>Nenhum CLT encontrado</p></div></td></tr>`
+    : lista.map(c => {
+        const rec         = Calc.receita(c); // taxa única de colocação
+        const comissaoRec = calcComissaoRec(c);
+        const liquido     = rec - comissaoRec;
+        const meses = Calc.mesesTrabalhados(c.admissao);
+        const mesAdm = c.admissao ? c.admissao.slice(0,7).replace('-','/') : '—';
+        totSal+=c.salario||0; totRec+=rec; totLiq+=liquido;
+        const vtHtml = c.vt==='fretado'?'<span class="tag tag-blue">Fretado</span>'
+          :c.vt==='sim'?`<span class="tag tag-accent">VT ${c.valorVT>0?Fmt.brl(c.valorVT):''}</span>`
+          :'<span class="tag tag-gray">Não</span>';
+        return `<tr data-search="${(c.nome+' '+c.empresa+' '+(c.agencia||'')+' '+(c.cargo||'')+' '+(c.recrutador||'')).toLowerCase()}">
+          <td><div class="ci"><div class="av ${Fmt.avCls(c.id)}">${Fmt.ini(c.nome)}</div>
+            <div class="ci-name">${c.nome}</div></div></td>
+          <td>${c.empresa}</td>
+          <td style="font-size:.76rem">${
+            c.agencia
+              ? `<div style="font-weight:700">${c.agencia}</div><span class="tag ${c.tipoOrigem==='direta'?'tag-green':c.tipoOrigem==='indicacao'?'tag-blue':'tag-orange'}" style="margin-top:.2rem">${{agencia:'Agência',direta:'Direta',indicacao:'Indicação',outros:'Outros'}[c.tipoOrigem]||'Agência'}</span>`
+              : `<span style="opacity:.35">—</span>`
+          }</td>
+          <td style="font-size:.78rem">${c.cargo||'—'}</td>
+          <td>${vtHtml}</td>
+          <td class="fw8">${Fmt.brl(c.salario)}</td>
+          <td><span class="tag tag-blue">${c.taxa}%</span></td>
+          <td class="c-accent fw8" title="Valor pago uma única vez">${Fmt.brl(rec)} <span style="font-size:.6rem;opacity:.5">único</span></td>
+          <td style="font-size:.76rem;line-height:1.5">${
+            comissaoRec > 0
+              ? `<div style="font-weight:600">${c.recrutador || 'Externo'}</div><span class="tag tag-orange" style="margin-top:.2rem">${c.tipoComissao==='fixo' ? 'R$ fixo' : (c.comissaoRec||0)+'%'} = ${Fmt.brl(comissaoRec)}</span>`
+              : `<span style="opacity:.35">Sem consultor</span>`
+          }</td>
+          <td class="fw8" style="color:var(--accent)">${Fmt.brl(liquido)}</td>
+          <td style="font-size:.78rem">${Fmt.dt(c.admissao)}</td>
+          <td style="font-size:.76rem">${Math.floor(meses/12)}a ${meses%12}m</td>
+          <td style="font-size:.78rem;color:var(--muted)">${mesAdm}</td>
+          <td><span class="tag ${stCls[c.situacao]||'tag-gray'}">${stTxt[c.situacao]||c.situacao}</span></td>
+          <td><div style="display:flex;gap:.3rem">
+            <button class="btn btn-blue btn-sm" onclick="abrirModal(${c.id})">✏️</button>
+            <button class="btn btn-danger btn-sm" onclick="excluir(${c.id})">✕</button>
+          </div></td>
+        </tr>`;
+      }).join('');
+  document.getElementById('tfSal').textContent  = Fmt.brl(totSal);
+  document.getElementById('tfRec').textContent  = Fmt.brl(totRec);
+  if(document.getElementById('tfLiq')) document.getElementById('tfLiq').textContent = Fmt.brl(totLiq);
+}
+
+function renderAnalise() {
+  const ativos = clts().filter(c=>c.situacao==='ativo');
+  const faixas = [
+    {l:'até R$2K',    min:0,     max:2000},
+    {l:'R$2K–R$3.5K', min:2000,  max:3500},
+    {l:'R$3.5K–R$5K', min:3500,  max:5000},
+    {l:'acima R$5K',  min:5000,  max:Infinity},
+  ];
+  const maxN = ativos.length || 1;
+  document.getElementById('faixaSalarial').innerHTML = faixas.map(f=>{
+    const n = ativos.filter(c=>c.salario>=f.min&&c.salario<f.max).length;
+    const pct = Math.round(n/maxN*100);
+    return `<div style="margin-bottom:.8rem">
+      <div style="display:flex;justify-content:space-between;font-size:.76rem;margin-bottom:.2rem">
+        <span style="color:var(--muted)">${f.l}</span><span class="c-accent fw8">${n} colaborador(es)</span>
+      </div>
+      <div class="pbar"><div class="pbar-fill" style="width:${pct}%"></div></div>
+    </div>`;
+  }).join('');
+  const emp = {};
+  ativos.forEach(c=>{if(!emp[c.empresa])emp[c.empresa]=0;emp[c.empresa]+=Calc.receita(c);});
+  const sorted = Object.entries(emp).sort((a,b)=>b[1]-a[1]);
+  const maxR = sorted[0]?.[1]||1;
+  document.getElementById('recEmpresa').innerHTML = sorted.map(([e,v])=>`
+    <div style="margin-bottom:.7rem">
+      <div style="display:flex;justify-content:space-between;font-size:.76rem;margin-bottom:.2rem">
+        <span style="color:var(--muted)">${e}</span><span class="c-accent fw8">${Fmt.brl(v)} <span style="opacity:.5;font-size:.6rem">colocação</span></span>
+      </div>
+      <div class="pbar"><div class="pbar-fill" style="width:${Math.round(v/maxR*100)}%"></div></div>
+    </div>`).join('');
+}
+
+function abrirModal(id=null) {
+  editId = id;
+  const c = id ? contratos.find(x=>x.id===id) : null;
+  document.getElementById('modalTitulo').textContent = id ? '✏️ Editar CLT' : '＋ Novo CLT';
+  cfg = CC.getConfig();
+  UI.setVal('mNome',     c?.nome     || '');
+  UI.setVal('mEmpresa',  c?.empresa  || '');
+  UI.setVal('mAgencia',  c?.agencia  || '');
+  UI.setVal('mTipoOrigem', c?.tipoOrigem || 'agencia');
+  UI.setVal('mCargo',    c?.cargo    || '');
+  UI.setVal('mVT',       c?.vt       || 'nao');
+  UI.setVal('mValorVT',  c?.valorVT  || 0);
+  UI.setVal('mSalario',      c?.salario  || 0);
+  UI.setVal('mTaxa',         c?.taxa     || cfg.taxaCLT);
+  UI.setVal('mConsultor',   c?.recrutador    || '');
+  const tipoC = c?.tipoComissao || 'none';
+  UI.setVal('mTipoComissao', tipoC);
+  UI.setVal('mComissaoPct',  c?.comissaoRec  || 20);
+  UI.setVal('mComissaoFixo', c?.comissaoFixo || 20);
+  UI.setVal('mAdmissao', c?.admissao || '');
+  UI.setVal('mSituacao', c?.situacao || 'ativo');
+  UI.setVal('mObs',      c?.obs      || '');
+  calcReceita();
+  UI.openModal('modalCLT');
+}
+
+function calcReceita() {
+  const sal        = parseFloat(UI.val('mSalario'))||0;
+  const taxa       = parseFloat(UI.val('mTaxa'))||0;
+  const recConsultoria = sal*(taxa/100);
+  const tipo       = UI.val('mTipoComissao') || 'none';
+  // mostrar/esconder campos conforme tipo
+  const grpPct  = document.getElementById('grpComissaoPct');
+  const grpFixo = document.getElementById('grpComissaoFixo');
+  if (grpPct)  grpPct.style.display  = tipo==='pct'  ? '' : 'none';
+  if (grpFixo) grpFixo.style.display = tipo==='fixo' ? '' : 'none';
+  let comissao = 0;
+  if (tipo === 'pct') {
+    const pct = parseFloat(UI.val('mComissaoPct'))||0;
+    comissao  = recConsultoria * (pct/100);
+  } else if (tipo === 'fixo') {
+    comissao  = parseFloat(UI.val('mComissaoFixo'))||0;
+  }
+  const liquido = recConsultoria - comissao;
+  UI.setVal('mReceita',    Fmt.brl(recConsultoria));
+  UI.setVal('mValorRec',   tipo !== 'none' ? Fmt.brl(comissao) : '—');
+  UI.setVal('mLiqAgencia', Fmt.brl(liquido));
+}
+
+async function salvar() {
+  const nome = UI.val('mNome').trim();
+  const emp  = UI.val('mEmpresa').trim();
+  const adm  = UI.val('mAdmissao');
+  if (!nome||!emp||!adm) { UI.toast('Preencha nome, empresa e admissão','err'); return; }
+  const dados = {
+    tipo:'clt', nome, empresa:emp, cargo:UI.val('mCargo'),
+    agencia: UI.val('mAgencia').trim(),
+    tipoOrigem: UI.val('mTipoOrigem') || 'agencia',
+    vt:UI.val('mVT'), valorVT:parseFloat(UI.val('mValorVT'))||0,
+    salario:parseFloat(UI.val('mSalario'))||0,
+    taxa:parseFloat(UI.val('mTaxa'))||cfg.taxaCLT,
+    recrutador:   UI.val('mConsultor').trim(),
+    tipoComissao: UI.val('mTipoComissao') || 'none',
+    comissaoRec:  UI.val('mTipoComissao')==='pct'  ? parseFloat(UI.val('mComissaoPct'))||0  : 0,
+    comissaoFixo: UI.val('mTipoComissao')==='fixo' ? parseFloat(UI.val('mComissaoFixo'))||0 : 0,
+    admissao:adm, situacao:UI.val('mSituacao'), obs:UI.val('mObs'),
+  };
+  try {
+    if (editId) {
+      await CC.updateContrato(editId, dados);
+      const idx = contratos.findIndex(c=>c.id===editId);
+      if (idx >= 0) contratos[idx] = { ...contratos[idx], ...dados };
+      UI.toast(`${nome} atualizado!`,'ok');
+    } else {
+      const novo = await CC.insertContrato(dados);
+      contratos.push({ ...dados, ...novo }); // garante recrutador/comissaoRec mesmo se Supabase não retornar
+      UI.toast(`${nome} cadastrado!`,'ok');
+    }
+  } catch(e) {
+    UI.toast('Erro ao salvar: ' + e.message, 'err');
+    return;
+  }
+  UI.closeModal('modalCLT');
+  renderTudo();
+}
+
+async function excluir(id) {
+  if (!confirm('Excluir este CLT?')) return;
+  try {
+    await CC.deleteContrato(id);
+    contratos = contratos.filter(x=>x.id!==id);
+    renderTudo(); UI.toast('Removido','wrn');
+  } catch(e) {
+    UI.toast('Erro ao excluir: ' + e.message, 'err');
+  }
+}
+
+function renderTudo() { renderKPIs(); renderTabela(); renderAnalise(); renderMensal(); }
+
+let anoMensal = new Date().getFullYear();
+
+const MESES_NOMES = ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
+
+function abrirModalMes(mesIdx, ano) {
+  // Pré-preenche a data de admissão com o 1º dia do mês selecionado
+  const dataAdm = `${ano}-${String(mesIdx+1).padStart(2,'0')}-01`;
+  abrirModal();
+  setTimeout(() => {
+    const el = document.getElementById('mAdmissao');
+    if (el) el.value = dataAdm;
+    calcReceita();
+  }, 50);
+}
+
+function toggleMesCLT(id) {
+  const body = document.getElementById('mb-' + id);
+  const btn  = document.getElementById('mbt-' + id);
+  if (!body) return;
+  const aberto = body.style.display !== 'none';
+  body.style.display = aberto ? 'none' : '';
+  if (btn) btn.textContent = aberto ? '▼' : '▲';
+}
+
+function renderMensal() {
+  document.getElementById('anoMensalLabel').textContent = anoMensal;
+  const lista = clts();
+  const wrap  = document.getElementById('mensal-clt');
+  if (!wrap) return;
+
+  // Dashboard geral do ano
+  const doAno = lista.filter(c => c.admissao && c.admissao.startsWith(String(anoMensal)));
+  const totRecAno    = doAno.reduce((s,c)=>s+Calc.receita(c),0);
+  const totComAno    = doAno.reduce((s,c)=>s+calcComissaoRec(c),0);
+  const totLiqAno    = totRecAno - totComAno;
+  const totAdmAno    = doAno.length;
+  const desligAno    = lista.filter(c => c.situacao==='desligado' && c.admissao && c.admissao.startsWith(String(anoMensal))).length;
+
+  let html = `
+    <div class="tbl-wrap" style="padding:1.2rem;margin-bottom:1.2rem;background:linear-gradient(135deg,rgba(59,130,246,.08),rgba(99,102,241,.05));border:1px solid rgba(59,130,246,.2)">
+      <div class="tbl-title" style="margin-bottom:.9rem">📊 Resumo do Ano ${anoMensal}</div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:.7rem">
+        <div class="kpi" style="margin:0"><div class="kpi-v c-blue">${totAdmAno}</div><div class="kpi-l">CLTs admitidos em ${anoMensal}</div></div>
+        <div class="kpi" style="margin:0"><div class="kpi-v c-accent">${Fmt.brl(totRecAno)}</div><div class="kpi-l">Receita bruta do ano</div></div>
+        <div class="kpi" style="margin:0"><div class="kpi-v c-green">${Fmt.brl(totLiqAno)}</div><div class="kpi-l">Líquido do ano</div></div>
+        <div class="kpi" style="margin:0"><div class="kpi-v c-muted">${desligAno}</div><div class="kpi-l">Desligados (do ano)</div></div>
+      </div>
+    </div>`;
+
+  // Um bloco por mês
+  MESES_NOMES.forEach((nomeMes, i) => {
+    const mesStr   = `${anoMensal}-${String(i+1).padStart(2,'0')}`;
+    const admitidos = lista.filter(c => c.admissao && c.admissao.startsWith(mesStr));
+    const desligados = lista.filter(c => c.situacao === 'desligado' && c.admissao && c.admissao.startsWith(mesStr));
+
+    const totRec = admitidos.reduce((s,c)=>s+Calc.receita(c),0);
+    const totCom = admitidos.reduce((s,c)=>s+calcComissaoRec(c),0);
+    const totLiq = totRec - totCom;
+
+    const temDados = admitidos.length > 0 || desligados.length > 0;
+    const hoje = new Date();
+    const ehMesAtual = (hoje.getFullYear() === anoMensal && hoje.getMonth() === i);
+
+    const corBorda = ehMesAtual ? 'rgba(59,130,246,.5)' : (temDados ? 'rgba(99,102,241,.25)' : 'var(--border)');
+    const bgHeader = ehMesAtual ? 'rgba(59,130,246,.1)' : (temDados ? 'rgba(99,102,241,.05)' : 'transparent');
+
+    html += `
+      <div class="tbl-wrap" style="margin-bottom:.6rem;border:1px solid ${corBorda}">
+        <div onclick="toggleMesCLT('${mesStr}')" style="display:flex;align-items:center;justify-content:space-between;padding:.85rem 1rem;cursor:pointer;background:${bgHeader};border-radius:inherit;user-select:none">
+          <div style="display:flex;align-items:center;gap:.75rem">
+            <span style="font-weight:800;font-size:.95rem">${nomeMes} ${anoMensal}</span>
+            ${ehMesAtual ? '<span class="tag tag-blue" style="font-size:.6rem">Mês atual</span>' : ''}
+            ${admitidos.length > 0 ? `<span class="tag tag-green" style="font-size:.6rem">+${admitidos.length} admitido(s)</span>` : ''}
+            ${desligados.length > 0 ? `<span class="tag tag-red" style="font-size:.6rem">-${desligados.length} desligado(s)</span>` : ''}
+            ${!temDados ? '<span style="font-size:.72rem;color:var(--muted);opacity:.5">Sem admissões</span>' : ''}
+          </div>
+          <div style="display:flex;align-items:center;gap:.75rem">
+            ${temDados ? `<span style="font-size:.78rem;font-weight:700;color:var(--accent)">${Fmt.brl(totRec)}</span>` : ''}
+            <button class="btn btn-primary btn-sm" onclick="event.stopPropagation();abrirModalMes(${i},${anoMensal})" style="font-size:.68rem;padding:.25rem .6rem">＋ Adicionar CLT</button>
+            <span id="mbt-${mesStr}" style="color:var(--muted);font-size:.8rem">${temDados ? '▼' : '▼'}</span>
+          </div>
+        </div>
+
+        <div id="mb-${mesStr}" style="display:none;padding:1rem;border-top:1px solid var(--border)">
+          ${temDados ? `
+            <!-- Dashboard do mês -->
+            ${admitidos.length > 0 ? `
+            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:.6rem;margin-bottom:1rem">
+              <div class="kpi" style="margin:0;padding:.7rem"><div class="kpi-v c-blue" style="font-size:1.3rem">${admitidos.length}</div><div class="kpi-l">Colocação(ões)</div></div>
+              <div class="kpi" style="margin:0;padding:.7rem"><div class="kpi-v c-accent" style="font-size:1.3rem">${Fmt.brl(totRec)}</div><div class="kpi-l">Receita bruta (único)</div></div>
+              ${totCom > 0 ? `<div class="kpi" style="margin:0;padding:.7rem"><div class="kpi-v c-orange" style="font-size:1.3rem">${Fmt.brl(totCom)}</div><div class="kpi-l">Minha comissão</div></div>` : ''}
+              <div class="kpi" style="margin:0;padding:.7rem"><div class="kpi-v c-green" style="font-size:1.3rem">${Fmt.brl(totLiq)}</div><div class="kpi-l">Líquido empresa</div></div>
+            </div>
+            <!-- Lista de admitidos -->
+            <div style="font-size:.72rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:.5rem">Admitidos em ${nomeMes}</div>
+            <div style="display:flex;flex-direction:column;gap:.4rem">
+              ${admitidos.map(c => {
+                const rec = Calc.receita(c);
+                const com = calcComissaoRec(c);
+                const liq = rec - com;
+                return `<div style="display:flex;align-items:center;justify-content:space-between;padding:.6rem .8rem;background:rgba(59,130,246,.05);border-radius:8px;border:1px solid rgba(59,130,246,.12)">
+                  <div style="display:flex;align-items:center;gap:.6rem">
+                    <div class="av ${Fmt.avCls(c.id)}" style="width:28px;height:28px;font-size:.65rem">${Fmt.ini(c.nome)}</div>
+                    <div>
+                      <div style="font-weight:700;font-size:.82rem">${c.nome}</div>
+                      <div style="font-size:.68rem;color:var(--muted)">${c.empresa} · ${c.cargo||'—'} · ${c.taxa}% do salário</div>
+                    </div>
+                  </div>
+                  <div style="display:flex;align-items:center;gap:.8rem">
+                    <div style="text-align:right">
+                      <div style="font-weight:800;font-size:.85rem;color:var(--accent)">${Fmt.brl(rec)}</div>
+                      <div style="font-size:.6rem;color:var(--muted)">colocação única</div>
+                    </div>
+                    <span class="tag ${c.situacao==='ativo'?'tag-green':c.situacao==='desligado'?'tag-red':'tag-orange'}">${c.situacao}</span>
+                    <button class="btn btn-blue btn-sm" onclick="abrirModal(${c.id})" style="padding:.2rem .5rem">✏️</button>
+                  </div>
+                </div>`;
+              }).join('')}
+            </div>` : ''}
+            ${desligados.length > 0 ? `
+            <div style="font-size:.72rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin:${admitidos.length>0?'.9rem':'0'} 0 .5rem">Desligamentos em ${nomeMes}</div>
+            <div style="display:flex;flex-direction:column;gap:.4rem">
+              ${desligados.map(c => `<div style="display:flex;align-items:center;justify-content:space-between;padding:.5rem .8rem;background:rgba(239,68,68,.04);border-radius:8px;border:1px solid rgba(239,68,68,.15)">
+                <div style="display:flex;align-items:center;gap:.6rem">
+                  <div class="av av-red" style="width:26px;height:26px;font-size:.65rem">${Fmt.ini(c.nome)}</div>
+                  <div style="font-size:.8rem;font-weight:600">${c.nome}</div>
+                </div>
+                <div style="font-size:.7rem;color:var(--muted)">${c.empresa}</div>
+                <button class="btn btn-blue btn-sm" onclick="abrirModal(${c.id})" style="padding:.2rem .5rem">✏️</button>
+              </div>`).join('')}
+            </div>` : ''}
+          ` : `<div style="text-align:center;padding:1rem;color:var(--muted);font-size:.8rem">Nenhuma admissão neste mês.</div>`}
+        </div>
+      </div>`;
+  });
+
+  wrap.innerHTML = html;
+}
+
+function exportarCSV() {
+  Export.csv(
+    ['Nome','Empresa','Cargo','VT','Salário','Taxa%','Taxa Colocação (único)','Admissão','Tempo','Situação'],
+    clts().map(c=>{const m=Calc.mesesTrabalhados(c.admissao);
+      return[c.nome,c.empresa,c.cargo||'',c.vt,Fmt.brl(c.salario||0),c.taxa+'%',
+        Fmt.brl(Calc.receita(c)),Fmt.dt(c.admissao),`${Math.floor(m/12)}a ${m%12}m`,c.situacao];}),
+    'clt.csv'
+  );
+}
+
+function exportarWord() {
+  const totColoc = clts().reduce((s,c)=>s+Calc.receita(c),0);
+  const rows = clts().map(c=>`<tr><td>${c.nome}</td><td>${c.empresa}</td><td>${c.cargo||'—'}</td><td>${Fmt.brl(c.salario||0)}</td><td>${c.taxa}%</td><td><b>${Fmt.brl(Calc.receita(c))}</b></td><td>${Fmt.dt(c.admissao)}</td><td>${c.situacao}</td></tr>`).join('');
+  Export.word(`<h2>Controle de CLTs — Orizon Consultoria</h2>
+    <p><b>Nota:</b> Para CLTs, a receita bruta (taxa de colocação) é gerada uma única vez no mês da contratação. Sua comissão é descontada desse valor.</p>
+    <p>Total histórico de colocações: <b>${Fmt.brl(totColoc)}</b></p>
+    <table><thead><tr><th>Nome</th><th>Empresa</th><th>Cargo</th><th>Salário</th><th>Taxa</th><th>Colocação (único)</th><th>Admissão</th><th>Situação</th></tr></thead>
+    <tbody>${rows}</tbody></table>`, 'clt.doc');
+}
+
+document.addEventListener('DOMContentLoaded', async () => {
+  // Aguarda token do cc-auth.js estar disponível
+  await new Promise(resolve => {
+    if (window._ccAccessToken !== undefined) { resolve(); return; }
+    const t = setInterval(() => { if (window._ccAccessToken !== undefined) { clearInterval(t); resolve(); } }, 50);
+    setTimeout(() => { clearInterval(t); resolve(); }, 5000);
+  });
+  cfg = CC.getConfig();
+  // Mostra spinner enquanto carrega
+  document.getElementById('tbodyCLT').innerHTML =
+    `<tr><td colspan="12" style="text-align:center;padding:2rem;color:var(--muted)">⏳ Carregando dados...</td></tr>`;
+  try {
+    contratos = await CC.getContratosAsync();
+    CC.set('contratos', contratos);
+  } catch(e) {
+    contratos = CC.getContratos();
+    UI.toast('Usando dados locais (sem conexão)', 'wrn');
+  }
+  renderTudo();
+});
+</script>
+</body>
+</html>

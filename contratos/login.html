@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<link rel="icon" type="image/png" sizes="32x32" href="../imagens/favicon-32x32.png"/>
+<link rel="icon" type="image/png" sizes="192x192" href="../imagens/favicon-192x192.png"/>
+<link rel="shortcut icon" href="../imagens/icone.png" type="image/png"/>
+<link rel="apple-touch-icon" href="../imagens/icone.png"/>
+<meta name="description" content="Orizon Consultoria — Sistema de Gestão Financeira de Contratos"/>
+<meta name="robots" content="noindex, nofollow"/>
+<title>Entrar — Contratos · Orizon Consultoria</title>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;700;800;900&display=swap" rel="stylesheet"/>
+
+    <!-- ═══ FAVICON ═══ -->
+  <link rel="icon" type="image/png" sizes="32x32" href="../imagens/favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="192x192" href="../imagens/favicon-192x192.png" />
+  <link rel="shortcut icon" href="../imagens/icone.png" type="image/png" />
+  <link rel="apple-touch-icon" href="../imagens/icone.png" />
+  <link rel="manifest" href="../imagens/site.webmanifest" />
+<style>
+:root{
+  --primary:#1d4ed8;--accent:#3b82f6;
+  --bg:#080808;--bg2:#0d0d0d;--card:#111111;--card2:#161616;
+  --border:rgba(59,130,246,0.12);--border2:rgba(59,130,246,0.28);
+  --text:#f0f0f0;--muted:#666;--muted2:#333;
+  --red:#e74c3c;--green:#2ecc71;--orange:#f39c12;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Sora',sans-serif;font-size:14px;}
+body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
+  background-image:linear-gradient(rgba(59,130,246,0.025) 1px,transparent 1px),linear-gradient(90deg,rgba(59,130,246,0.025) 1px,transparent 1px);
+  background-size:52px 52px;}
+body::after{content:'';position:fixed;top:-30%;left:50%;transform:translateX(-50%);
+  width:800px;height:600px;background:radial-gradient(ellipse,rgba(59,130,246,0.05) 0%,transparent 68%);
+  pointer-events:none;z-index:0;}
+
+/* ── PAGE ── */
+#loginScreen{
+  position:fixed;inset:0;z-index:200;display:flex;align-items:center;justify-content:center;
+  background:var(--bg);overflow:auto;padding:1rem;
+}
+#loginScreen::before{
+  content:'';position:absolute;inset:0;
+  background-image:
+    radial-gradient(circle at 20% 20%, rgba(59,130,246,0.06) 0%, transparent 50%),
+    radial-gradient(circle at 80% 80%, rgba(30,64,175,0.08) 0%, transparent 50%);
+  animation:lbg 8s ease-in-out infinite alternate;pointer-events:none;
+}
+@keyframes lbg{0%{opacity:0.7;transform:scale(1);}100%{opacity:1;transform:scale(1.05);}}
+
+/* ── SPLIT CARD ── */
+.login-wrap{
+  position:relative;z-index:1;width:100%;max-width:860px;
+  display:grid;grid-template-columns:1fr 1fr;
+  background:rgba(13,13,13,0.97);
+  border:1px solid var(--border2);border-radius:28px;
+  overflow:hidden;backdrop-filter:blur(24px);
+  box-shadow:0 40px 80px rgba(0,0,0,0.6);
+  animation:fadeUp .4s ease;
+}
+@keyframes fadeUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
+@media(max-width:680px){.login-wrap{grid-template-columns:1fr;}.login-brand{display:none!important;}}
+
+/* ── BRANDING (esquerda) ── */
+.login-brand{
+  background:linear-gradient(160deg,rgba(15,25,45,0.98) 0%,rgba(8,14,30,0.99) 100%);
+  padding:2.8rem 2.2rem;display:flex;flex-direction:column;justify-content:space-between;
+  border-right:1px solid rgba(59,130,246,0.12);position:relative;overflow:hidden;
+}
+.login-brand::before{
+  content:'';position:absolute;top:-40%;right:-30%;width:400px;height:400px;
+  background:radial-gradient(ellipse,rgba(59,130,246,0.08) 0%,transparent 65%);pointer-events:none;
+}
+.login-brand::after{
+  content:'';position:absolute;bottom:-20%;left:-10%;width:250px;height:250px;
+  background:radial-gradient(ellipse,rgba(30,64,175,0.12) 0%,transparent 65%);pointer-events:none;
+}
+.lb-logo{width:64px;height:64px;border-radius:18px;
+  background:linear-gradient(135deg,rgba(30,64,175,0.4),rgba(59,130,246,0.15));
+  border:1px solid rgba(59,130,246,0.3);display:flex;align-items:center;justify-content:center;
+  overflow:hidden;margin-bottom:1.8rem;box-shadow:0 4px 20px rgba(59,130,246,0.15);}
+.lb-logo img{width:46px;height:46px;object-fit:contain;}
+.lb-tag{font-size:0.55rem;font-weight:700;letter-spacing:3px;text-transform:uppercase;
+  color:var(--accent);opacity:0.65;margin-bottom:0.6rem;}
+.lb-title{font-size:2rem;font-weight:900;line-height:1.15;margin-bottom:0.5rem;letter-spacing:-0.5px;}
+.lb-title span{color:var(--accent);}
+.lb-sub{font-size:0.78rem;color:rgba(255,255,255,0.4);line-height:1.7;margin-bottom:2rem;}
+.lb-features{display:flex;flex-direction:column;gap:0.6rem;}
+.lb-feat{display:flex;align-items:center;gap:0.65rem;font-size:0.73rem;color:rgba(255,255,255,0.5);}
+.lb-feat-dot{width:6px;height:6px;border-radius:50%;background:var(--accent);opacity:0.7;flex-shrink:0;}
+.lb-footer{font-size:0.6rem;color:rgba(255,255,255,0.2);margin-top:auto;}
+.lb-secure{display:flex;align-items:center;gap:0.45rem;margin-top:1.5rem;}
+.lb-secure-ico{font-size:0.9rem;opacity:0.4;}
+.lb-secure-txt{font-size:0.62rem;color:rgba(255,255,255,0.28);}
+
+/* ── FORM (direita) ── */
+.login-form-side{padding:2.8rem 2.4rem;display:flex;flex-direction:column;justify-content:center;}
+.lf-eyebrow{font-size:0.58rem;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;
+  color:var(--accent);opacity:0.7;margin-bottom:0.45rem;}
+.lf-title{font-size:1.4rem;font-weight:900;margin-bottom:0.25rem;}
+.lf-sub{font-size:0.76rem;color:var(--muted);margin-bottom:2rem;line-height:1.55;}
+
+.f-label{font-size:0.65rem;font-weight:700;color:var(--muted);display:block;
+  margin-bottom:0.3rem;letter-spacing:0.4px;text-transform:uppercase;}
+.f-wrap{position:relative;margin-bottom:0.85rem;}
+.f-icon{position:absolute;left:0.9rem;top:50%;transform:translateY(-50%);
+  font-size:0.85rem;opacity:0.35;pointer-events:none;}
+.f-eye{position:absolute;right:0.9rem;top:50%;transform:translateY(-50%);
+  font-size:0.88rem;opacity:0.35;cursor:pointer;transition:opacity 0.15s;}
+.f-eye:hover{opacity:0.7;}
+.f-input{width:100%;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.09);
+  border-radius:12px;padding:0.82rem 2.5rem 0.82rem 2.6rem;color:var(--text);
+  font-family:inherit;font-size:0.86rem;transition:all 0.2s;outline:none;}
+.f-input:focus{border-color:var(--accent);background:rgba(59,130,246,0.04);box-shadow:0 0 0 3px rgba(59,130,246,0.08);}
+.f-input.err{border-color:var(--red)!important;animation:shake 0.35s ease;}
+.f-input::placeholder{color:var(--muted2);font-size:0.82rem;}
+@keyframes shake{0%,100%{transform:translateX(0)}25%,75%{transform:translateX(-5px)}50%{transform:translateX(5px)}}
+
+/* tabs (Entrar / Recuperar) */
+.tabs{display:flex;gap:.3rem;background:var(--card2);border-radius:10px;padding:.25rem;margin-bottom:1.6rem;}
+.tab{flex:1;text-align:center;padding:.45rem;border-radius:8px;font-size:.72rem;font-weight:700;
+  cursor:pointer;transition:all .15s;color:var(--muted);}
+.tab.active{background:var(--primary);color:#fff;box-shadow:0 2px 8px rgba(30,64,175,.4);}
+
+/* tentativas */
+.login-attempts{display:flex;align-items:center;gap:0.45rem;margin-bottom:0.7rem;min-height:1.2rem;}
+.att-dot{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,0.1);transition:all 0.2s;flex-shrink:0;}
+.att-dot.used{background:var(--red);}
+.att-dot.warn{background:var(--orange);}
+.att-txt{font-size:0.62rem;color:var(--muted);}
+
+/* checkbox humano */
+.check-human{display:flex;align-items:center;gap:0.7rem;
+  background:rgba(255,255,255,0.025);border:1px solid rgba(255,255,255,0.07);
+  border-radius:12px;padding:0.75rem 1rem;margin-bottom:0.85rem;cursor:pointer;
+  user-select:none;transition:all 0.2s;}
+.check-human:hover{background:rgba(59,130,246,0.05);border-color:rgba(59,130,246,0.18);}
+.check-human.on{background:rgba(59,130,246,0.07);border-color:rgba(59,130,246,0.28);}
+.ch-box{width:20px;height:20px;border-radius:5px;border:2px solid rgba(255,255,255,0.16);
+  background:rgba(255,255,255,0.03);display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;transition:all 0.18s;}
+.check-human.on .ch-box{background:var(--accent);border-color:var(--accent);}
+.ch-tick{opacity:0;transform:scale(0.4);transition:all 0.15s;font-size:0.72rem;color:#fff;}
+.check-human.on .ch-tick{opacity:1;transform:scale(1);}
+.ch-txt{font-size:0.78rem;color:var(--muted);font-weight:600;flex:1;}
+.check-human.on .ch-txt{color:var(--text);}
+.ch-ico{font-size:0.9rem;opacity:0.3;margin-left:auto;}
+.check-human.on .ch-ico{opacity:1;}
+
+/* botão */
+.login-btn{
+  width:100%;background:linear-gradient(135deg,var(--primary),var(--accent));
+  color:#fff;border:none;border-radius:12px;padding:0.92rem;font-family:inherit;
+  font-size:0.9rem;font-weight:800;cursor:pointer;transition:all 0.22s;letter-spacing:0.2px;
+}
+.login-btn:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 8px 28px rgba(59,130,246,0.28);}
+.login-btn:disabled{opacity:0.28;cursor:not-allowed;}
+
+.login-blocked{background:rgba(231,76,60,0.08);border:1px solid rgba(231,76,60,0.25);
+  border-radius:10px;padding:0.75rem 1rem;font-size:0.75rem;color:var(--red);
+  text-align:center;margin-bottom:0.8rem;display:none;line-height:1.55;}
+.login-blocked.show{display:block;}
+.login-err{font-size:0.73rem;color:var(--red);text-align:center;margin-top:0.65rem;min-height:1rem;font-weight:600;}
+.login-footer{margin-top:1.6rem;font-size:0.6rem;color:var(--muted2);text-align:center;
+  display:flex;align-items:center;justify-content:center;gap:0.4rem;}
+.lf-sep{opacity:0.3;}
+
+/* recuperar senha */
+.btn-ghost-sm{background:none;border:none;cursor:pointer;font-family:inherit;
+  font-size:0.7rem;color:var(--muted);text-decoration:underline;text-underline-offset:2px;padding:0;}
+.btn-ghost-sm:hover{color:var(--accent);}
+.spinner{display:none;width:18px;height:18px;border:2px solid rgba(255,255,255,0.2);
+  border-top-color:#fff;border-radius:50%;animation:spin .6s linear infinite;margin:0 auto;}
+@keyframes spin{to{transform:rotate(360deg)}}
+.msg{padding:.65rem .9rem;border-radius:9px;font-size:.72rem;font-weight:600;margin-bottom:1rem;display:none;}
+.msg.ok{background:rgba(59,130,246,.10);border:1px solid rgba(59,130,246,.3);color:#3b82f6;}
+.msg.show{display:block;}
+
+@media(max-width:480px){
+  #loginScreen{padding:0;align-items:flex-end;}
+  .login-wrap{border-radius:20px 20px 0 0;}
+  .login-form-side{padding:2rem 1.4rem 2.5rem;}
+  .f-input{font-size:16px!important;}
+  .login-btn{min-height:48px;}
+}
+</style>
+</head>
+<body>
+<div id="loginScreen">
+  <div class="login-wrap">
+
+    <!-- ESQUERDA: Branding -->
+    <div class="login-brand">
+      <div>
+        <div class="lb-logo">
+          <img src="../imagens/fundo.png" alt="Orizon" onerror="this.parentElement.innerHTML='OR'"/>
+        </div>
+        <div class="lb-tag">Contratos & RH</div>
+        <div class="lb-title">Orizon <span>Consultoria</span></div>
+        <div class="lb-sub">Sistema interno de gestão de contratos, estagiários e CLTs.</div>
+        <div class="lb-features">
+          <div class="lb-feat"><div class="lb-feat-dot"></div>Gestão de estagiários e CLTs</div>
+          <div class="lb-feat"><div class="lb-feat-dot"></div>Controle financeiro mensal</div>
+          <div class="lb-feat"><div class="lb-feat-dot"></div>Relatórios e balanço</div>
+          <div class="lb-feat"><div class="lb-feat-dot"></div>Alertas de vencimento automáticos</div>
+        </div>
+      </div>
+      <div>
+        <div class="lb-secure">
+          <span class="lb-secure-ico">🔒</span>
+          <span class="lb-secure-txt">Acesso restrito · Autenticação via Supabase</span>
+        </div>
+        <div class="lb-footer" style="margin-top:0.6rem;">Orizon Consultoria · Guaíba/RS</div>
+      </div>
+    </div>
+
+    <!-- DIREITA: Formulário -->
+    <div class="login-form-side">
+      <div class="lf-eyebrow">Acesso restrito</div>
+      <h1 class="lf-title">Bem-vindo de volta</h1>
+      <p class="lf-sub">Faça login para acessar o sistema de contratos.</p>
+
+      <!-- Tabs -->
+      <div class="tabs">
+        <div class="tab active" onclick="showTab('login',this)">Entrar</div>
+        <div class="tab" onclick="showTab('reset',this)">Recuperar Senha</div>
+      </div>
+
+      <!-- TAB LOGIN -->
+      <div id="tabLogin">
+        <label class="f-label" for="lEmail">E-mail</label>
+        <div class="f-wrap">
+          <span class="f-icon">✉️</span>
+          <input class="f-input" id="lEmail" type="email" placeholder="seu@email.com"
+            autocomplete="username" onkeydown="if(event.key==='Enter')document.getElementById('lSenha').focus()"/>
+        </div>
+
+        <label class="f-label" for="lSenha">Senha</label>
+        <div class="f-wrap">
+          <span class="f-icon">🔒</span>
+          <input class="f-input" id="lSenha" type="password" placeholder="••••••••"
+            autocomplete="current-password" onkeydown="if(event.key==='Enter')loginTentar()"/>
+          <span class="f-eye" onclick="toggleSenha()" title="Mostrar senha">👁</span>
+        </div>
+
+        <div style="text-align:right;margin:-0.4rem 0 0.8rem">
+          <button class="btn-ghost-sm" onclick="showTab('reset',document.querySelectorAll('.tab')[1])">Esqueci minha senha</button>
+        </div>
+
+        <!-- Tentativas -->
+        <div class="login-attempts" id="attemptsRow" style="display:none;">
+          <div class="att-dot" id="att1"></div>
+          <div class="att-dot" id="att2"></div>
+          <div class="att-dot" id="att3"></div>
+          <div class="att-dot" id="att4"></div>
+          <div class="att-dot" id="att5"></div>
+          <span class="att-txt" id="attTxt"></span>
+        </div>
+
+        <div class="login-blocked" id="loginBlocked"></div>
+
+        <div class="check-human" id="chHuman" onclick="toggleHuman()">
+          <div class="ch-box"><span class="ch-tick">✓</span></div>
+          <span class="ch-txt">Não sou um robô</span>
+          <span class="ch-ico">🛡️</span>
+        </div>
+
+        <button class="login-btn" id="loginBtn" disabled onclick="loginTentar()">
+          <span id="btnLoginTxt">Entrar no sistema</span>
+          <div class="spinner" id="spinnerLogin"></div>
+        </button>
+        <div class="login-err" id="loginErr"></div>
+      </div>
+
+      <!-- TAB RECUPERAR -->
+      <div id="tabReset" style="display:none;">
+        <div class="msg ok" id="msgOk"></div>
+        <p style="font-size:.72rem;color:var(--muted);margin-bottom:1rem;line-height:1.6;">
+          Digite seu e-mail e enviaremos um link para redefinir sua senha.
+        </p>
+        <label class="f-label" for="emailReset">E-mail cadastrado</label>
+        <div class="f-wrap">
+          <span class="f-icon">✉️</span>
+          <input class="f-input" id="emailReset" type="email" placeholder="seu@email.com"
+            style="padding-left:2.6rem" onkeydown="if(event.key==='Enter')enviarReset()"/>
+        </div>
+        <button class="login-btn" id="btnReset" onclick="enviarReset()">
+          <span id="btnResetTxt">Enviar Link de Recuperação</span>
+          <div class="spinner" id="spinnerReset"></div>
+        </button>
+        <div style="text-align:center;margin-top:1rem;">
+          <button class="btn-ghost-sm" onclick="showTab('login',document.querySelectorAll('.tab')[0])">← Voltar ao login</button>
+        </div>
+      </div>
+
+      <div class="login-footer">
+        <span>🔐</span><span class="lf-sep">·</span>
+        <span>Conexão segura · Autenticação Supabase</span>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script>
+const SUPABASE_URL = 'https://yunoxkembhskpnprffoi.supabase.co';
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inl1bm94a2VtYmhza3BucHJmZm9pIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg5Nzg2MzksImV4cCI6MjA5NDU1NDYzOX0.WhkzrBCHThvJaMuLeo6oVPjrWvc_MvfCoyz9B90-Yms';
+const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+const MAX_TENTATIVAS = 5;
+const DELAY_BASE_MS  = 1000;
+const LOCK_KEY       = 'orizon_cc_lock';
+let _humanOk = false;
+
+// Verifica sessão ativa
+(async () => {
+  const { data: { session } } = await sb.auth.getSession();
+  if (session) goNext();
+})();
+
+verificarBloqueioInicial();
+
+function showTab(name, el) {
+  document.getElementById('tabLogin').style.display = name === 'login' ? 'block' : 'none';
+  document.getElementById('tabReset').style.display = name === 'reset' ? 'block' : 'none';
+  document.querySelectorAll('.tab').forEach((t,i) =>
+    t.classList.toggle('active', (name==='login'&&i===0)||(name==='reset'&&i===1)));
+}
+
+function toggleSenha() {
+  const el = document.getElementById('lSenha');
+  el.type = el.type === 'password' ? 'text' : 'password';
+}
+
+function toggleHuman() {
+  _humanOk = !_humanOk;
+  document.getElementById('chHuman').classList.toggle('on', _humanOk);
+  const lk = lerLockout();
+  const bloqueado = lk && lk.bloqueado && Date.now() < lk.ate;
+  document.getElementById('loginBtn').disabled = !_humanOk || bloqueado;
+}
+
+function lerLockout() {
+  try { return JSON.parse(localStorage.getItem(LOCK_KEY)); } catch { return null; }
+}
+function salvarLockout(d) {
+  try { localStorage.setItem(LOCK_KEY, JSON.stringify(d)); } catch {}
+}
+function limparLockout() {
+  try { localStorage.removeItem(LOCK_KEY); } catch {}
+}
+
+function atualizarIndicadorTentativas(n) {
+  const row = document.getElementById('attemptsRow');
+  if (n === 0) { row.style.display = 'none'; return; }
+  row.style.display = 'flex';
+  for (let i = 1; i <= 5; i++) {
+    const d = document.getElementById('att'+i);
+    d.className = 'att-dot' + (i <= n ? (n >= MAX_TENTATIVAS-1 ? ' used' : ' warn') : '');
+  }
+  document.getElementById('attTxt').textContent = `${n}/${MAX_TENTATIVAS} tentativas`;
+}
+
+let _lockTimer = null;
+function mostrarBloqueio(segundos) {
+  const el = document.getElementById('loginBlocked');
+  document.getElementById('loginBtn').disabled = true;
+  const atualizar = () => {
+    const lk = lerLockout();
+    if (!lk || !lk.bloqueado || Date.now() >= lk.ate) {
+      el.classList.remove('show'); el.textContent = '';
+      limparLockout(); atualizarIndicadorTentativas(0);
+      document.getElementById('loginBtn').disabled = !_humanOk;
+      return;
+    }
+    const s = Math.ceil((lk.ate - Date.now()) / 1000);
+    el.classList.add('show');
+    el.textContent = `⛔ Muitas tentativas. Aguarde ${s}s para tentar novamente.`;
+    _lockTimer = setTimeout(atualizar, 1000);
+  };
+  atualizar();
+}
+
+function verificarBloqueioInicial() {
+  const lk = lerLockout();
+  if (!lk) return;
+  if (lk.bloqueado && Date.now() < lk.ate) {
+    atualizarIndicadorTentativas(MAX_TENTATIVAS);
+    mostrarBloqueio();
+  } else if (lk.bloqueado) {
+    limparLockout();
+  } else {
+    atualizarIndicadorTentativas(lk.tentativas || 0);
+  }
+}
+
+async function loginTentar() {
+  if (!_humanOk) return;
+  const lk = lerLockout();
+  if (lk && lk.bloqueado && Date.now() < lk.ate) return;
+
+  const email = document.getElementById('lEmail').value.trim().toLowerCase();
+  const senha = document.getElementById('lSenha').value;
+  const err   = document.getElementById('loginErr');
+  const btn   = document.getElementById('loginBtn');
+
+  btn.disabled = true;
+  document.getElementById('spinnerLogin').style.display = 'block';
+  document.getElementById('btnLoginTxt').style.display  = 'none';
+  err.textContent = '';
+
+  try {
+    const { data, error } = await sb.auth.signInWithPassword({ email, password: senha });
+
+    document.getElementById('spinnerLogin').style.display = 'none';
+    document.getElementById('btnLoginTxt').style.display  = 'inline';
+
+    if (error || !data.session) {
+      const atual = lk ? lk.tentativas : 0;
+      const novas = atual + 1;
+      if (novas >= MAX_TENTATIVAS) {
+        salvarLockout({ tentativas: novas, bloqueado: true, ate: Date.now() + 120000 });
+        atualizarIndicadorTentativas(novas);
+        mostrarBloqueio();
+        err.textContent = '';
+      } else {
+        salvarLockout({ tentativas: novas, bloqueado: false, ate: null });
+        atualizarIndicadorTentativas(novas);
+        btn.disabled = false;
+        const delay = DELAY_BASE_MS * novas;
+        err.textContent = '❌ E-mail ou senha incorretos.';
+        ['lEmail','lSenha'].forEach(id => {
+          const el = document.getElementById(id);
+          el.classList.add('err');
+          setTimeout(() => el.classList.remove('err'), 600);
+        });
+        setTimeout(() => { btn.disabled = !_humanOk; }, delay);
+      }
+      return;
+    }
+
+    limparLockout();
+    atualizarIndicadorTentativas(0);
+    // Aguarda sessão ser persistida no localStorage antes de redirecionar
+    await sb.auth.getSession();
+    goNext();
+
+  } catch(e) {
+    document.getElementById('spinnerLogin').style.display = 'none';
+    document.getElementById('btnLoginTxt').style.display  = 'inline';
+    err.textContent = '❌ Erro de conexão. Tente novamente.';
+    btn.disabled = false;
+  }
+}
+
+async function enviarReset() {
+  const email = document.getElementById('emailReset').value.trim();
+  const msgOk = document.getElementById('msgOk');
+  if (!email) return;
+
+  document.getElementById('btnReset').disabled = true;
+  document.getElementById('spinnerReset').style.display = 'block';
+  document.getElementById('btnResetTxt').style.display  = 'none';
+
+  const { error } = await sb.auth.resetPasswordForEmail(email, {
+    redirectTo: 'https://orizonrs.github.io/Consultoria/contratos/reset-senha.html'
+  });
+
+  document.getElementById('spinnerReset').style.display = 'none';
+  document.getElementById('btnResetTxt').style.display  = 'inline';
+  document.getElementById('btnReset').disabled = false;
+
+  if (error) { alert('Erro: ' + error.message); return; }
+  msgOk.textContent = '✅ Link enviado! Verifique sua caixa de entrada.';
+  msgOk.classList.add('show');
+}
+
+function goNext() {
+  const params = new URLSearchParams(window.location.search);
+  const next   = params.get('next');
+  const dest   = (next && !next.includes('login')) ? decodeURIComponent(next) : '/Consultoria/contratos/index.html';
+  window.location.replace(dest);
+}
+</script>
+</body>
+</html>

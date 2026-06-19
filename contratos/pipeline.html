@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+<link rel="icon" type="image/png" sizes="32x32" href="../imagens/favicon-32x32.png"/>
+<link rel="shortcut icon" href="../imagens/icone.png" type="image/png"/>
+<link rel="manifest" href="../imagens/site.webmanifest"/>
+<meta name="robots" content="noindex, nofollow"/>
+<title>Pipeline de Projetos — Contratos · Orizon Consultoria</title>
+<link rel="stylesheet" href="assets/cc-style.css"/>
+<style>
+/* ── Kanban ── */
+.kanban { display: flex; gap: 1rem; overflow-x: auto; padding-bottom: 1rem; align-items: flex-start; }
+.kanban-col { flex-shrink: 0; width: 260px; background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); display: flex; flex-direction: column; max-height: calc(100vh - 180px); }
+.kanban-col-head { padding: .7rem .9rem; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; gap: .5rem; flex-shrink: 0; }
+.kanban-col-title { font-size: .78rem; font-weight: 800; display: flex; align-items: center; gap: .4rem; }
+.kanban-col-count { background: var(--bg2); border: 1px solid var(--border); border-radius: 99px; font-size: .6rem; font-weight: 700; padding: .1rem .45rem; color: var(--muted); }
+.kanban-cards { flex: 1; overflow-y: auto; padding: .5rem; display: flex; flex-direction: column; gap: .45rem; }
+.kanban-add { padding: .5rem; flex-shrink: 0; }
+.kanban-add button { width: 100%; background: none; border: 1px dashed var(--border); border-radius: 8px; color: var(--muted); font-size: .72rem; padding: .4rem; cursor: pointer; transition: all .15s; font-family: inherit; }
+.kanban-add button:hover { border-color: var(--border2); color: var(--text); background: rgba(59,130,246,.04); }
+
+/* ── Cards de vaga ── */
+.vaga-card { background: var(--card2); border: 1px solid var(--border); border-radius: 10px; padding: .7rem .8rem; cursor: grab; transition: all .15s; user-select: none; }
+.vaga-card:hover { border-color: var(--border2); box-shadow: 0 4px 16px rgba(0,0,0,.3); }
+.vaga-card.dragging { opacity: .4; transform: scale(.97); }
+.vaga-card-titulo { font-size: .8rem; font-weight: 800; margin-bottom: .25rem; }
+.vaga-card-empresa { font-size: .68rem; color: var(--muted); margin-bottom: .5rem; }
+.vaga-card-tags { display: flex; flex-wrap: wrap; gap: .3rem; margin-bottom: .45rem; }
+.vaga-card-foot { display: flex; align-items: center; justify-content: space-between; font-size: .65rem; color: var(--muted); }
+.vaga-card-foot .rec { color: var(--accent); font-weight: 600; }
+
+.col-drop-over { background: rgba(59,130,246,.05); border-color: var(--border2); }
+.cards-drop-over { background: rgba(59,130,246,.05); border-radius: 8px; }
+
+/* prioridade */
+.tag-p-alta   { background: rgba(231,76,60,.12);  color: var(--red);    border-color: rgba(231,76,60,.25); }
+.tag-p-media  { background: rgba(243,156,18,.12); color: var(--orange); border-color: rgba(243,156,18,.25); }
+.tag-p-baixa  { background: rgba(46,204,113,.1);  color: var(--green);  border-color: rgba(46,204,113,.25); }
+
+/* form no modal */
+.form-row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: .7rem; }
+</style>
+</head>
+<body>
+<div class="app">
+<!-- SIDEBAR -->
+<aside class="sidebar" id="sidebar">
+  <div class="sb-head">
+    <div class="sb-logo-ico"><img src="../imagens/fundo.png" alt="Orizon" style="width:44px;height:44px;object-fit:contain"/></div>
+    <div class="sb-logo-txt">
+      <div class="sb-logo-name">Orizon <span>Consultoria</span></div>
+      <div class="sb-logo-sub">Contratos</div>
+    </div>
+  </div>
+  <nav class="sb-nav">
+    <div class="sb-sep">Visão Geral</div>
+    <a class="sb-item" href="index.html"><span class="ico">📊</span><span class="lbl">Dashboard</span></a>
+    <div class="sb-sep">Controles</div>
+    <a class="sb-item" href="estagiarios.html"><span class="ico">🎓</span><span class="lbl">Estagiários</span></a>
+    <a class="sb-item" href="clt.html"><span class="ico">💼</span><span class="lbl">CLTs</span></a>
+    <div class="sb-sep">Gestão</div>
+    <a class="sb-item" href="financeiro-mensal.html"><span class="ico">📅</span><span class="lbl">Financeiro Mensal</span></a>
+    <a class="sb-item" href="relatorios.html"><span class="ico">📈</span><span class="lbl">Relatórios</span></a>
+    <a class="sb-item" href="balanco-financeiro.html"><span class="ico">💰</span><span class="lbl">Balanço Financeiro</span></a>
+    <a class="sb-item" href="despesas-fixas.html"><span class="ico">📌</span><span class="lbl">Despesas Fixas</span></a>
+    <div class="sb-sep">Equipe</div>
+    <a class="sb-item" href="consultores.html"><span class="ico">🏆</span><span class="lbl">Consultores</span></a>
+    <a class="sb-item active" href="pipeline.html"><span class="ico">🔄</span><span class="lbl">Pipeline de Projetos</span></a>
+    <div class="sb-sep">Sistema</div>
+    <a class="sb-item" href="configuracoes.html"><span class="ico">⚙️</span><span class="lbl">Configurações</span></a>
+  </nav>
+  <div class="sb-foot">
+    <div class="sb-av"><img src="../imagens/fundo.png" alt="" style="width:18px;height:18px;object-fit:contain"/></div>
+    <div class="sb-uinfo"><div class="sb-uname" id="user-nome">—</div><div class="sb-urole" id="user-email">—</div></div>
+    <button class="sb-toggle" onclick="if(window.ccLogout)window.ccLogout()" title="Sair" style="margin-right:.2rem;opacity:.4">⏻</button>
+    <button class="sb-toggle" id="sb-toggle">◀</button>
+  </div>
+</aside>
+
+<div class="main">
+  <div class="topbar">
+    <div class="tb-bc"><a href="index.html">Dashboard</a><span class="sep"> / </span><span>Pipeline de Projetos</span></div>
+    <div class="tb-right">
+      <span id="tb-date" class="tb-date"></span>
+      <button class="btn btn-ghost btn-sm" onclick="exportarCSV()">📊 CSV</button>
+      <button class="btn btn-primary btn-sm" onclick="abrirNova('prospecção')">＋ Nova Vaga</button>
+    </div>
+  </div>
+
+  <div class="content" style="overflow:hidden">
+    <div class="sec-hd" style="margin-bottom:.9rem">
+      <div>
+        <div class="sec-title">🔄 Pipeline de <span>Vagas</span></div>
+        <div class="sec-sub">Arraste os cards entre as colunas para atualizar o status</div>
+      </div>
+      <div style="display:flex;gap:.5rem;align-items:center">
+        <div class="search-box"><span>🔍</span><input placeholder="Filtrar vagas..." id="searchVaga" oninput="renderBoard()"/></div>
+      </div>
+    </div>
+
+    <div class="kanban" id="kanban"></div>
+  </div>
+</div>
+</div>
+
+<!-- Modal Vaga -->
+<div class="overlay" id="modalVaga">
+  <div class="modal">
+    <div class="modal-hd">
+      <span class="modal-title" id="modalVagaTitulo">Nova Vaga</span>
+      <button class="modal-close" onclick="UI.closeModal('modalVaga')">✕</button>
+    </div>
+    <div class="form-row-2" style="margin-bottom:.7rem">
+      <div class="form-group">
+        <label class="fl">Cargo / Função *</label>
+        <input class="fi" id="vCargo" placeholder="Ex: Assistente Adm."/>
+      </div>
+      <div class="form-group">
+        <label class="fl">Empresa *</label>
+        <input class="fi" id="vEmpresa" placeholder="Ex: Tech Beta Ltda"/>
+      </div>
+    </div>
+    <div class="form-row-2" style="margin-bottom:.7rem">
+      <div class="form-group">
+        <label class="fl">Tipo de Vaga</label>
+        <select class="fi" id="vTipo">
+          <option value="estagiario">Estágio</option>
+          <option value="clt">CLT</option>
+          <option value="outro">Outro</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="fl">Prioridade</label>
+        <select class="fi" id="vPrioridade">
+          <option value="alta">🔴 Alta</option>
+          <option value="media" selected>🟡 Média</option>
+          <option value="baixa">🟢 Baixa</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-row-2" style="margin-bottom:.7rem">
+      <div class="form-group">
+        <label class="fl">Recrutador Responsável</label>
+        <input class="fi" id="vRecrutador" placeholder="Nome do consultor"/>
+      </div>
+      <div class="form-group">
+        <label class="fl">Salário/Bolsa Est. (R$)</label>
+        <input class="fi" type="number" id="vSalario" placeholder="Ex: 2000"/>
+      </div>
+    </div>
+    <div class="form-group" style="margin-bottom:.7rem">
+      <label class="fl">Candidato(s) em triagem</label>
+      <input class="fi" id="vCandidatos" placeholder="Ex: João Silva, Maria Oliveira"/>
+    </div>
+    <div class="form-group" style="margin-bottom:.7rem">
+      <label class="fl">Observações</label>
+      <textarea class="fi" id="vObs" rows="2" placeholder="Requisitos, notas, prazo..."></textarea>
+    </div>
+    <div class="form-group" style="margin-bottom:1rem">
+      <label class="fl">Status no Kanban</label>
+      <select class="fi" id="vStatus">
+        <option value="prospecção">Prospecção</option>
+        <option value="triagem">Triagem</option>
+        <option value="entrevista">Entrevista</option>
+        <option value="proposta">Proposta</option>
+        <option value="fechado">Fechado</option>
+      </select>
+    </div>
+    <div class="modal-ft">
+      <button class="btn btn-danger btn-sm" id="btnDeletarVaga" onclick="deletarVaga()" style="margin-right:auto;display:none">🗑 Excluir</button>
+      <button class="btn btn-ghost" onclick="UI.closeModal('modalVaga')">Cancelar</button>
+      <button class="btn btn-primary" onclick="salvarVaga()">✓ Salvar</button>
+    </div>
+  </div>
+</div>
+
+<div id="toast-ct"></div>
+<script src="assets/cc-auth.js"></script>
+<script src="assets/cc-core.js"></script>
+<script>
+const VAGAS_KEY = 'ex_cc_vagas';
+let _vagas = [];
+let _editId = null;
+let _dragId = null;
+
+const COLUNAS = [
+  { id:'prospecção', label:'🔍 Prospecção',  cor:'var(--muted)' },
+  { id:'triagem',    label:'📋 Triagem',      cor:'var(--blue)'  },
+  { id:'entrevista', label:'🎙 Entrevista',    cor:'var(--purple)'},
+  { id:'proposta',   label:'📄 Proposta',     cor:'var(--orange)'},
+  { id:'fechado',    label:'✅ Fechado',       cor:'var(--green)' },
+];
+
+function loadVagas() {
+  try { _vagas = JSON.parse(localStorage.getItem(VAGAS_KEY)) || []; }
+  catch { _vagas = []; }
+}
+
+function saveVagas() {
+  localStorage.setItem(VAGAS_KEY, JSON.stringify(_vagas));
+}
+
+function renderBoard() {
+  const q = (document.getElementById('searchVaga')?.value || '').toLowerCase().trim();
+  const kanban = document.getElementById('kanban');
+
+  kanban.innerHTML = COLUNAS.map(col => {
+    const cards = _vagas.filter(v =>
+      v.status === col.id &&
+      (!q || `${v.cargo} ${v.empresa} ${v.recrutador||''} ${v.candidatos||''}`.toLowerCase().includes(q))
+    );
+    return `
+      <div class="kanban-col" id="col-${col.id}"
+           ondragover="onDragOver(event,'${col.id}')"
+           ondragleave="onDragLeave(event,'${col.id}')"
+           ondrop="onDrop(event,'${col.id}')">
+        <div class="kanban-col-head">
+          <div class="kanban-col-title" style="color:${col.cor}">${col.label}</div>
+          <span class="kanban-col-count">${cards.length}</span>
+        </div>
+        <div class="kanban-cards" id="cards-${col.id}">
+          ${cards.map(v => renderCard(v)).join('')}
+        </div>
+        <div class="kanban-add">
+          <button onclick="abrirNova('${col.id}')">+ Adicionar vaga</button>
+        </div>
+      </div>`;
+  }).join('');
+
+  // Reanexa drag handlers
+  document.querySelectorAll('.vaga-card').forEach(el => {
+    el.addEventListener('dragstart', e => {
+      _dragId = el.dataset.id;
+      setTimeout(() => el.classList.add('dragging'), 0);
+    });
+    el.addEventListener('dragend', () => {
+      el.classList.remove('dragging');
+    });
+  });
+}
+
+function renderCard(v) {
+  const prioLabel = { alta:'Alta', media:'Média', baixa:'Baixa' }[v.prioridade] || '';
+  const prioCls   = { alta:'tag-p-alta', media:'tag-p-media', baixa:'tag-p-baixa' }[v.prioridade] || '';
+  const tipoCls   = v.tipo === 'estagiario' ? 'tag-purple' : v.tipo === 'clt' ? 'tag-blue' : 'tag-gray';
+  const tipoLabel = v.tipo === 'estagiario' ? 'Estágio' : v.tipo === 'clt' ? 'CLT' : v.tipo;
+  const diasAberto = v.criadoEm ? Math.round((Date.now() - v.criadoEm) / 86400000) : 0;
+
+  return `
+    <div class="vaga-card" draggable="true" data-id="${v.id}" onclick="abrirEditar('${v.id}')">
+      <div class="vaga-card-titulo">${v.cargo}</div>
+      <div class="vaga-card-empresa">🏢 ${v.empresa}</div>
+      <div class="vaga-card-tags">
+        <span class="tag ${prioCls}" style="font-size:.56rem">${prioLabel}</span>
+        <span class="tag ${tipoCls}" style="font-size:.56rem">${tipoLabel}</span>
+        ${v.salario ? `<span class="tag tag-accent" style="font-size:.56rem">${Fmt.brl(v.salario)}</span>` : ''}
+      </div>
+      ${v.candidatos ? `<div style="font-size:.65rem;color:var(--muted);margin-bottom:.3rem">👤 ${v.candidatos}</div>` : ''}
+      <div class="vaga-card-foot">
+        <span class="rec">${v.recrutador || '—'}</span>
+        <span>${diasAberto}d aberta</span>
+      </div>
+    </div>`;
+}
+
+// ── Drag & Drop ──
+function onDragOver(e, colId) {
+  e.preventDefault();
+  document.getElementById('col-'+colId)?.classList.add('col-drop-over');
+}
+function onDragLeave(e, colId) {
+  document.getElementById('col-'+colId)?.classList.remove('col-drop-over');
+}
+function onDrop(e, colId) {
+  e.preventDefault();
+  document.getElementById('col-'+colId)?.classList.remove('col-drop-over');
+  if (!_dragId) return;
+  const vaga = _vagas.find(v => v.id === _dragId);
+  if (vaga && vaga.status !== colId) {
+    vaga.status = colId;
+    saveVagas();
+    renderBoard();
+    UI.toast(`Movido para ${COLUNAS.find(c=>c.id===colId)?.label}`, 'ok');
+  }
+  _dragId = null;
+}
+
+// ── Modal ──
+function abrirNova(status) {
+  _editId = null;
+  document.getElementById('modalVagaTitulo').textContent = '＋ Nova Vaga';
+  document.getElementById('btnDeletarVaga').style.display = 'none';
+  document.getElementById('vCargo').value      = '';
+  document.getElementById('vEmpresa').value    = '';
+  document.getElementById('vTipo').value       = 'estagiario';
+  document.getElementById('vPrioridade').value = 'media';
+  document.getElementById('vRecrutador').value = '';
+  document.getElementById('vSalario').value    = '';
+  document.getElementById('vCandidatos').value = '';
+  document.getElementById('vObs').value        = '';
+  document.getElementById('vStatus').value     = status;
+  UI.openModal('modalVaga');
+}
+
+function abrirEditar(id) {
+  const v = _vagas.find(x => x.id === id);
+  if (!v) return;
+  _editId = id;
+  document.getElementById('modalVagaTitulo').textContent = '✏️ Editar Vaga';
+  document.getElementById('btnDeletarVaga').style.display = 'inline-flex';
+  document.getElementById('vCargo').value      = v.cargo;
+  document.getElementById('vEmpresa').value    = v.empresa;
+  document.getElementById('vTipo').value       = v.tipo || 'estagiario';
+  document.getElementById('vPrioridade').value = v.prioridade || 'media';
+  document.getElementById('vRecrutador').value = v.recrutador || '';
+  document.getElementById('vSalario').value    = v.salario || '';
+  document.getElementById('vCandidatos').value = v.candidatos || '';
+  document.getElementById('vObs').value        = v.obs || '';
+  document.getElementById('vStatus').value     = v.status;
+  UI.openModal('modalVaga');
+}
+
+function salvarVaga() {
+  const cargo   = document.getElementById('vCargo').value.trim();
+  const empresa = document.getElementById('vEmpresa').value.trim();
+  if (!cargo || !empresa) { UI.toast('Cargo e empresa são obrigatórios', 'err'); return; }
+
+  const dados = {
+    cargo,
+    empresa,
+    tipo:        document.getElementById('vTipo').value,
+    prioridade:  document.getElementById('vPrioridade').value,
+    recrutador:  document.getElementById('vRecrutador').value.trim(),
+    salario:     parseFloat(document.getElementById('vSalario').value) || 0,
+    candidatos:  document.getElementById('vCandidatos').value.trim(),
+    obs:         document.getElementById('vObs').value.trim(),
+    status:      document.getElementById('vStatus').value,
+  };
+
+  if (_editId) {
+    const idx = _vagas.findIndex(v => v.id === _editId);
+    if (idx >= 0) _vagas[idx] = { ..._vagas[idx], ...dados };
+    UI.toast('Vaga atualizada!', 'ok');
+  } else {
+    _vagas.push({ id: `v${Date.now()}`, criadoEm: Date.now(), ...dados });
+    UI.toast('Vaga criada!', 'ok');
+  }
+
+  saveVagas();
+  UI.closeModal('modalVaga');
+  renderBoard();
+}
+
+function deletarVaga() {
+  if (!_editId || !confirm('Excluir esta vaga?')) return;
+  _vagas = _vagas.filter(v => v.id !== _editId);
+  saveVagas();
+  UI.closeModal('modalVaga');
+  renderBoard();
+  UI.toast('Vaga excluída', 'wrn');
+}
+
+function exportarCSV() {
+  Export.csv(
+    ['Status','Cargo','Empresa','Tipo','Prioridade','Recrutador','Salário Est.','Candidatos','Obs'],
+    _vagas.map(v=>[v.status,v.cargo,v.empresa,v.tipo,v.prioridade,v.recrutador||'',Fmt.brl(v.salario),v.candidatos||'',v.obs||'']),
+    `pipeline_${new Date().toISOString().slice(0,10)}.csv`
+  );
+}
+
+// ── Boot ──
+loadVagas();
+const _initWait = setInterval(() => {
+  if (window._ccAccessToken !== undefined) { clearInterval(_initWait); CC.init(); }
+}, 80);
+document.addEventListener('DOMContentLoaded', renderBoard);
+</script>
+</body>
+</html>

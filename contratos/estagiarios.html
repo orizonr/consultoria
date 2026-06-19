@@ -1,0 +1,721 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <!-- ═══ FAVICON ═══ -->
+  <link rel="icon" type="image/png" sizes="32x32" href="../imagens/favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="192x192" href="../imagens/favicon-192x192.png" />
+  <link rel="shortcut icon" href="../imagens/icone.png" type="image/png" />
+  <link rel="apple-touch-icon" href="../imagens/icone.png" />
+  <link rel="manifest" href="../imagens/site.webmanifest" />
+<!-- SEO -->
+<meta name="description" content="Orizon Consultoria — Sistema de Gestão Financeira de Contratos" />
+<meta name="robots" content="noindex, nofollow" />
+<title>Estagiários — Contratos · Orizon Consultoria</title>
+<link rel="stylesheet" href="assets/cc-style.css"/>
+<style>.sb-head{padding:1.1rem 0.85rem 1rem;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:0.75rem;flex-shrink:0;}.sb-logo-ico{width:44px;height:44px;border-radius:13px;background:linear-gradient(135deg,rgba(30,64,175,0.35),rgba(59,130,246,0.18));border:1px solid rgba(59,130,246,0.28);display:flex;align-items:center;justify-content:center;overflow:hidden;flex-shrink:0;box-shadow:0 2px 10px rgba(59,130,246,0.15);}.sb-logo-ico img{width:44px;height:44px;object-fit:contain;}.sb-logo-txt{overflow:hidden;white-space:nowrap;}.sb-logo-name{font-size:1.18rem;font-weight:900;line-height:1.2;letter-spacing:-0.3px;}.sb-logo-name span{color:var(--accent);}.sb-logo-sub{font-size:0.6rem;color:var(--accent);text-transform:uppercase;letter-spacing:2px;opacity:0.65;margin-top:0.1rem;}.sb-av img{width:100%;height:100%;object-fit:contain;border-radius:inherit;}</style></head>
+<body>
+<div class="app">
+
+<aside class="sidebar" id="sidebar">
+  <div class="sb-head"><div class="sb-logo-ico"><img src="../imagens/fundo.png" alt="Orizon" style="width:44px;height:44px;object-fit:contain"/></div><div class="sb-logo-txt"><div class="sb-logo-name">Orizon <span>Consultoria</span></div><div class="sb-logo-sub">Contratos</div></div></div>
+  <nav class="sb-nav">
+    <div class="sb-sep">Visão Geral</div>
+    <a class="sb-item" href="index.html"><span class="ico">📊</span><span class="lbl">Dashboard</span></a>
+    <div class="sb-sep">Controles</div>
+    <a class="sb-item active" href="estagiarios.html"><span class="ico">🎓</span><span class="lbl">Estagiários</span></a>
+    <a class="sb-item" href="clt.html"><span class="ico">💼</span><span class="lbl">CLTs</span></a>
+    <div class="sb-sep">Gestão</div>
+    <a class="sb-item" href="financeiro-mensal.html"><span class="ico">📅</span><span class="lbl">Financeiro Mensal</span></a>
+    <a class="sb-item" href="relatorios.html"><span class="ico">📈</span><span class="lbl">Relatórios</span></a>
+    <a class="sb-item" href="balanco-financeiro.html"><span class="ico">💰</span><span class="lbl">Balanço Financeiro</span></a>
+    <a class="sb-item" href="despesas-fixas.html"><span class="ico">📌</span><span class="lbl">Despesas Fixas</span></a>
+    <div class="sb-sep">Equipe</div>
+    <a class="sb-item" href="consultores.html"><span class="ico">🏆</span><span class="lbl">Consultores</span></a>
+    <a class="sb-item" href="pipeline.html"><span class="ico">🔄</span><span class="lbl">Pipeline de Projetos</span></a>
+    <div class="sb-sep">Sistema</div>
+    <a class="sb-item" href="configuracoes.html"><span class="ico">⚙️</span><span class="lbl">Configurações</span></a>
+  </nav>
+  <div class="sb-foot"><div class="sb-av"><img src="../imagens/fundo.png" alt="EX" style="width:18px;height:18px;object-fit:contain"/></div><div class="sb-uinfo"><div class="sb-uname" id="user-nome">—</div><div class="sb-urole" id="user-email">—</div></div><button class="sb-toggle" onclick="if(window.ccLogout)window.ccLogout()" title="Sair" style="margin-right:.2rem;opacity:.4">⏻</button><button class="sb-toggle" id="sb-toggle">◀</button></div>
+</aside>
+
+<div class="main">
+  <div class="topbar">
+    <div class="tb-bc"><a href="index.html">Dashboard</a><span class="sep"> / </span><span>Estagiários</span></div>
+    <div class="tb-right">
+      <span id="tb-date" class="tb-date"></span>
+      <button class="btn btn-ghost btn-sm" onclick="exportarCSV()">📊 CSV</button>
+      <button class="btn btn-ghost btn-sm" onclick="exportarWord()">📄 Word</button>
+      <button class="btn btn-primary btn-sm" onclick="abrirModal()">＋ Novo Estagiário</button>
+    </div>
+  </div>
+
+  <div class="content">
+    <div class="sec-hd">
+      <div>
+        <div class="sec-title">🎓 Controle de <span>Estagiários</span></div>
+        <div class="sec-sub">Períodos de 6 meses · Máximo 2 anos · Alertas automáticos de vencimento</div>
+      </div>
+    </div>
+
+    <div class="info-box accent">📌 Cada contrato de estágio tem até <strong>4 períodos de 6 meses</strong> (máx. 2 anos — Lei 11.788/2008). O sistema alerta quando um período está próximo do vencimento. A <strong>taxa cobrada da empresa</strong> é a receita bruta gerada; sua comissão é o que entra no seu bolso.</div>
+
+    <!-- KPIs -->
+    <div class="kpi-row" id="kpiArea"></div>
+    <div class="tbl-wrap" id="consultorArea" style="display:none;padding:1rem;margin-top:.8rem"></div>
+
+    <!-- Alertas -->
+    <div id="alertasArea"></div>
+
+    <!-- Filtros + Tabela -->
+    <div class="tbl-wrap" id="tblEstWrap">
+      <div class="tbl-hd">
+        <span class="tbl-title">📋 Lista de Estagiários</span>
+        <div class="tbl-actions">
+          <div class="search-box"><span>🔍</span><input placeholder="Buscar nome, empresa, agência..." oninput="UI.filtrar('tbodyEst',this.value)"/></div>
+          <select class="fi" id="filtStatus" style="font-size:.72rem;padding:.32rem .6rem" onchange="renderTabela()">
+            <option value="">Todos</option>
+            <option value="ativo">Ativos</option>
+            <option value="alerta">Com Alerta</option>
+            <option value="cancelado">Cancelados</option>
+            <option value="efetivado">Efetivados</option>
+            <option value="concluido">Concluídos</option>
+          </select>
+          <select class="fi" id="filtPeriodo" style="font-size:.72rem;padding:.32rem .6rem" onchange="renderTabela()">
+            <option value="">Todos os períodos</option>
+            <option value="1">1º Período</option>
+            <option value="2">2º Período</option>
+            <option value="3">3º Período</option>
+            <option value="4">4º Período</option>
+          </select>
+        </div>
+      </div>
+      <div class="tbl-scroll" style="-webkit-overflow-scrolling:touch">
+        <table>
+          <thead>
+            <tr>
+              <th>Estagiário</th>
+              <th>Empresa Cliente</th>
+              <th>Agência / Origem</th>
+              <th>VT / Fretado</th>
+              <th>Bolsa</th>
+              <th>Taxa</th>
+              <th>Receita Bruta/mês</th>
+              <th>Minha Comissão</th>
+              <th>Líquido p/ Empresa/mês</th>
+              <th>Períodos (6m cada → 2 anos)</th>
+              <th>Fim do Contrato</th>
+              <th>Status</th>
+              <th>Ações</th>
+            </tr>
+          </thead>
+          <tbody id="tbodyEst"></tbody>
+          <tfoot>
+            <tr>
+              <td colspan="4">TOTAIS</td>
+              <td id="tfBolsa"></td>
+              <td>—</td>
+              <td id="tfReceita" class="c-accent"></td>
+              <td>—</td>
+              <td id="tfLiqEst" class="c-accent fw8" title="Líquido da empresa após minha comissão"></td>
+              <td colspan="4"></td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+    </div>
+
+    <!-- ═══ CONTROLE MENSAL ═══ -->
+    <div style="margin-top:2rem">
+      <div class="sec-hd" style="margin-bottom:1rem">
+        <div>
+          <div class="sec-title">📅 Controle Mensal de <span>Estagiários</span></div>
+          <div class="sec-sub">Cada mês com seus próprios contratos e dashboard de receita recorrente · Clique no mês para expandir</div>
+        </div>
+        <div style="display:flex;align-items:center;gap:.5rem">
+          <button class="btn btn-ghost btn-sm" onclick="anoMensal--;renderMensal()">◀</button>
+          <span id="anoMensalLabel" style="font-weight:800;font-size:1rem;min-width:50px;text-align:center"></span>
+          <button class="btn btn-ghost btn-sm" onclick="anoMensal++;renderMensal()">▶</button>
+        </div>
+      </div>
+      <div id="mensal-est"></div>
+    </div>
+
+  </div>
+</div>
+</div>
+
+<!-- MODAL -->
+<div class="overlay" id="modalEst">
+<div class="modal">
+  <div class="modal-hd">
+    <div class="modal-title" id="modalTitulo">＋ Novo Estagiário</div>
+    <button class="modal-close" onclick="UI.closeModal('modalEst')">✕</button>
+  </div>
+  <div class="form-grid">
+    <div class="form-group fg-full"><label class="fl">Nome Completo *</label>
+      <input class="fi" id="mNome" placeholder="Nome completo do estagiário"/></div>
+    <div class="form-group fg-full"><label class="fl">Empresa Cliente *</label>
+      <input class="fi" id="mEmpresa" placeholder="Ex: Masterflake — empresa onde o estagiário fica alocado"/>
+      <span style="font-size:.62rem;color:var(--muted);margin-top:.2rem">Empresa onde o estagiário trabalha no dia a dia</span>
+    </div>
+    <div class="form-group"><label class="fl">🏢 Agência / Origem da Vaga</label>
+      <input class="fi" id="mAgencia" placeholder="Ex: Exittus, CIEE, IEL, Direta..."/>
+      <span style="font-size:.62rem;color:var(--muted);margin-top:.2rem">Quem abriu a vaga ou intermediou o contrato</span>
+    </div>
+    <div class="form-group"><label class="fl">Tipo de Origem</label>
+      <select class="fi" id="mTipoOrigem">
+        <option value="agencia">Agência (ex: Exittus, CIEE)</option>
+        <option value="direta">Direta — empresa me contratou direto</option>
+        <option value="indicacao">Indicação</option>
+        <option value="outros">Outros</option>
+      </select>
+    </div>
+    <div class="form-group"><label class="fl">Vale Transporte</label>
+      <select class="fi" id="mVT">
+        <option value="nao">Não</option>
+        <option value="sim">Sim — valor em dinheiro</option>
+        <option value="fretado">Fretado (empresa fornece)</option>
+      </select>
+    </div>
+    <div class="form-group"><label class="fl">Valor VT (R$/mês)</label>
+      <input type="number" class="fi" id="mValorVT" value="0" min="0" step="0.01"/></div>
+    <div class="form-group"><label class="fl">Bolsa Auxílio (R$/mês) *</label>
+      <input type="number" class="fi" id="mBolsa" value="0" min="0" step="0.01" oninput="calcReceita()"/></div>
+    <div class="form-group"><label class="fl">Taxa cobrada da empresa (%)</label>
+      <input type="number" class="fi" id="mTaxa" value="15" min="0" max="100" step="0.5" oninput="calcReceita()"/>
+      <span style="font-size:.63rem;color:var(--muted);margin-top:.2rem">Taxa que a empresa paga sobre a bolsa do estagiário</span>
+    </div>
+    <div class="form-group"><label class="fl">Receita Bruta gerada/mês (calculado)</label>
+      <input class="fi fi-calc" id="mReceita" readonly/></div>
+    <div class="form-group" style="grid-column:1/-1;border-top:1px solid var(--border);padding-top:.9rem;margin-top:.2rem">
+      <label class="fl" style="font-size:.7rem;color:var(--accent);font-weight:700;text-transform:uppercase;letter-spacing:.05em">💰 Minha Comissão (opcional)</label>
+    </div>
+    <div class="form-group"><label class="fl">Meu Nome / Identificação</label>
+      <input class="fi" id="mConsultor" placeholder="Ex: João Silva — Meu nome"/></div>
+    <div class="form-group"><label class="fl">Tipo de Comissão</label>
+      <select class="fi" id="mTipoComissao" onchange="calcReceita()">
+        <option value="none">Sem comissão definida</option>
+        <option value="pct">% da receita bruta gerada</option>
+        <option value="fixo">Valor fixo mensal (R$/mês)</option>
+      </select>
+    </div>
+    <div class="form-group" id="grpComissaoPct" style="display:none"><label class="fl">Percentual (%)</label>
+      <select class="fi" id="mComissaoPct" onchange="calcReceita()">
+        <option value="20">20%</option>
+        <option value="25">25%</option>
+        <option value="30">30%</option>
+        <option value="35">35%</option>
+        <option value="40">40%</option>
+        <option value="45">45%</option>
+      </select>
+      <span style="font-size:.62rem;color:var(--muted);margin-top:.2rem">% sobre a receita bruta que a empresa paga</span>
+    </div>
+    <div class="form-group" id="grpComissaoFixo" style="display:none"><label class="fl">Valor Fixo (R$/mês)</label>
+      <select class="fi" id="mComissaoFixo" onchange="calcReceita()">
+        <option value="20">R$ 20,00/mês</option>
+        <option value="30">R$ 30,00/mês</option>
+        <option value="40">R$ 40,00/mês</option>
+        <option value="50">R$ 50,00/mês</option>
+      </select>
+      <span style="font-size:.62rem;color:var(--muted);margin-top:.2rem">Valor fixo que recebo por mês deste contrato</span>
+    </div>
+    <div class="form-group"><label class="fl">Minha Comissão/mês (calculado)</label>
+      <input class="fi fi-calc" id="mValorRec" readonly/></div>
+    <div class="form-group"><label class="fl">Líquido p/ empresa após minha comissão</label>
+      <input class="fi fi-calc" id="mLiqAgencia" readonly style="color:var(--accent);font-weight:700"/></div>
+    <div class="form-group"><label class="fl">Início do 1º Período *</label>
+      <input type="date" class="fi" id="mInicio1" oninput="calcFim()"/></div>
+    <div class="form-group"><label class="fl">Período Atual</label>
+      <select class="fi" id="mPeriodoAtual" onchange="calcFim()">
+        <option value="1">1º Período (0–6 meses)</option>
+        <option value="2">2º Período (6–12 meses)</option>
+        <option value="3">3º Período (12–18 meses)</option>
+        <option value="4">4º Período (18–24 meses)</option>
+      </select>
+    </div>
+    <div class="form-group"><label class="fl">Fim do Período Atual (calculado)</label>
+      <input class="fi fi-calc" id="mFimPeriodo" readonly/></div>
+    <div class="form-group"><label class="fl">Fim do Contrato Total (calculado)</label>
+      <input class="fi fi-calc" id="mFimContrato" readonly/></div>
+    <div class="form-group"><label class="fl">Situação</label>
+      <select class="fi" id="mSituacao">
+        <option value="ativo">Ativo</option>
+        <option value="cancelado">Cancelado</option>
+        <option value="efetivado">Efetivado como CLT</option>
+        <option value="concluido">Concluído (2 anos cumpridos)</option>
+      </select>
+    </div>
+    <div class="form-group fg-full"><label class="fl">Observações</label>
+      <textarea class="fi" id="mObs" placeholder="Ex: NF, contato supervisor, observações do contrato..."></textarea></div>
+  </div>
+  <div class="modal-ft">
+    <button class="btn btn-ghost" onclick="UI.closeModal('modalEst')">Cancelar</button>
+    <button class="btn btn-primary" onclick="salvar()">✓ Salvar</button>
+  </div>
+</div>
+</div>
+
+<div id="toast-ct"></div>
+<script src="assets/cc-auth.js"></script>
+<script src="assets/cc-core.js"></script>
+<script>
+// ── Estado global ──
+let contratos = CC.getContratos();
+let cfg       = CC.getConfig();
+let editId    = null;
+
+function estagiarios() {
+  return contratos.filter(c => c.tipo === 'estagiario');
+}
+
+// ── Calcula comissão do recrutador para um contrato ──
+function calcComissaoRec(c) {
+  const rec = Calc.receita(c);
+  if (c.tipoComissao === 'pct')  return rec * ((c.comissaoRec||0)/100);
+  if (c.tipoComissao === 'fixo') return c.comissaoFixo || 0;
+  if (!c.tipoComissao && (c.comissaoRec||0) > 0) return rec * (c.comissaoRec/100);
+  return 0;
+}
+
+function renderKPIs() {
+  const lista  = estagiarios();
+  const ativos = lista.filter(c => c.situacao === 'ativo');
+  const alerts = { w:0, v:0 };
+  ativos.forEach(c => Calc.periodos(c,cfg).forEach(p => {
+    if(p.status==='warn')    alerts.w++;
+    if(p.status==='vencido') alerts.v++;
+  }));
+  const totalBolsa    = ativos.reduce((s,c)=>s+c.bolsa,0);
+  const totalReceita  = ativos.reduce((s,c)=>s+Calc.receita(c),0);
+  const totalComiss   = ativos.reduce((s,c)=>s+calcComissaoRec(c),0);
+  const totalLiq      = totalReceita - totalComiss;
+
+  document.getElementById('kpiArea').innerHTML = [
+    { v:ativos.length,         l:'Estagiários Ativos',                                                  cls:'c-accent' },
+    { v:Fmt.brl(totalBolsa),   l:'Total Bolsas (custo empresas/mês)', sub:'Valor que as empresas pagam aos estagiários',     cls:'c-text' },
+    { v:Fmt.brl(totalReceita), l:'Receita Bruta gerada/mês',    sub:totalComiss>0?`Minha comissão: ${(totalReceita>0?(totalComiss/totalReceita*100).toFixed(0):0)}% do bruto`:'Configure sua comissão em cada contrato', cls:'c-green' },
+    { v:Fmt.brl(totalLiq),     l:'💰 Minha Comissão Total/mês',         sub:totalComiss>0?`Receita bruta: ${Fmt.brl(totalReceita)}`:'Defina sua % em cada contrato', cls:'c-accent' },
+    { v:alerts.w+alerts.v,     l:'Alertas de Período',             cls:alerts.w+alerts.v>0?'c-orange':'c-green' },
+    { v:lista.filter(c=>c.situacao==='efetivado').length, l:'Efetivados CLT', cls:'c-blue' },
+    { v:lista.filter(c=>c.situacao==='concluido').length, l:'Concluídos',     cls:'c-muted' },
+  ].map(k=>`<div class="kpi"><div class="kpi-v ${k.cls}">${k.v}</div><div class="kpi-l">${k.l}</div>${k.sub?`<div class="kpi-sub" style="font-size:.6rem;color:var(--muted);margin-top:.15rem">${k.sub}</div>`:''}</div>`).join('');
+
+  // Breakdown por recrutador
+  const recMap = {};
+  ativos.forEach(c => {
+    if (c.tipoComissao && c.tipoComissao !== 'none') {
+      const nome = (c.recrutador||'').trim() || 'Externo';
+      if (!recMap[nome]) recMap[nome] = { total:0, qtd:0 };
+      recMap[nome].total += calcComissaoRec(c);
+      recMap[nome].qtd++;
+    }
+  });
+  const recEntries = Object.entries(recMap).sort((a,b)=>b[1].total-a[1].total);
+  const recArea = document.getElementById('consultorArea');
+  if (!recArea) return;
+  if (recEntries.length === 0) {
+    recArea.style.display = 'none';
+    return;
+  }
+  recArea.style.display = '';
+  recArea.innerHTML = `
+    <div class="tbl-title" style="margin-bottom:.7rem">💰 Minhas Comissões por Contrato</div>
+    <div style="display:flex;flex-wrap:wrap;gap:.6rem">
+      ${recEntries.map(([nome,d])=>`
+        <div style="background:rgba(243,156,18,.07);border:1px solid rgba(243,156,18,.2);border-radius:10px;padding:.7rem 1rem;min-width:160px">
+          <div style="font-size:.78rem;font-weight:800;margin-bottom:.2rem">${nome}</div>
+          <div style="font-size:1.1rem;font-weight:900;color:var(--orange)">${Fmt.brl(d.total)}</div>
+          <div style="font-size:.6rem;color:var(--muted);margin-top:.1rem">${d.qtd} contrato(s) ativo(s)</div>
+        </div>`).join('')}
+    </div>`;
+}
+
+function renderAlertas() {
+  const items = { warn:[], vencido:[] };
+  estagiarios().filter(c=>c.situacao==='ativo').forEach(c =>
+    Calc.periodos(c,cfg).forEach(p => {
+      if(p.status==='warn')    items.warn.push({c,p});
+      if(p.status==='vencido') items.vencido.push({c,p});
+    })
+  );
+  if (!items.warn.length && !items.vencido.length) { document.getElementById('alertasArea').innerHTML=''; return; }
+  let html = `<div class="alert-box"><div class="alert-title">🔔 Períodos que requerem ação</div>`;
+  items.vencido.forEach(({c,p}) => html+=`<div class="alert-item danger">
+    <span>⛔ <strong>${c.nome}</strong> — ${p.num}º período <strong>VENCIDO</strong> em ${Fmt.dt(p.fim)} · ${c.empresa}</span>
+    <button class="btn btn-orange btn-sm" onclick="abrirModal(${c.id})">Renovar Período</button></div>`);
+  items.warn.forEach(({c,p}) => html+=`<div class="alert-item warn">
+    <span>⚠️ <strong>${c.nome}</strong> — ${p.num}º período vence em <strong>${p.dias} dia(s)</strong> (${Fmt.dt(p.fim)}) · ${c.empresa}</span>
+    <button class="btn btn-orange btn-sm" onclick="abrirModal(${c.id})">Renovar</button></div>`);
+  document.getElementById('alertasArea').innerHTML = html + '</div>';
+}
+
+function renderTabela() {
+  const filtStatus  = document.getElementById('filtStatus').value;
+  const filtPeriodo = document.getElementById('filtPeriodo').value;
+  let lista = estagiarios();
+  if (filtPeriodo) lista = lista.filter(c => String(c.periodoAtual) === filtPeriodo);
+  if (filtStatus === 'alerta') {
+    lista = lista.filter(c => {
+      const ps = Calc.periodos(c,cfg);
+      return ps.some(p=>p.status==='warn'||p.status==='vencido');
+    });
+  } else if (filtStatus) {
+    lista = lista.filter(c => c.situacao === filtStatus);
+  }
+  let totBolsa=0, totRec=0, totLiqEst=0;
+  document.getElementById('tbodyEst').innerHTML = lista.length === 0
+    ? `<tr><td colspan="12"><div class="empty"><span class="ico">🎓</span><p>Nenhum estagiário encontrado</p></div></td></tr>`
+    : lista.map(c => {
+        const rec         = Calc.receita(c);
+        const comissaoRec = calcComissaoRec(c);
+        const liquido     = rec - comissaoRec;
+        const fim = Calc.addMeses(c.inicio1, 4*6);
+        const st  = Calc.statusContrato(c, cfg);
+        totBolsa += c.bolsa; totRec += rec; totLiqEst += liquido;
+        const vtHtml = c.vt==='fretado'?'<span class="tag tag-blue">Fretado</span>'
+          :c.vt==='sim'?`<span class="tag tag-accent">VT ${c.valorVT>0?Fmt.brl(c.valorVT):''}</span>`
+          :'<span class="tag tag-gray">Não</span>';
+        return `<tr data-search="${(c.nome+' '+c.empresa+' '+(c.agencia||'')+' '+(c.recrutador||'')).toLowerCase()}"
+          <td><div class="ci"><div class="av ${Fmt.avCls(c.id)}">${Fmt.ini(c.nome)}</div>
+            <div><div class="ci-name">${c.nome}</div>
+            ${c.obs?`<div class="ci-sub">${c.obs}</div>`:''}
+            </div></div></td>
+          <td>${c.empresa}</td>
+          <td style="font-size:.76rem">${
+            c.agencia
+              ? `<div style="font-weight:700">${c.agencia}</div><span class="tag ${c.tipoOrigem==='direta'?'tag-green':c.tipoOrigem==='indicacao'?'tag-blue':'tag-orange'}" style="margin-top:.2rem">${{agencia:'Agência',direta:'Direta',indicacao:'Indicação',outros:'Outros'}[c.tipoOrigem]||'Agência'}</span>`
+              : `<span style="opacity:.35">—</span>`
+          }</td>
+          <td>${vtHtml}</td>
+          <td class="fw8">${Fmt.brl(c.bolsa)}</td>
+          <td><span class="tag tag-accent">${c.taxa}%</span></td>
+          <td class="c-accent fw8">${Fmt.brl(rec)}</td>
+          <td style="font-size:.76rem;line-height:1.5">${
+            comissaoRec > 0
+              ? `<div style="font-weight:600">${c.recrutador || 'Externo'}</div><span class="tag tag-orange" style="margin-top:.2rem">${c.tipoComissao==='fixo' ? 'R$ fixo' : (c.comissaoRec||0)+'%'} = ${Fmt.brl(comissaoRec)}/mês</span>`
+              : `<span style="opacity:.35">Sem consultor</span>`
+          }</td>
+          <td class="fw8" style="color:var(--accent)">${Fmt.brl(liquido)}</td>
+          <td>${renderPeriodos(c)}</td>
+          <td style="font-size:.76rem;color:var(--muted)">${Fmt.dt(fim)}</td>
+          <td><span class="tag ${st.cls}">${st.txt}</span></td>
+          <td><div style="display:flex;gap:.3rem">
+            <button class="btn btn-blue btn-sm" onclick="abrirModal(${c.id})">✏️</button>
+            <button class="btn btn-danger btn-sm" onclick="excluir(${c.id})">✕</button>
+          </div></td>
+        </tr>`;
+      }).join('');
+  document.getElementById('tfBolsa').textContent  = Fmt.brl(totBolsa);
+  document.getElementById('tfReceita').textContent = Fmt.brl(totRec);
+  if(document.getElementById('tfLiqEst')) document.getElementById('tfLiqEst').textContent = Fmt.brl(totLiqEst);
+}
+
+function renderPeriodos(c) {
+  const ps = Calc.periodos(c, cfg);
+  return `<div class="periodos-wrap">${ps.map(p=>`
+    <div class="periodo-bloco ${p.status}" title="${p.num}º: ${Fmt.dt(p.inicio)} → ${Fmt.dt(p.fim)}">
+      <div class="periodo-num">${p.num}º</div>
+      <div>${{ok:'✓ OK',warn:`⚠️ ${p.dias}d`,vencido:'✕ Venc.',ativo:'▶ Ativo',futuro:'···'}[p.status]}</div>
+    </div>`).join('')}</div>`;
+}
+
+function abrirModal(id=null) {
+  editId = id;
+  const c = id ? contratos.find(x=>x.id===id) : null;
+  document.getElementById('modalTitulo').textContent = id ? '✏️ Editar Estagiário' : '＋ Novo Estagiário';
+  cfg = CC.getConfig();
+  document.getElementById('taxaHint').textContent = cfg.taxaEstPadrao;
+  UI.setVal('mNome',        c?.nome        || '');
+  UI.setVal('mEmpresa',     c?.empresa     || '');
+  UI.setVal('mAgencia',     c?.agencia     || '');
+  UI.setVal('mTipoOrigem',  c?.tipoOrigem  || 'agencia');
+  UI.setVal('mVT',          c?.vt          || 'nao');
+  UI.setVal('mValorVT',     c?.valorVT     || 0);
+  UI.setVal('mBolsa',        c?.bolsa       || 0);
+  UI.setVal('mTaxa',        c?.taxa        || cfg.taxaEstPadrao);
+  UI.setVal('mConsultor',   c?.recrutador  || '');
+  const tipoC = c?.tipoComissao || 'none';
+  UI.setVal('mTipoComissao', tipoC);
+  UI.setVal('mComissaoPct',  c?.comissaoRec  || 20);
+  UI.setVal('mComissaoFixo', c?.comissaoFixo || 20);
+  UI.setVal('mInicio1',     c?.inicio1     || '');
+  UI.setVal('mPeriodoAtual',c?.periodoAtual|| 1);
+  UI.setVal('mSituacao',    c?.situacao    || 'ativo');
+  UI.setVal('mObs',         c?.obs         || '');
+  calcReceita(); calcFim();
+  UI.openModal('modalEst');
+}
+
+function calcReceita() {
+  const bolsa      = parseFloat(UI.val('mBolsa'))||0;
+  const taxa       = parseFloat(UI.val('mTaxa'))||0;
+  const recConsultoria = bolsa*(taxa/100);
+  const tipo       = UI.val('mTipoComissao') || 'none';
+  const grpPct  = document.getElementById('grpComissaoPct');
+  const grpFixo = document.getElementById('grpComissaoFixo');
+  if (grpPct)  grpPct.style.display  = tipo==='pct'  ? '' : 'none';
+  if (grpFixo) grpFixo.style.display = tipo==='fixo' ? '' : 'none';
+  let comissao = 0;
+  if (tipo === 'pct')  comissao = recConsultoria * ((parseFloat(UI.val('mComissaoPct'))||0)/100);
+  if (tipo === 'fixo') comissao = parseFloat(UI.val('mComissaoFixo'))||0;
+  const liquido = recConsultoria - comissao;
+  UI.setVal('mReceita',    Fmt.brl(recConsultoria));
+  UI.setVal('mValorRec',   tipo !== 'none' ? Fmt.brl(comissao) : '—');
+  UI.setVal('mLiqAgencia', Fmt.brl(liquido));
+}
+
+function calcFim() {
+  const ini    = UI.val('mInicio1');
+  const periodo= parseInt(UI.val('mPeriodoAtual'))||1;
+  if (!ini) return;
+  UI.setVal('mFimPeriodo',  Fmt.dt(Calc.addMeses(ini, periodo*6)));
+  UI.setVal('mFimContrato', Fmt.dt(Calc.addMeses(ini, 4*6)));
+}
+
+async function salvar() {
+  const nome = UI.val('mNome').trim();
+  const emp  = UI.val('mEmpresa').trim();
+  const ini  = UI.val('mInicio1');
+  if (!nome || !emp || !ini) { UI.toast('Preencha nome, empresa e início do 1º período','err'); return; }
+  const dados = {
+    tipo:'estagiario', nome, empresa:emp,
+    agencia: UI.val('mAgencia').trim(),
+    tipoOrigem: UI.val('mTipoOrigem') || 'agencia',
+    vt: UI.val('mVT'), valorVT: parseFloat(UI.val('mValorVT'))||0,
+    bolsa: parseFloat(UI.val('mBolsa'))||0,
+    taxa:  parseFloat(UI.val('mTaxa'))||cfg.taxaEstPadrao,
+    recrutador:  UI.val('mConsultor').trim(),
+    tipoComissao: UI.val('mTipoComissao') || 'none',
+    comissaoRec:  UI.val('mTipoComissao')==='pct'  ? parseFloat(UI.val('mComissaoPct'))||0  : 0,
+    comissaoFixo: UI.val('mTipoComissao')==='fixo' ? parseFloat(UI.val('mComissaoFixo'))||0 : 0,
+    inicio1: ini,
+    periodoAtual: parseInt(UI.val('mPeriodoAtual'))||1,
+    situacao: UI.val('mSituacao'),
+    obs: UI.val('mObs'),
+  };
+  try {
+    if (editId) {
+      await CC.updateContrato(editId, dados);
+      const idx = contratos.findIndex(c=>c.id===editId);
+      if (idx >= 0) contratos[idx] = { ...contratos[idx], ...dados };
+      UI.toast(`${nome} atualizado!`, 'ok');
+    } else {
+      const novo = await CC.insertContrato(dados);
+      contratos.push(novo);
+      UI.toast(`${nome} cadastrado!`, 'ok');
+    }
+  } catch(e) {
+    UI.toast('Erro ao salvar: ' + e.message, 'err');
+    return;
+  }
+  UI.closeModal('modalEst');
+  renderTudo();
+}
+
+async function excluir(id) {
+  const c = contratos.find(x=>x.id===id);
+  if (!confirm(`Excluir contrato de ${c?.nome}?`)) return;
+  try {
+    await CC.deleteContrato(id);
+    contratos = contratos.filter(x=>x.id!==id);
+    renderTudo();
+    UI.toast('Removido','wrn');
+  } catch(e) {
+    UI.toast('Erro ao excluir: ' + e.message, 'err');
+  }
+}
+
+function renderTudo() { renderKPIs(); renderAlertas(); renderTabela(); renderMensal(); }
+
+let anoMensal = new Date().getFullYear();
+
+const MESES_NOMES = ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
+
+function abrirModalMes(mesIdx, ano) {
+  // Pré-preenche a data de início com o 1º dia do mês selecionado
+  const dataIni = `${ano}-${String(mesIdx+1).padStart(2,'0')}-01`;
+  abrirModal();
+  setTimeout(() => {
+    const el = document.getElementById('mInicio1');
+    if (el) { el.value = dataIni; calcFim(); }
+  }, 50);
+}
+
+function toggleMesEst(id) {
+  const body = document.getElementById('mb-' + id);
+  const btn  = document.getElementById('mbt-' + id);
+  if (!body) return;
+  const aberto = body.style.display !== 'none';
+  body.style.display = aberto ? 'none' : '';
+  if (btn) btn.textContent = aberto ? '▼' : '▲';
+}
+
+function renderMensal() {
+  document.getElementById('anoMensalLabel').textContent = anoMensal;
+  const lista = estagiarios();
+  const wrap  = document.getElementById('mensal-est');
+  if (!wrap) return;
+
+  // Para estagiários: receita é RECORRENTE. Cada mês mostramos quem estava ativo
+  // e também quem COMEÇOU naquele mês (inicio1 começa naquele mês)
+  // Dashboard geral do ano: soma receita mensal de todos os meses do ano
+  let totRecAno = 0;
+  let totComAno = 0;
+  let iniciadosAno = 0;
+  for (let m = 0; m < 12; m++) {
+    const mesStr = `${anoMensal}-${String(m+1).padStart(2,'0')}`;
+    const ativos = lista.filter(c => c.situacao === 'ativo' && c.inicio1 && c.inicio1 <= mesStr + '-31');
+    ativos.forEach(c => { totRecAno += Calc.receita(c); totComAno += calcComissaoRec(c); });
+    iniciadosAno += lista.filter(c => c.inicio1 && c.inicio1.startsWith(mesStr)).length;
+  }
+  const totLiqAno = totRecAno - totComAno;
+
+  let html = `
+    <div class="tbl-wrap" style="padding:1.2rem;margin-bottom:1.2rem;background:linear-gradient(135deg,rgba(99,102,241,.08),rgba(139,92,246,.05));border:1px solid rgba(99,102,241,.2)">
+      <div class="tbl-title" style="margin-bottom:.9rem">📊 Resumo do Ano ${anoMensal}</div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:.7rem">
+        <div class="kpi" style="margin:0"><div class="kpi-v c-accent">${iniciadosAno}</div><div class="kpi-l">Estagiários iniciados em ${anoMensal}</div></div>
+        <div class="kpi" style="margin:0"><div class="kpi-v c-green">${Fmt.brl(totRecAno)}</div><div class="kpi-l">Receita bruta acumulada do ano</div></div>
+        <div class="kpi" style="margin:0"><div class="kpi-v c-blue">${Fmt.brl(totLiqAno)}</div><div class="kpi-l">Líquido acumulado do ano</div></div>
+        <div class="kpi" style="margin:0"><div class="kpi-v c-muted">${lista.filter(c=>c.situacao==='ativo').length}</div><div class="kpi-l">Ativos hoje</div></div>
+      </div>
+    </div>`;
+
+  MESES_NOMES.forEach((nomeMes, i) => {
+    const mesStr    = `${anoMensal}-${String(i+1).padStart(2,'0')}`;
+    // Iniciados neste mês
+    const iniciados = lista.filter(c => c.inicio1 && c.inicio1.startsWith(mesStr));
+    // Ativos neste mês (para receita recorrente)
+    const ativosNoMes = lista.filter(c => c.situacao === 'ativo' && c.inicio1 && c.inicio1 <= mesStr + '-31');
+    // Encerrados neste mês (cancelado/concluido/efetivado com inicio no mês — aproximação)
+    const encerrados = lista.filter(c => ['cancelado','concluido','efetivado'].includes(c.situacao) && c.inicio1 && c.inicio1.startsWith(mesStr));
+
+    const totRec = ativosNoMes.reduce((s,c)=>s+Calc.receita(c),0);
+    const totCom = ativosNoMes.reduce((s,c)=>s+calcComissaoRec(c),0);
+    const totLiq = totRec - totCom;
+
+    const temDados = iniciados.length > 0 || encerrados.length > 0;
+    const hoje = new Date();
+    const ehMesAtual = (hoje.getFullYear() === anoMensal && hoje.getMonth() === i);
+
+    const corBorda = ehMesAtual ? 'rgba(99,102,241,.5)' : (temDados ? 'rgba(139,92,246,.25)' : 'var(--border)');
+    const bgHeader = ehMesAtual ? 'rgba(99,102,241,.1)' : (temDados ? 'rgba(139,92,246,.05)' : 'transparent');
+
+    html += `
+      <div class="tbl-wrap" style="margin-bottom:.6rem;border:1px solid ${corBorda}">
+        <div onclick="toggleMesEst('${mesStr}')" style="display:flex;align-items:center;justify-content:space-between;padding:.85rem 1rem;cursor:pointer;background:${bgHeader};border-radius:inherit;user-select:none">
+          <div style="display:flex;align-items:center;gap:.75rem">
+            <span style="font-weight:800;font-size:.95rem">${nomeMes} ${anoMensal}</span>
+            ${ehMesAtual ? '<span class="tag tag-blue" style="font-size:.6rem">Mês atual</span>' : ''}
+            ${iniciados.length > 0 ? `<span class="tag tag-green" style="font-size:.6rem">+${iniciados.length} iniciado(s)</span>` : ''}
+            ${encerrados.length > 0 ? `<span class="tag tag-red" style="font-size:.6rem">-${encerrados.length} encerrado(s)</span>` : ''}
+            ${!temDados && ativosNoMes.length > 0 ? `<span class="tag tag-accent" style="font-size:.6rem">${ativosNoMes.length} ativo(s)</span>` : ''}
+            ${!temDados && ativosNoMes.length === 0 ? '<span style="font-size:.72rem;color:var(--muted);opacity:.5">Sem atividade</span>' : ''}
+          </div>
+          <div style="display:flex;align-items:center;gap:.75rem">
+            ${ativosNoMes.length > 0 ? `<span style="font-size:.78rem;font-weight:700;color:var(--accent)">${Fmt.brl(totRec)}/mês</span>` : ''}
+            <button class="btn btn-primary btn-sm" onclick="event.stopPropagation();abrirModalMes(${i},${anoMensal})" style="font-size:.68rem;padding:.25rem .6rem">＋ Adicionar Estagiário</button>
+            <span id="mbt-${mesStr}" style="color:var(--muted);font-size:.8rem">▼</span>
+          </div>
+        </div>
+
+        <div id="mb-${mesStr}" style="display:none;padding:1rem;border-top:1px solid var(--border)">
+          <!-- Dashboard de receita recorrente do mês -->
+          ${ativosNoMes.length > 0 ? `
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:.6rem;margin-bottom:1rem">
+            <div class="kpi" style="margin:0;padding:.7rem"><div class="kpi-v c-accent" style="font-size:1.3rem">${ativosNoMes.length}</div><div class="kpi-l">Ativos neste mês</div></div>
+            <div class="kpi" style="margin:0;padding:.7rem"><div class="kpi-v c-green" style="font-size:1.3rem">${Fmt.brl(totRec)}</div><div class="kpi-l">Receita bruta/mês</div></div>
+            ${totCom > 0 ? `<div class="kpi" style="margin:0;padding:.7rem"><div class="kpi-v c-orange" style="font-size:1.3rem">${Fmt.brl(totCom)}</div><div class="kpi-l">Minha comissão/mês</div></div>` : ''}
+            <div class="kpi" style="margin:0;padding:.7rem"><div class="kpi-v c-blue" style="font-size:1.3rem">${Fmt.brl(totLiq)}</div><div class="kpi-l">Líquido empresa/mês</div></div>
+          </div>` : ''}
+
+          ${iniciados.length > 0 ? `
+          <div style="font-size:.72rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:.5rem">Iniciados em ${nomeMes}</div>
+          <div style="display:flex;flex-direction:column;gap:.4rem;margin-bottom:.8rem">
+            ${iniciados.map(c => {
+              const rec = Calc.receita(c);
+              const com = calcComissaoRec(c);
+              const liq = rec - com;
+              return `<div style="display:flex;align-items:center;justify-content:space-between;padding:.6rem .8rem;background:rgba(99,102,241,.05);border-radius:8px;border:1px solid rgba(99,102,241,.15)">
+                <div style="display:flex;align-items:center;gap:.6rem">
+                  <div class="av ${Fmt.avCls(c.id)}" style="width:28px;height:28px;font-size:.65rem">${Fmt.ini(c.nome)}</div>
+                  <div>
+                    <div style="font-weight:700;font-size:.82rem">${c.nome}</div>
+                    <div style="font-size:.68rem;color:var(--muted)">${c.empresa} · ${c.taxa}% da bolsa · ${c.periodoAtual}º período</div>
+                  </div>
+                </div>
+                <div style="display:flex;align-items:center;gap:.8rem">
+                  <div style="text-align:right">
+                    <div style="font-weight:800;font-size:.85rem;color:var(--accent)">${Fmt.brl(rec)}/mês</div>
+                    <div style="font-size:.6rem;color:var(--muted)">receita recorrente</div>
+                  </div>
+                  <span class="tag ${c.situacao==='ativo'?'tag-green':c.situacao==='cancelado'?'tag-red':'tag-orange'}">${c.situacao}</span>
+                  <button class="btn btn-blue btn-sm" onclick="abrirModal(${c.id})" style="padding:.2rem .5rem">✏️</button>
+                </div>
+              </div>`;
+            }).join('')}
+          </div>` : ''}
+
+          ${encerrados.length > 0 ? `
+          <div style="font-size:.72rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:.5rem">Encerrados (iniciados em ${nomeMes})</div>
+          <div style="display:flex;flex-direction:column;gap:.4rem">
+            ${encerrados.map(c => `<div style="display:flex;align-items:center;justify-content:space-between;padding:.5rem .8rem;background:rgba(239,68,68,.04);border-radius:8px;border:1px solid rgba(239,68,68,.15)">
+              <div style="display:flex;align-items:center;gap:.6rem">
+                <div class="av av-red" style="width:26px;height:26px;font-size:.65rem">${Fmt.ini(c.nome)}</div>
+                <div style="font-size:.8rem;font-weight:600">${c.nome}</div>
+              </div>
+              <div style="font-size:.7rem;color:var(--muted)">${c.empresa}</div>
+              <span class="tag ${c.situacao==='efetivado'?'tag-blue':'tag-gray'}">${c.situacao}</span>
+              <button class="btn btn-blue btn-sm" onclick="abrirModal(${c.id})" style="padding:.2rem .5rem">✏️</button>
+            </div>`).join('')}
+          </div>` : ''}
+
+          ${!temDados && ativosNoMes.length === 0 ? `<div style="text-align:center;padding:1rem;color:var(--muted);font-size:.8rem">Nenhum estagiário neste mês.</div>` : ''}
+        </div>
+      </div>`;
+  });
+
+  wrap.innerHTML = html;
+}
+
+function exportarCSV() {
+  Export.csv(
+    ['Nome','Empresa','VT','Bolsa','Taxa%','Receita/mês','Período','Início','Fim Contrato','Situação','Obs'],
+    estagiarios().map(c=>[c.nome,c.empresa,c.vt,Fmt.brl(c.bolsa),c.taxa+'%',Fmt.brl(Calc.receita(c)),
+      c.periodoAtual+'º',Fmt.dt(c.inicio1),Fmt.dt(Calc.addMeses(c.inicio1,24)),c.situacao,c.obs||'']),
+    'estagiarios.csv'
+  );
+}
+
+function exportarWord() {
+  const total = estagiarios().filter(c=>c.situacao==='ativo').reduce((s,c)=>s+Calc.receita(c),0);
+  const rows  = estagiarios().map(c=>`<tr><td>${c.nome}</td><td>${c.empresa}</td><td>${Fmt.brl(c.bolsa)}</td><td>${c.taxa}%</td><td><b>${Fmt.brl(Calc.receita(c))}</b></td><td>${c.periodoAtual}º</td><td>${Fmt.dt(c.inicio1)}</td><td>${c.situacao}</td></tr>`).join('');
+  Export.word(`<h2>Controle de Estagiários — Orizon Consultoria</h2>
+    <p>Receita: <b>${Fmt.brl(total)}</b> | ${new Date().toLocaleDateString('pt-BR')}</p>
+    <table><thead><tr><th>Nome</th><th>Empresa</th><th>Bolsa</th><th>Taxa</th><th>Receita</th><th>Período</th><th>Início</th><th>Situação</th></tr></thead>
+    <tbody>${rows}</tbody></table>`, 'estagiarios.doc');
+}
+
+// Inicializa quando DOM estiver pronto
+document.addEventListener('DOMContentLoaded', async () => {
+  await new Promise(resolve => {
+    if (window._ccAccessToken !== undefined) { resolve(); return; }
+    const t = setInterval(() => { if (window._ccAccessToken !== undefined) { clearInterval(t); resolve(); } }, 50);
+    setTimeout(() => { clearInterval(t); resolve(); }, 5000);
+  });
+  cfg = CC.getConfig();
+  document.getElementById('tbodyEst').innerHTML =
+    `<tr><td colspan="10" style="text-align:center;padding:2rem;color:var(--muted)">⏳ Carregando dados...</td></tr>`;
+  try {
+    contratos = await CC.getContratosAsync();
+    CC.set('contratos', contratos);
+  } catch(e) {
+    contratos = CC.getContratos();
+    UI.toast('Usando dados locais (sem conexão)', 'wrn');
+  }
+  renderTudo();
+});
+</script>
+</body>
+</html>

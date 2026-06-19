@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+<link rel="icon" type="image/png" sizes="32x32" href="../imagens/favicon-32x32.png"/>
+<link rel="shortcut icon" href="../imagens/icone.png" type="image/png"/>
+<meta name="robots" content="noindex, nofollow"/>
+<title>Relatório Financeiro — Orizon Consultoria</title>
+<link rel="stylesheet" href="assets/cc-style.css"/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<style>
+.sb-head{padding:1.1rem 0.85rem 1rem;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:0.75rem;flex-shrink:0;}
+.sb-logo-ico{width:44px;height:44px;border-radius:13px;background:linear-gradient(135deg,rgba(30,64,175,0.35),rgba(59,130,246,0.18));border:1px solid rgba(59,130,246,0.28);display:flex;align-items:center;justify-content:center;overflow:hidden;flex-shrink:0;box-shadow:0 2px 10px rgba(59,130,246,0.15);}
+.sb-logo-ico img{width:44px;height:44px;object-fit:contain;}
+.sb-logo-txt{overflow:hidden;white-space:nowrap;}
+.sb-logo-name{font-size:1.18rem;font-weight:900;line-height:1.2;letter-spacing:-0.3px;}
+.sb-logo-name span{color:var(--accent);}
+.sb-logo-sub{font-size:0.6rem;color:var(--accent);text-transform:uppercase;letter-spacing:2px;opacity:0.65;margin-top:0.1rem;}
+
+/* Filtros */
+.filtro-box{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:1.4rem;margin-bottom:1.5rem;}
+.filtro-row{display:flex;gap:1rem;align-items:flex-end;flex-wrap:wrap;}
+.filtro-group{display:flex;flex-direction:column;gap:.3rem;}
+.filtro-group label{font-size:.68rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;}
+.tipo-btn{display:flex;gap:.5rem;margin-bottom:1rem;}
+.tipo-btn button{padding:.5rem 1.2rem;border-radius:8px;border:1px solid var(--border);background:transparent;color:var(--text);cursor:pointer;font-size:.78rem;font-weight:600;transition:.15s;}
+.tipo-btn button.active{background:var(--accent);border-color:var(--accent);color:#fff;}
+
+/* Preview */
+.preview-box{background:var(--surface);border:1px solid var(--border);border-radius:12px;overflow:hidden;}
+.preview-header{padding:1rem 1.4rem;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;}
+.preview-content{padding:1.4rem;max-height:70vh;overflow-y:auto;}
+
+/* KPIs inline */
+.kpi-row{display:grid;grid-template-columns:repeat(4,1fr);gap:.8rem;margin-bottom:1.5rem;}
+.kpi-card{background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:10px;padding:1rem;}
+.kpi-label{font-size:.62rem;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:.3rem;}
+.kpi-val{font-size:1.3rem;font-weight:800;}
+.kpi-val.green{color:#22c55e;}
+.kpi-val.red{color:#ef4444;}
+.kpi-val.blue{color:var(--accent);}
+
+/* Tabelas preview */
+.rel-section{margin-bottom:1.8rem;}
+.rel-section-title{font-size:.8rem;font-weight:800;text-transform:uppercase;letter-spacing:1px;color:var(--accent);border-bottom:1px solid var(--border);padding-bottom:.5rem;margin-bottom:.8rem;}
+table.rel-tbl{width:100%;border-collapse:collapse;font-size:.72rem;}
+table.rel-tbl th{background:rgba(255,255,255,.04);color:var(--muted);text-align:left;padding:.5rem .7rem;font-size:.62rem;text-transform:uppercase;letter-spacing:.5px;}
+table.rel-tbl td{padding:.5rem .7rem;border-bottom:1px solid rgba(255,255,255,.05);color:var(--text);}
+table.rel-tbl tr:last-child td{border-bottom:none;}
+table.rel-tbl td.num{text-align:right;font-weight:700;font-variant-numeric:tabular-nums;}
+table.rel-tbl td.red{color:#ef4444;}
+table.rel-tbl td.green{color:#22c55e;}
+.totrow td{font-weight:800;border-top:1px solid var(--border)!important;background:rgba(255,255,255,.03);}
+
+.empty-rel{text-align:center;padding:2rem;color:var(--muted);font-size:.8rem;}
+</style>
+</head>
+<body>
+<div class="app">
+<aside class="sidebar" id="sidebar">
+  <div class="sb-head"><div class="sb-logo-ico"><img src="../imagens/fundo.png" alt="Orizon" style="width:44px;height:44px;object-fit:contain"/></div><div class="sb-logo-txt"><div class="sb-logo-name">Orizon <span>Consultoria</span></div><div class="sb-logo-sub">Contratos</div></div></div>
+  <nav class="sb-nav">
+    <div class="sb-sep">Visão Geral</div>
+    <a class="sb-item" href="index.html"><span class="ico">📊</span><span class="lbl">Dashboard</span></a>
+    <div class="sb-sep">Controles</div>
+    <a class="sb-item" href="estagiarios.html"><span class="ico">🎓</span><span class="lbl">Estagiários</span></a>
+    <a class="sb-item" href="clt.html"><span class="ico">💼</span><span class="lbl">CLTs</span></a>
+    <div class="sb-sep">Gestão</div>
+    <a class="sb-item" href="financeiro-mensal.html"><span class="ico">📅</span><span class="lbl">Financeiro Mensal</span></a>
+    <a class="sb-item" href="relatorios.html"><span class="ico">📈</span><span class="lbl">Relatórios</span></a>
+    <a class="sb-item active" href="relatorio-pdf.html"><span class="ico">📄</span><span class="lbl">Relatório PDF</span></a>
+    <a class="sb-item" href="balanco-financeiro.html"><span class="ico">💰</span><span class="lbl">Balanço Financeiro</span></a>
+    <a class="sb-item" href="despesas-fixas.html"><span class="ico">📌</span><span class="lbl">Despesas Fixas</span></a>
+    <div class="sb-sep">Equipe</div>
+    <a class="sb-item" href="consultores.html"><span class="ico">🏆</span><span class="lbl">Consultores</span></a>
+    <a class="sb-item" href="pipeline.html"><span class="ico">🔄</span><span class="lbl">Pipeline de Projetos</span></a>
+    <div class="sb-sep">Sistema</div>
+    <a class="sb-item" href="configuracoes.html"><span class="ico">⚙️</span><span class="lbl">Configurações</span></a>
+  </nav>
+  <div class="sb-foot"><div class="sb-av"><img src="../imagens/fundo.png" alt="EX" style="width:18px;height:18px;object-fit:contain"/></div><div class="sb-uinfo"><div class="sb-uname" id="user-nome">—</div><div class="sb-urole" id="user-email">—</div></div><button class="sb-toggle" onclick="if(window.ccLogout)window.ccLogout()" title="Sair" style="margin-right:.2rem;opacity:.4">⏻</button><button class="sb-toggle" id="sb-toggle">◀</button></div>
+</aside>
+
+<div class="main">
+  <div class="topbar">
+    <div class="tb-bc"><a href="index.html">Dashboard</a><span class="sep"> / </span><span>Relatório PDF</span></div>
+    <div class="tb-right"><span id="tb-date" class="tb-date"></span></div>
+  </div>
+  <div class="content">
+    <div class="sec-hd">
+      <div><div class="sec-title">📄 <span>Relatório Financeiro PDF</span></div>
+      <div class="sec-sub">Comissões, contratos, despesas e resultado — para envio à agência</div></div>
+      <button class="btn btn-primary" id="btnGerarPDF" onclick="gerarPDF()" style="opacity:.4;pointer-events:none">⬇ Baixar PDF</button>
+    </div>
+
+    <!-- Filtros -->
+    <div class="filtro-box">
+      <div class="tipo-btn">
+        <button class="active" id="btnMensal" onclick="relSetTipo('mensal')">📅 Mensal</button>
+        <button id="btnPeriodo" onclick="relSetTipo('periodo')">📆 Período Personalizado</button>
+      </div>
+      <div class="filtro-row">
+        <!-- Mensal -->
+        <div id="grpMensal" class="filtro-group">
+          <label>Mês / Ano</label>
+          <input type="month" class="fi" id="inputMes" style="width:180px"/>
+        </div>
+        <!-- Período -->
+        <div id="grpPeriodo" style="display:none;gap:1rem;display:none" class="filtro-row">
+          <div class="filtro-group">
+            <label>De</label>
+            <input type="date" class="fi" id="inputDe" style="width:160px"/>
+          </div>
+          <div class="filtro-group">
+            <label>Até</label>
+            <input type="date" class="fi" id="inputAte" style="width:160px"/>
+          </div>
+        </div>
+        <div class="filtro-group" style="margin-left:auto">
+          <label>&nbsp;</label>
+          <button class="btn btn-primary" onclick="relCarregar()">🔍 Gerar Prévia</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Preview -->
+    <div class="preview-box" id="previewBox" style="display:none">
+      <div class="preview-header">
+        <div style="font-weight:800;font-size:.9rem" id="previewTitulo">—</div>
+        <div style="font-size:.7rem;color:var(--muted)" id="previewSub">—</div>
+      </div>
+      <div class="preview-content" id="previewContent"></div>
+    </div>
+  </div>
+</div>
+</div>
+
+<div id="toast-ct"></div>
+<script src="assets/cc-auth.js"></script>
+<script src="assets/cc-core.js"></script>
+<script>
+const SB_URL_REL = 'https://yunoxkembhskpnprffoi.supabase.co';
+const SB_ANON_REL = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inl1bm94a2VtYmhza3BucHJmZm9pIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg5Nzg2MzksImV4cCI6MjA5NDU1NDYzOX0.WhkzrBCHThvJaMuLeo6oVPjrWvc_MvfCoyz9B90-Yms';
+
+let sb, tipoFiltro = 'mensal', dadosRelatorio = null;
+
+function token() { return window._ccAccessToken || SB_ANON_REL; }
+function brl(v) { return 'R$ ' + Number(v||0).toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2}); }
+function fmtDt(s) { if(!s) return '—'; const [y,m,d]=s.split('-'); return `${d}/${m}/${y}`; }
+function nomeMes(m) { return ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'][parseInt(m)-1]; }
+
+function relSetTipo(t) {
+  tipoFiltro = t;
+  document.getElementById('btnMensal').classList.toggle('active', t==='mensal');
+  document.getElementById('btnPeriodo').classList.toggle('active', t==='periodo');
+  document.getElementById('grpMensal').style.display  = t==='mensal'  ? '' : 'none';
+  document.getElementById('grpPeriodo').style.display = t==='periodo' ? 'flex' : 'none';
+}
+
+function getDatas() {
+  if (tipoFiltro === 'mensal') {
+    const v = document.getElementById('inputMes').value;
+    if (!v) return null;
+    const [y,m] = v.split('-');
+    const ultimo = new Date(y, parseInt(m), 0).getDate();
+    return { ini: `${y}-${m}-01`, fim: `${y}-${m}-${String(ultimo).padStart(2,'0')}`, label: `${nomeMes(m)}/${y}` };
+  } else {
+    const de = document.getElementById('inputDe').value;
+    const ate = document.getElementById('inputAte').value;
+    if (!de || !ate) return null;
+    return { ini: de, fim: ate, label: `${fmtDt(de)} a ${fmtDt(ate)}` };
+  }
+}
+
+async function relCarregar() {
+  const datas = getDatas();
+  if (!datas) { UI.toast('Selecione o período', 'err'); return; }
+
+  UI.toast('Carregando dados...', 'ok');
+
+  if (!sb) sb = window.supabase.createClient(SB_URL_REL, SB_ANON_REL, {
+    global: { headers: { Authorization: `Bearer ${token()}` } }
+  });
+
+  // Busca contratos e lançamentos em paralelo
+  const [{ data: contratos }, { data: lancamentos }, { data: despFixas }] = await Promise.all([
+    sb.from('ex_contratos').select('*').order('created_at', { ascending: false }),
+    sb.from('lancamentos_financeiros').select('*').gte('data', datas.ini).lte('data', datas.fim).order('data'),
+    sb.from('ex_despesas_fixas').select('*').eq('ativa', true),
+  ]);
+
+  // Se não tiver tabela ex_contratos, usa CC
+  const ctrs = contratos || CC.getContratos() || [];
+
+  dadosRelatorio = { datas, contratos: ctrs, lancamentos: lancamentos||[], despFixas: despFixas||[] };
+  renderPreview(dadosRelatorio);
+}
+
+function calcReceita(c) {
+  if (c.tipo === 'estagiario') {
+    const bolsa = Number(c.bolsa||0);
+    const taxa = Number(c.taxa||15)/100;
+    return bolsa * taxa;
+  } else {
+    const sal = Number(c.salario||0);
+    const taxa = Number(c.taxa||50)/100;
+    return sal * taxa;
+  }
+}
+
+function calcComissao(c) {
+  const rec = calcReceita(c);
+  if (!c.tipoComissao || c.tipoComissao === 'none') return 0;
+  if (c.tipoComissao === 'percentual') return rec * (Number(c.comissaoPct||0)/100);
+  if (c.tipoComissao === 'fixo') return Number(c.comissaoFixo||0);
+  return 0;
+}
+
+function renderPreview(d) {
+  const { datas, contratos, lancamentos, despFixas } = d;
+
+  // Estagiários: ativos no período (receita recorrente — qualquer ativo conta)
+  const estagiarios = contratos.filter(c =>
+    (c.tipo === 'estagiario') &&
+    (c.situacao === 'ativo' || c.situacao === 'Ativo') &&
+    c.inicio1 && c.inicio1 <= datas.fim
+  );
+
+  // CLTs: SOMENTE admitidos dentro do período selecionado (taxa única)
+  const clts = contratos.filter(c =>
+    (c.tipo === 'clt') &&
+    c.admissao && c.admissao >= datas.ini && c.admissao <= datas.fim
+  );
+
+  const ativos = [...estagiarios, ...clts];
+  const receitas = lancamentos.filter(l => l.tipo === 'receita');
+  const despesas = lancamentos.filter(l => l.tipo === 'despesa');
+
+  const totalReceita  = receitas.reduce((s,l)=>s+Number(l.valor||0), 0);
+  const totalDespesa  = despesas.reduce((s,l)=>s+Number(l.valor||0), 0);
+  const totalComissao = ativos.reduce((s,c)=>s+calcComissao(c), 0);
+  const resultado     = totalReceita - totalDespesa;
+
+  document.getElementById('previewBox').style.display = '';
+  document.getElementById('previewTitulo').textContent = `Relatório Financeiro — ${datas.label}`;
+  document.getElementById('previewSub').textContent = `Gerado em ${new Date().toLocaleDateString('pt-BR')} — Orizon Consultoria`;
+
+  // KPIs
+  let html = `<div class="kpi-row">
+    <div class="kpi-card"><div class="kpi-label">Receita Total</div><div class="kpi-val green">${brl(totalReceita)}</div></div>
+    <div class="kpi-card"><div class="kpi-label">Despesas Total</div><div class="kpi-val red">${brl(totalDespesa)}</div></div>
+    <div class="kpi-card"><div class="kpi-label">Comissões Pagas</div><div class="kpi-val red">${brl(totalComissao)}</div></div>
+    <div class="kpi-card"><div class="kpi-label">Resultado Líquido</div><div class="kpi-val ${resultado>=0?'green':'red'}">${brl(resultado)}</div></div>
+  </div>`;
+
+  // Contratos / Comissões
+  html += `<div class="rel-section"><div class="rel-section-title">Contratos Ativos & Comissões</div>`;
+  if (ativos.length) {
+    html += `<table class="rel-tbl">
+      <tr><th>Colaborador</th><th>Tipo</th><th>Empresa</th><th>Base (R$)</th><th>Taxa</th><th>Receita Consultoria</th><th>Comissão</th><th>Liq. Consultoria</th></tr>`;
+    let tRec=0, tCom=0, tLiq=0;
+    ativos.forEach(c => {
+      const base  = c.tipo==='estagiario' ? Number(c.bolsa||0) : Number(c.salario||0);
+      const rec   = calcReceita(c);
+      const com   = calcComissao(c);
+      const liq   = rec - com;
+      tRec+=rec; tCom+=com; tLiq+=liq;
+      const comLabel = c.tipoComissao==='percentual' ? `${c.comissaoPct}%` : c.tipoComissao==='fixo' ? 'Fixo' : '—';
+      html += `<tr>
+        <td>${c.nome||'—'}</td>
+        <td>${c.tipo==='estagiario'?'Estagiário':'CLT'}</td>
+        <td>${c.empresa||'—'}</td>
+        <td class="num">${brl(base)}</td>
+        <td class="num">${c.taxa||0}%</td>
+        <td class="num green">${brl(rec)}</td>
+        <td class="num red">${com>0?brl(com)+' ('+comLabel+')':'—'}</td>
+        <td class="num ${liq>=0?'green':'red'}">${brl(liq)}</td>
+      </tr>`;
+    });
+    html += `<tr class="totrow">
+      <td colspan="5"><strong>TOTAL</strong></td>
+      <td class="num green">${brl(tRec)}</td>
+      <td class="num red">${brl(tCom)}</td>
+      <td class="num ${tLiq>=0?'green':'red'}">${brl(tLiq)}</td>
+    </tr></table>`;
+  } else {
+    html += `<div class="empty-rel">Nenhum contrato ativo encontrado.</div>`;
+  }
+  html += `</div>`;
+
+  // Lançamentos - Receitas
+  html += `<div class="rel-section"><div class="rel-section-title">Receitas do Período</div>`;
+  if (receitas.length) {
+    html += `<table class="rel-tbl"><tr><th>Data</th><th>Descrição</th><th>Categoria</th><th>Forma</th><th>Valor</th></tr>`;
+    receitas.forEach(l => {
+      html += `<tr><td>${fmtDt(l.data)}</td><td>${l.descricao||'—'}</td><td>${l.categoria||'—'}</td><td>${l.forma_pgto||'—'}</td><td class="num green">${brl(l.valor)}</td></tr>`;
+    });
+    html += `<tr class="totrow"><td colspan="4"><strong>TOTAL RECEITAS</strong></td><td class="num green">${brl(totalReceita)}</td></tr></table>`;
+  } else {
+    html += `<div class="empty-rel">Nenhuma receita lançada no período.</div>`;
+  }
+  html += `</div>`;
+
+  // Lançamentos - Despesas
+  html += `<div class="rel-section"><div class="rel-section-title">Despesas do Período</div>`;
+  if (despesas.length) {
+    html += `<table class="rel-tbl"><tr><th>Data</th><th>Descrição</th><th>Categoria</th><th>Obs</th><th>Valor</th></tr>`;
+    despesas.forEach(l => {
+      html += `<tr><td>${fmtDt(l.data)}</td><td>${l.descricao||'—'}</td><td>${l.categoria||'—'}</td><td style="font-size:.65rem;color:var(--muted)">${l.obs||'—'}</td><td class="num red">${brl(l.valor)}</td></tr>`;
+    });
+    html += `<tr class="totrow"><td colspan="4"><strong>TOTAL DESPESAS</strong></td><td class="num red">${brl(totalDespesa)}</td></tr></table>`;
+  } else {
+    html += `<div class="empty-rel">Nenhuma despesa lançada no período.</div>`;
+  }
+  html += `</div>`;
+
+  // Resultado final
+  html += `<div class="rel-section"><div class="rel-section-title">Resultado Final</div>
+    <table class="rel-tbl">
+      <tr><td>Receita Total</td><td class="num green">${brl(totalReceita)}</td></tr>
+      <tr><td>(-) Comissões Consultores</td><td class="num red">- ${brl(totalComissao)}</td></tr>
+      <tr><td>(-) Despesas Operacionais</td><td class="num red">- ${brl(totalDespesa)}</td></tr>
+      <tr class="totrow"><td><strong>= RESULTADO LÍQUIDO</strong></td><td class="num ${resultado>=0?'green':'red'}"><strong>${brl(resultado)}</strong></td></tr>
+    </table>
+  </div>`;
+
+  document.getElementById('previewContent').innerHTML = html;
+
+  // Habilita botão PDF
+  const btn = document.getElementById('btnGerarPDF');
+  btn.style.opacity = '1';
+  btn.style.pointerEvents = 'auto';
+
+  UI.toast('Prévia gerada!', 'ok');
+}
+
+async function gerarPDF() {
+  if (!dadosRelatorio) return;
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
+  const { datas, contratos, lancamentos } = dadosRelatorio;
+
+  const estagiariosPdf = contratos.filter(c =>
+    (c.tipo === 'estagiario') &&
+    (c.situacao === 'ativo' || c.situacao === 'Ativo') &&
+    c.inicio1 && c.inicio1 <= datas.fim
+  );
+  const cltsPdf = contratos.filter(c =>
+    (c.tipo === 'clt') &&
+    c.admissao && c.admissao >= datas.ini && c.admissao <= datas.fim
+  );
+  const ativos   = [...estagiariosPdf, ...cltsPdf];
+  const receitas = lancamentos.filter(l => l.tipo === 'receita');
+  const despesas = lancamentos.filter(l => l.tipo === 'despesa');
+  const totalReceita  = receitas.reduce((s,l)=>s+Number(l.valor||0), 0);
+  const totalDespesa  = despesas.reduce((s,l)=>s+Number(l.valor||0), 0);
+  const totalComissao = ativos.reduce((s,c)=>s+calcComissao(c), 0);
+  const resultado     = totalReceita - totalDespesa;
+
+  const W = doc.internal.pageSize.getWidth();
+  let y = 18;
+
+  // Cabeçalho
+  doc.setFillColor(15, 23, 42);
+  doc.rect(0, 0, W, 38, 'F');
+  doc.setTextColor(255,255,255);
+  doc.setFontSize(18); doc.setFont('helvetica','bold');
+  doc.text('RELATÓRIO FINANCEIRO', 14, 16);
+  doc.setFontSize(9); doc.setFont('helvetica','normal');
+  doc.setTextColor(148,163,184);
+  doc.text(datas.label, 14, 23);
+  doc.text('Gerado em: ' + new Date().toLocaleDateString('pt-BR') + ' às ' + new Date().toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'}), 14, 29);
+  doc.setTextColor(59,130,246);
+  doc.setFontSize(7);
+  doc.text('DOCUMENTO CONFIDENCIAL', W-14, 29, { align: 'right' });
+  y = 48;
+
+  // KPIs
+  doc.setTextColor(30,41,59);
+  const kpis = [
+    ['Receita Total', brl(totalReceita), [34,197,94]],
+    ['Despesas', brl(totalDespesa), [239,68,68]],
+    ['Comissões', brl(totalComissao), [239,68,68]],
+    ['Resultado Líquido', brl(resultado), resultado>=0?[34,197,94]:[239,68,68]],
+  ];
+  const kw = (W-28)/4;
+  kpis.forEach(([label, val, color], i) => {
+    const x = 14 + i*kw;
+    doc.setFillColor(248,250,252);
+    doc.roundedRect(x, y, kw-3, 18, 2, 2, 'F');
+    doc.setFontSize(6.5); doc.setFont('helvetica','normal');
+    doc.setTextColor(100,116,139);
+    doc.text(label.toUpperCase(), x+4, y+6);
+    doc.setFontSize(10); doc.setFont('helvetica','bold');
+    doc.setTextColor(...color);
+    doc.text(val, x+4, y+14);
+  });
+  y += 26;
+
+  // Contratos
+  if (ativos.length) {
+    doc.setFontSize(9); doc.setFont('helvetica','bold');
+    doc.setTextColor(30,41,59);
+    doc.text('CONTRATOS ATIVOS & COMISSÕES', 14, y);
+    y += 4;
+    doc.autoTable({
+      startY: y,
+      head: [['Colaborador','Tipo','Empresa','Base','Taxa','Receita','Comissão','Líquido']],
+      body: ativos.map(c => {
+        const base = c.tipo==='estagiario' ? Number(c.bolsa||0) : Number(c.salario||0);
+        const rec  = calcReceita(c);
+        const com  = calcComissao(c);
+        const comLabel = c.tipoComissao==='percentual'?`${c.comissaoPct}%`:c.tipoComissao==='fixo'?'Fixo':'—';
+        return [c.nome||'—', c.tipo==='estagiario'?'Estagiário':'CLT', c.empresa||'—',
+          brl(base), (c.taxa||0)+'%', brl(rec), com>0?brl(com)+' ('+comLabel+')':'—', brl(rec-com)];
+      }),
+      foot: [['','','','','','TOTAL', brl(totalComissao), brl(ativos.reduce((s,c)=>s+calcReceita(c)-calcComissao(c),0))]],
+      styles: { fontSize: 7, cellPadding: 2.5 },
+      headStyles: { fillColor: [15,23,42], textColor: [255,255,255], fontSize: 6.5 },
+      footStyles: { fillColor: [241,245,249], textColor: [30,41,59], fontStyle: 'bold' },
+      columnStyles: { 5:{halign:'right'}, 6:{halign:'right'}, 7:{halign:'right'}, 3:{halign:'right'} },
+      margin: { left: 14, right: 14 },
+    });
+    y = doc.lastAutoTable.finalY + 8;
+  }
+
+  // Receitas
+  if (receitas.length) {
+    if (y > 220) { doc.addPage(); y = 18; }
+    doc.setFontSize(9); doc.setFont('helvetica','bold');
+    doc.setTextColor(30,41,59);
+    doc.text('RECEITAS DO PERÍODO', 14, y);
+    y += 4;
+    doc.autoTable({
+      startY: y,
+      head: [['Data','Descrição','Categoria','Forma Pgto','Valor']],
+      body: receitas.map(l => [fmtDt(l.data), l.descricao||'—', l.categoria||'—', l.forma_pgto||'—', brl(l.valor)]),
+      foot: [['','','','TOTAL RECEITAS', brl(totalReceita)]],
+      styles: { fontSize: 7, cellPadding: 2.5 },
+      headStyles: { fillColor: [21,128,61], textColor: [255,255,255], fontSize: 6.5 },
+      footStyles: { fillColor: [240,253,244], textColor: [21,128,61], fontStyle: 'bold' },
+      columnStyles: { 4:{halign:'right'} },
+      margin: { left: 14, right: 14 },
+    });
+    y = doc.lastAutoTable.finalY + 8;
+  }
+
+  // Despesas
+  if (despesas.length) {
+    if (y > 220) { doc.addPage(); y = 18; }
+    doc.setFontSize(9); doc.setFont('helvetica','bold');
+    doc.setTextColor(30,41,59);
+    doc.text('DESPESAS DO PERÍODO', 14, y);
+    y += 4;
+    doc.autoTable({
+      startY: y,
+      head: [['Data','Descrição','Categoria','Obs','Valor']],
+      body: despesas.map(l => [fmtDt(l.data), l.descricao||'—', l.categoria||'—', l.obs||'—', brl(l.valor)]),
+      foot: [['','','','TOTAL DESPESAS', brl(totalDespesa)]],
+      styles: { fontSize: 7, cellPadding: 2.5 },
+      headStyles: { fillColor: [153,27,27], textColor: [255,255,255], fontSize: 6.5 },
+      footStyles: { fillColor: [254,242,242], textColor: [153,27,27], fontStyle: 'bold' },
+      columnStyles: { 4:{halign:'right'} },
+      margin: { left: 14, right: 14 },
+    });
+    y = doc.lastAutoTable.finalY + 8;
+  }
+
+  // Resultado final
+  if (y > 230) { doc.addPage(); y = 18; }
+  doc.setFontSize(9); doc.setFont('helvetica','bold');
+  doc.setTextColor(30,41,59);
+  doc.text('RESULTADO FINAL', 14, y);
+  y += 4;
+  doc.autoTable({
+    startY: y,
+    body: [
+      ['Receita Total', brl(totalReceita)],
+      ['(-) Comissões Consultores', '- ' + brl(totalComissao)],
+      ['(-) Despesas Operacionais', '- ' + brl(totalDespesa)],
+      ['= RESULTADO LÍQUIDO', brl(resultado)],
+    ],
+    styles: { fontSize: 8, cellPadding: 3 },
+    bodyStyles: { textColor: [30,41,59] },
+    columnStyles: { 1: { halign:'right', fontStyle:'bold' } },
+    didParseCell(data) {
+      if (data.row.index === 3) {
+        data.cell.styles.fillColor = resultado>=0?[240,253,244]:[254,242,242];
+        data.cell.styles.textColor = resultado>=0?[21,128,61]:[153,27,27];
+        data.cell.styles.fontStyle = 'bold';
+        data.cell.styles.fontSize = 9;
+      }
+    },
+    margin: { left: 14, right: 14 },
+  });
+
+  // Rodapé todas as páginas
+  const totalPages = doc.internal.getNumberOfPages();
+  for (let i = 1; i <= totalPages; i++) {
+    doc.setPage(i);
+    doc.setFontSize(6.5); doc.setFont('helvetica','normal');
+    doc.setTextColor(148,163,184);
+    doc.text(`Relatório Financeiro — ${datas.label}`, 14, doc.internal.pageSize.getHeight()-8);
+    doc.text(`Página ${i} de ${totalPages}`, W-14, doc.internal.pageSize.getHeight()-8, { align:'right' });
+  }
+
+  const nome = `relatorio_orizon_${datas.label.replace(/\//g,'-').replace(/ /g,'_')}.pdf`;
+  doc.save(nome);
+  UI.toast('PDF gerado e baixado!', 'ok');
+}
+
+// Init
+const _w = setInterval(() => {
+  if (window._ccAccessToken !== undefined) {
+    clearInterval(_w);
+    const hoje = new Date();
+    document.getElementById('inputMes').value = `${hoje.getFullYear()}-${String(hoje.getMonth()+1).padStart(2,'0')}`;
+    document.getElementById('inputDe').value  = `${hoje.getFullYear()}-${String(hoje.getMonth()+1).padStart(2,'0')}-01`;
+    document.getElementById('inputAte').value = hoje.toISOString().slice(0,10);
+  }
+}, 80);
+</script>
+</body>
+</html>

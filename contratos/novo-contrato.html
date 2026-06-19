@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <!-- ═══ FAVICON ═══ -->
+  <link rel="icon" type="image/png" sizes="32x32" href="../imagens/favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="192x192" href="../imagens/favicon-192x192.png" />
+  <link rel="shortcut icon" href="../imagens/icone.png" type="image/png" />
+  <link rel="apple-touch-icon" href="../imagens/icone.png" />
+  <link rel="manifest" href="../imagens/site.webmanifest" />
+<!-- SEO -->
+<meta name="description" content="Orizon Consultoria — Sistema de Gestão de Contratos e RH" />
+<meta name="robots" content="noindex, nofollow" />
+<title>Novo Contrato — Orizon Consultoria</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;700;800;900&display=swap"/>
+<style>
+:root{--accent:#3b82f6;--primary:#1e40af;--bg:#080808;--card:#111;--card2:#161616;--border:rgba(59,130,246,.13);--border2:rgba(59,130,246,.28);--text:#f0f0f0;--muted:#666;--muted2:#444;--radius:16px;--green:#2ecc71;--blue:#3498db;--red:#e74c3c;--orange:#f39c12;--purple:#a78bfa;--sidebar:220px}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Sora',sans-serif;font-size:17px;overflow:hidden}
+body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;background-image:linear-gradient(rgba(59,130,246,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(59,130,246,.025) 1px,transparent 1px);background-size:52px 52px}
+.app{display:flex;height:100vh;position:relative;z-index:1}
+.sidebar{width:var(--sidebar);flex-shrink:0;background:rgba(10,10,10,.97);border-right:1px solid var(--border);display:flex;flex-direction:column}
+.sb-head{padding:1.1rem 1rem;display:flex;align-items:center;gap:.7rem;border-bottom:1px solid var(--border)}
+.sb-logo{width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,var(--primary),var(--accent));display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0}
+.sb-name{font-size:.82rem;font-weight:800}.sb-name span{color:var(--accent)}
+.sb-sub{font-size:.58rem;color:var(--muted);text-transform:uppercase;letter-spacing:1.5px}
+.sb-nav{flex:1;padding:.5rem .4rem;overflow-y:auto}
+.sb-sep{font-size:.52rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--muted2);padding:.7rem .6rem .3rem}
+.sb-item{display:flex;align-items:center;gap:.6rem;padding:.52rem .65rem;border-radius:10px;cursor:pointer;text-decoration:none;color:var(--muted);font-size:.78rem;font-weight:600;transition:all .15s;position:relative}
+.sb-item:hover{background:rgba(255,255,255,.04);color:var(--text)}
+.sb-item.active{background:rgba(59,130,246,.1);color:var(--accent)}
+.sb-item.active::before{content:'';position:absolute;left:0;top:20%;bottom:20%;width:3px;background:var(--accent);border-radius:99px}
+.sb-foot{padding:.7rem .6rem;border-top:1px solid var(--border);display:flex;align-items:center;gap:.5rem}
+.sb-av{width:28px;height:28px;border-radius:8px;background:linear-gradient(135deg,var(--primary),var(--accent));display:flex;align-items:center;justify-content:center;font-size:.65rem;font-weight:800;flex-shrink:0}
+.sb-uname{font-size:.72rem;font-weight:700;max-width:110px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.sb-uemail{font-size:.6rem;color:var(--muted);max-width:110px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.sb-logout{background:none;border:none;cursor:pointer;color:var(--muted);font-size:.8rem;margin-left:auto;opacity:.5}
+.main{flex:1;display:flex;flex-direction:column;overflow:hidden}
+.topbar{display:flex;align-items:center;justify-content:space-between;padding:.7rem 1.5rem;border-bottom:1px solid var(--border);background:rgba(8,8,8,.9);flex-shrink:0}
+.tb-bc{font-size:.72rem;color:var(--muted);display:flex;align-items:center;gap:.4rem}
+.tb-bc a{color:var(--muted);text-decoration:none}.tb-bc a:hover{color:var(--accent)}
+.tb-bc strong{color:var(--text)}
+.content{flex:1;overflow-y:auto;padding:1.5rem}
+.content::-webkit-scrollbar{width:4px}
+.content::-webkit-scrollbar-thumb{background:var(--muted2);border-radius:99px}
+.form-wrap{max-width:780px}
+.sec-title{font-size:1.3rem;font-weight:900;margin-bottom:.2rem}.sec-title span{color:var(--accent)}
+.sec-sub{font-size:.72rem;color:var(--muted);margin-bottom:1.4rem}
+/* Steps */
+.steps{display:flex;gap:.3rem;margin-bottom:1.5rem;background:var(--card2);border-radius:12px;padding:.3rem}
+.step{flex:1;text-align:center;padding:.5rem;border-radius:9px;font-size:.72rem;font-weight:700;color:var(--muted);cursor:pointer;transition:all .15s}
+.step.active{background:var(--primary);color:#fff}
+.step.done{color:var(--accent)}
+/* Tipo */
+.tipo-grid{display:grid;grid-template-columns:1fr 1fr;gap:.6rem;margin-bottom:1.2rem}
+.tipo-item{display:flex;align-items:center;gap:.75rem;padding:.85rem 1rem;background:rgba(255,255,255,.03);border:1.5px solid rgba(255,255,255,.07);border-radius:13px;cursor:pointer;transition:all .18s}
+.tipo-item:hover{background:rgba(255,255,255,.06)}
+.tipo-item.ativo{border-color:var(--accent);background:rgba(59,130,246,.07)}
+.tipo-ico{width:44px;height:44px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:1.2rem;flex-shrink:0}
+.tipo-nome{font-size:.85rem;font-weight:700;margin-bottom:.1rem}
+.tipo-desc{font-size:.62rem;color:var(--muted)}
+/* Cards */
+.card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:1.3rem 1.5rem;margin-bottom:1rem}
+.card-label{font-size:.58rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:1rem;display:flex;align-items:center;gap:.5rem}
+.card-label::after{content:'';flex:1;height:1px;background:rgba(255,255,255,.05)}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:.8rem}
+.grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:.8rem}
+.form-group{display:flex;flex-direction:column;gap:.3rem;margin-bottom:.5rem}
+.fl{font-size:.62rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.6px}
+.req{color:var(--accent)}
+.fi{background:var(--card2);border:1.5px solid var(--border);border-radius:10px;padding:.62rem .85rem;font-family:inherit;font-size:.82rem;color:var(--text);outline:none;transition:border .15s;width:100%}
+.fi:focus{border-color:var(--border2);box-shadow:0 0 0 3px rgba(59,130,246,.07)}
+.fi::placeholder{color:var(--muted2)}
+select.fi option{background:#161616}
+/* Signatários */
+.sig-card{background:var(--card2);border:1px solid var(--border);border-radius:12px;padding:.9rem 1rem;margin-bottom:.5rem;display:flex;align-items:center;gap:.8rem}
+.sig-card-left{flex:1;min-width:0}
+.sig-papel{font-size:.6rem;text-transform:uppercase;letter-spacing:1px;color:var(--accent);margin-bottom:.2rem}
+.sig-nome{font-size:.85rem;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sig-email{font-size:.68rem;color:var(--muted)}
+.add-sig-row{display:grid;grid-template-columns:1.2fr 2fr 2fr auto;gap:.5rem;align-items:end;margin-bottom:.6rem}
+.btn-add{display:inline-flex;align-items:center;gap:.3rem;padding:.55rem .9rem;border-radius:10px;border:1.5px dashed rgba(59,130,246,.3);cursor:pointer;font-family:inherit;font-size:.78rem;font-weight:700;transition:all .15s;background:none;color:var(--accent);width:100%;justify-content:center;margin-top:.4rem}
+.btn-add:hover{background:rgba(59,130,246,.05);border-color:rgba(59,130,246,.5)}
+/* Buttons */
+.btn{display:inline-flex;align-items:center;gap:.4rem;padding:.6rem 1.1rem;border-radius:10px;border:1px solid transparent;cursor:pointer;font-family:inherit;font-size:.8rem;font-weight:700;transition:all .15s;text-decoration:none}
+.btn-primary{background:linear-gradient(135deg,var(--primary),var(--accent));color:#fff;box-shadow:0 2px 12px rgba(59,130,246,.25)}
+.btn-primary:hover{filter:brightness(1.1);transform:translateY(-1px)}
+.btn-primary:disabled{opacity:.4;cursor:not-allowed;transform:none}
+.btn-ghost{background:rgba(255,255,255,.04);color:var(--muted);border-color:rgba(255,255,255,.08)}
+.btn-ghost:hover{background:rgba(255,255,255,.08);color:var(--text)}
+.btn-red{background:rgba(231,76,60,.1);color:var(--red);border-color:rgba(231,76,60,.2)}
+.btn-red:hover{background:rgba(231,76,60,.18)}
+.btn-sm{padding:.35rem .7rem;font-size:.7rem}
+.btn-blue{background:rgba(52,152,219,.1);color:var(--blue);border-color:rgba(52,152,219,.25)}
+.btn-green{background:rgba(46,204,113,.1);color:var(--green);border-color:rgba(46,204,113,.25)}
+.btn-green:hover{background:rgba(46,204,113,.18)}
+.spinner{display:none;width:16px;height:16px;border:2px solid rgba(255,255,255,.2);border-top-color:#fff;border-radius:50%;animation:spin .6s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+/* Link results */
+.link-result-card{background:var(--card2);border:1px solid var(--border2);border-radius:12px;padding:.9rem 1rem;margin-bottom:.6rem}
+.link-papel{font-size:.6rem;text-transform:uppercase;letter-spacing:1px;color:var(--accent);margin-bottom:.2rem}
+.link-nome{font-size:.88rem;font-weight:700;margin-bottom:.2rem}
+.link-box{background:rgba(0,0,0,.3);border:1px solid var(--border);border-radius:8px;padding:.55rem .8rem;font-size:.72rem;word-break:break-all;color:var(--accent);margin:.4rem 0;display:flex;align-items:center;gap:.5rem}
+.link-box span{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.copy-btn{background:rgba(59,130,246,.1);border:1px solid rgba(59,130,246,.25);border-radius:7px;color:var(--accent);cursor:pointer;font-size:.7rem;padding:.25rem .5rem;white-space:nowrap;flex-shrink:0}
+.copy-btn:hover{background:rgba(59,130,246,.2)}
+/* Toast */
+#toast-ct{position:fixed;bottom:1.5rem;right:1.5rem;display:flex;flex-direction:column;gap:.4rem;z-index:999}
+.toast{padding:.65rem 1.1rem;border-radius:10px;font-size:.78rem;font-weight:700;color:#fff;animation:fadeUp .25s ease}
+.toast.ok{background:#2ecc71}.toast.err{background:#e74c3c}
+@keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+/* Mobile */
+.mob-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.65);z-index:200;backdrop-filter:blur(2px)}
+.mob-overlay.open{display:block}
+.mob-menu-btn{display:none;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1);border-radius:8px;width:38px;height:38px;align-items:center;justify-content:center;cursor:pointer;font-size:1.1rem;color:var(--text);flex-shrink:0}
+@media(max-width:768px){
+  html,body{overflow:auto!important;height:auto!important}
+  .app{display:block!important;height:auto!important;min-height:100vh}
+  .main{height:auto!important;overflow:visible!important;display:block!important}
+  .content{overflow:visible!important;height:auto!important;padding:1rem .9rem 5rem!important}
+  .topbar{padding:.55rem .9rem!important;display:flex!important;gap:.5rem!important;flex-wrap:wrap!important;position:sticky;top:0;z-index:100;background:rgba(8,8,8,.95);backdrop-filter:blur(8px)}
+  .sidebar{position:fixed!important;left:-280px!important;top:0!important;bottom:0!important;width:260px!important;z-index:300!important;transition:left .25s!important;box-shadow:6px 0 30px rgba(0,0,0,.6)!important;overflow-y:auto!important}
+  .sidebar.mob-open{left:0!important}
+  .mob-menu-btn{display:flex!important}
+  .grid-2,.grid-3{grid-template-columns:1fr!important}
+  .tipo-grid{grid-template-columns:1fr 1fr!important}
+  .add-sig-row{grid-template-columns:1fr 1fr!important}
+  .add-sig-row>button{grid-column:1/-1}
+  .form-wrap{max-width:100%!important}
+  .card{padding:1rem 1.1rem!important}
+  .fi{font-size:16px!important}
+  .steps .step span{display:none}
+}
+@media(max-width:420px){.tipo-grid{grid-template-columns:1fr!important}}
+</style>
+</head>
+<body>
+<div class="app">
+<aside class="sidebar">
+  <div class="sb-head">
+    <div class="sb-logo">✉️</div>
+    <div><div class="sb-name">Orizon <span>Consultoria</span></div><div class="sb-sub">Documentos</div></div>
+  </div>
+  <nav class="sb-nav">
+    <div class="sb-sep">Cartas</div>
+    <a class="sb-item" href="index.html">📋 Histórico</a>
+    <a class="sb-item" href="nova-carta.html">✍️ Nova Carta</a>
+    <div class="sb-sep">Contratos Digitais</div>
+    <a class="sb-item" href="contratos.html">🖊️ Contratos</a>
+    <a class="sb-item active" href="novo-contrato.html">➕ Novo Contrato</a>
+  </nav>
+  <div class="sb-foot">
+    <div class="sb-av"><img src="../imagens/fundo.png" alt="EX" style="width:18px;height:18px;object-fit:contain"/></div>
+    <div><div class="sb-uname" id="user-nome">—</div><div class="sb-uemail" id="user-email">—</div></div>
+    <button class="sb-logout" onclick="if(window.crLogout)crLogout()" title="Sair">⏻</button>
+  </div>
+</aside>
+
+<div class="main">
+  <div class="mob-overlay" id="mobOverlay" onclick="closeSidebar()"></div>
+  <div class="topbar">
+    <button class="mob-menu-btn" onclick="toggleSidebar()">☰</button>
+    <div class="tb-bc"><a href="contratos.html">Contratos</a> <span style="color:var(--muted2)">›</span> <strong>Novo Contrato</strong></div>
+  </div>
+
+  <div class="content">
+    <div class="form-wrap">
+      <div class="sec-title">➕ Novo <span>Contrato</span></div>
+      <div class="sec-sub">Gere o contrato, adicione os signatários e envie os links para assinatura.</div>
+
+      <!-- Steps -->
+      <div class="steps">
+        <div class="step active" id="step1btn" onclick="goStep(1)">1. <span>Tipo &amp; Dados</span></div>
+        <div class="step" id="step2btn" onclick="goStep(2)">2. <span>Signatários</span></div>
+        <div class="step" id="step3btn">3. <span>Links</span></div>
+      </div>
+
+      <!-- ═══ STEP 1 ═══ -->
+      <div id="step1">
+        <!-- Tipo -->
+        <div class="tipo-grid">
+          <div class="tipo-item ativo" id="btn-clt" onclick="setTipo('clt')">
+            <div class="tipo-ico" style="background:rgba(52,152,219,.12);border:1px solid rgba(52,152,219,.22)">💼</div>
+            <div><div class="tipo-nome">Contrato CLT</div><div class="tipo-desc">Prazo indeterminado ou determinado</div></div>
+          </div>
+          <div class="tipo-item" id="btn-estagio" onclick="setTipo('estagio')">
+            <div class="tipo-ico" style="background:rgba(167,139,250,.12);border:1px solid rgba(167,139,250,.22)">🎓</div>
+            <div><div class="tipo-nome">Contrato de Estágio</div><div class="tipo-desc">Com IES — Lei 11.788/2008</div></div>
+          </div>
+        </div>
+
+        <!-- Candidato -->
+        <div class="card">
+          <div class="card-label">Candidato / Colaborador</div>
+          <div class="grid-2">
+            <div class="form-group"><label class="fl">Nome completo <span class="req">*</span></label><input class="fi" id="nome_candidato" placeholder="Nome completo"/></div>
+            <div class="form-group"><label class="fl">CPF <span class="req">*</span></label><input class="fi" id="cpf_candidato" placeholder="000.000.000-00" oninput="maskCPF(this)"/></div>
+          </div>
+          <div class="grid-2">
+            <div class="form-group"><label class="fl">Cargo / Função <span class="req">*</span></label><input class="fi" id="cargo" placeholder="Ex: Auxiliar Administrativo"/></div>
+            <div class="form-group"><label class="fl">Endereço completo</label><input class="fi" id="endereco_cand" placeholder="Rua, nº, bairro, cidade/UF"/></div>
+          </div>
+        </div>
+
+        <!-- Empresa contratante -->
+        <div class="card">
+          <div class="card-label">Empresa Contratante</div>
+          <div class="grid-2">
+            <div class="form-group"><label class="fl">Razão Social <span class="req">*</span></label><input class="fi" id="empresa" placeholder="Razão social"/></div>
+            <div class="form-group"><label class="fl">CNPJ</label><input class="fi" id="cnpj_empresa" placeholder="00.000.000/0001-00" oninput="maskCNPJ(this)"/></div>
+          </div>
+          <div class="form-group"><label class="fl">Endereço da empresa</label><input class="fi" id="endereco_emp" placeholder="Rua, nº, sala, bairro, cidade/UF, CEP"/></div>
+        </div>
+
+        <!-- IES (estágio) -->
+        <div class="card" id="bloco-ies" style="display:none">
+          <div class="card-label">Instituição de Ensino</div>
+          <div class="grid-2">
+            <div class="form-group"><label class="fl">Nome da IES</label><input class="fi" id="instituicao" placeholder="Ex: Universidade Feevale"/></div>
+            <div class="form-group"><label class="fl">Curso</label><input class="fi" id="curso" placeholder="Ex: Bacharelado em Administração"/></div>
+          </div>
+        </div>
+
+        <!-- Período e financeiro -->
+        <div class="card">
+          <div class="card-label">Período e Remuneração</div>
+          <div class="grid-3">
+            <div class="form-group"><label class="fl" id="lbl-ini">Início do contrato <span class="req">*</span></label><input type="date" class="fi" id="data_inicio"/></div>
+            <div class="form-group"><label class="fl" id="lbl-fim">Fim do contrato</label><input type="date" class="fi" id="data_fim"/><span style="font-size:.6rem;color:var(--muted2);margin-top:.2rem;display:block">Deixe em branco para prazo indeterminado</span></div>
+            <div class="form-group"><label class="fl" id="lbl-sal">Salário / Bolsa (R$)</label><input type="number" class="fi" id="salario" placeholder="0,00" step="0.01"/></div>
+          </div>
+          <div class="grid-2">
+            <div class="form-group"><label class="fl">Carga horária</label><input class="fi" id="carga_horaria" placeholder="Ex: 44h semanais"/></div>
+            <div class="form-group"><label class="fl">Local de emissão</label><input class="fi" id="cidade_emissao" value="Guaíba/RS"/></div>
+          </div>
+        </div>
+
+        <div style="display:flex;gap:.7rem;padding-bottom:1rem">
+          <button class="btn btn-primary" onclick="goStep(2)">Próximo: Signatários →</button>
+          <a href="contratos.html" class="btn btn-ghost">← Cancelar</a>
+        </div>
+      </div><!-- /step1 -->
+
+      <!-- ═══ STEP 2 ═══ -->
+      <div id="step2" style="display:none">
+        <div class="card">
+          <div class="card-label">Signatários</div>
+          <p style="font-size:.75rem;color:var(--muted);margin-bottom:1rem;line-height:1.6">
+            Adicione todas as pessoas que precisam assinar este documento. Cada uma receberá um link único e seguro.
+          </p>
+
+          <!-- Adicionar signatário -->
+          <div class="add-sig-row">
+            <div class="form-group" style="margin:0">
+              <label class="fl">Papel</label>
+              <select class="fi" id="newPapel">
+                <option value="candidato">Candidato/Colaborador</option>
+                <option value="empresa_exittus">Orizon Consultoria</option>
+                <option value="empresa_cliente">Empresa Contratante</option>
+                <option value="instituicao">Instituição de Ensino</option>
+                <option value="supervisor">Supervisor/Responsável</option>
+              </select>
+            </div>
+            <div class="form-group" style="margin:0">
+              <label class="fl">Nome <span class="req">*</span></label>
+              <input class="fi" id="newNome" placeholder="Nome completo"/>
+            </div>
+            <div class="form-group" style="margin:0">
+              <label class="fl">E-mail <span class="req">*</span></label>
+              <input class="fi" type="email" id="newEmail" placeholder="email@exemplo.com" onkeydown="if(event.key==='Enter')addSig()"/>
+            </div>
+            <button class="btn btn-primary btn-sm" onclick="addSig()" style="height:38px;margin-top:auto">＋ Adicionar</button>
+          </div>
+
+          <!-- Lista de signatários adicionados -->
+          <div id="sigList"></div>
+
+          <div id="sigEmpty" style="text-align:center;padding:1rem;color:var(--muted);font-size:.78rem">
+            Nenhum signatário adicionado ainda. Use o formulário acima para adicionar.
+          </div>
+        </div>
+
+        <div style="display:flex;gap:.7rem;padding-bottom:1rem;flex-wrap:wrap">
+          <button class="btn btn-primary" id="btnGerar" onclick="gerarContrato()">
+            <span id="btnGerarTxt">🖊️ Gerar e Enviar Contrato</span>
+            <div class="spinner" id="spGerar"></div>
+          </button>
+          <button class="btn btn-ghost" onclick="goStep(1)">← Voltar</button>
+        </div>
+      </div><!-- /step2 -->
+
+      <!-- ═══ STEP 3 ═══ -->
+      <div id="step3" style="display:none">
+        <div class="card" style="border-color:rgba(46,204,113,.3)">
+          <div class="card-label" style="color:var(--green)">✅ Contrato gerado com sucesso!</div>
+          <p style="font-size:.78rem;color:var(--muted);margin-bottom:1.2rem;line-height:1.7">
+            Compartilhe os links abaixo com cada signatário. Cada link é <strong>único e seguro</strong> — só a pessoa correta consegue assinar. Você pode enviar por e-mail, WhatsApp ou copiar o link.
+          </p>
+          <div id="linksResult"></div>
+          <div style="margin-top:1.2rem;display:flex;gap:.7rem;flex-wrap:wrap">
+            <a href="contratos.html" class="btn btn-primary">📋 Ver todos os contratos</a>
+            <button class="btn btn-ghost" onclick="resetForm()">➕ Novo contrato</button>
+          </div>
+        </div>
+      </div><!-- /step3 -->
+
+    </div><!-- /form-wrap -->
+  </div>
+</div>
+</div>
+
+<div id="toast-ct"></div>
+<script src="assets/cr-auth.js"></script>
+<script>
+const SB_URL='https://huycenqggwkfhvoynnhi.supabase.co', SB_KEY='sb_publishable_XPRq5RZwkFLToHc8cYcXXg_5YnPr-TA';
+const BASE_URL = window.location.origin + window.location.pathname.replace('novo-contrato.html','');
+let _tipo='clt', _signatarios=[];
+
+document.getElementById('data_inicio').value = new Date().toISOString().slice(0,10);
+
+// _sb é lido direto de window._sb no momento do uso (sem polling frágil)
+
+function setTipo(t){
+  _tipo=t;
+  document.querySelectorAll('.tipo-item').forEach(e=>e.classList.remove('ativo'));
+  document.getElementById('btn-'+t).classList.add('ativo');
+  document.getElementById('bloco-ies').style.display = t==='estagio'?'':'none';
+  document.getElementById('lbl-ini').innerHTML = t==='clt'?'Início do contrato <span class="req">*</span>':'Início do estágio <span class="req">*</span>';
+  document.getElementById('lbl-fim').textContent = t==='clt'?'Fim do contrato':'Fim do estágio';
+  document.getElementById('lbl-sal').textContent = t==='clt'?'Salário (R$)':'Bolsa mensal (R$)';
+  document.getElementById('carga_horaria').placeholder = t==='clt'?'Ex: 44h semanais':'Ex: 6h diárias / 30h semanais';
+}
+
+function goStep(n){
+  if(n===2){
+    const nome=v('nome_candidato'),empresa=v('empresa'),cargo=v('cargo');
+    if(!nome){toast('Informe o nome do candidato','err');return;}
+    if(!empresa){toast('Informe a empresa contratante','err');return;}
+    if(!cargo){toast('Informe o cargo','err');return;}
+    // Auto-preenche signatários se lista vazia
+    if(_signatarios.length===0){
+      _signatarios=[
+        {papel:'candidato',    nome:v('nome_candidato'), email:''},
+        {papel:'empresa_exittus', nome:'Orizon Consultoria', email:'adm@orizon.com'},
+        {papel:'empresa_cliente', nome:empresa, email:''},
+      ];
+      if(_tipo==='estagio'&&v('instituicao')) _signatarios.push({papel:'instituicao',nome:v('instituicao'),email:''});
+      renderSigList();
+    }
+  }
+  [1,2,3].forEach(i=>{
+    document.getElementById('step'+i).style.display=i===n?'':'none';
+    const btn=document.getElementById('step'+i+'btn');
+    if(btn) btn.className='step'+(i===n?' active':i<n?' done':'');
+  });
+}
+
+const PAPEL_LABEL={candidato:'Candidato/Colaborador',empresa_exittus:'Orizon Consultoria',empresa_cliente:'Empresa Contratante',instituicao:'Instituição de Ensino',supervisor:'Supervisor/Responsável'};
+const PAPEL_ICO  ={candidato:'👤',empresa_exittus:'🏢',empresa_cliente:'🏭',instituicao:'🎓',supervisor:'👔'};
+
+function addSig(){
+  const papel=document.getElementById('newPapel').value;
+  const nome=document.getElementById('newNome').value.trim();
+  const email=document.getElementById('newEmail').value.trim();
+  if(!nome){toast('Informe o nome','err');return;}
+  if(!email||!email.includes('@')){toast('Informe um e-mail válido','err');return;}
+  _signatarios.push({papel,nome,email});
+  document.getElementById('newNome').value='';
+  document.getElementById('newEmail').value='';
+  renderSigList();
+  toast(`${nome} adicionado`);
+}
+
+function removeSig(i){
+  _signatarios.splice(i,1);
+  renderSigList();
+}
+
+function renderSigList(){
+  const el=document.getElementById('sigList');
+  const empty=document.getElementById('sigEmpty');
+  if(!_signatarios.length){el.innerHTML='';empty.style.display='';return;}
+  empty.style.display='none';
+  el.innerHTML=_signatarios.map((s,i)=>`
+    <div class="sig-card">
+      <div style="font-size:1.3rem">${PAPEL_ICO[s.papel]||'👤'}</div>
+      <div class="sig-card-left">
+        <div class="sig-papel">${PAPEL_LABEL[s.papel]||s.papel}</div>
+        <div class="sig-nome">${s.nome}</div>
+        <div class="sig-email">${s.email}</div>
+      </div>
+      <button class="btn btn-red btn-sm" onclick="removeSig(${i})" title="Remover">✕</button>
+    </div>`).join('');
+}
+
+async function gerarContrato(){
+  if(!_signatarios.length){toast('Adicione pelo menos um signatário','err');return;}
+  const semEmail=_signatarios.filter(s=>!s.email||!s.email.includes('@'));
+  if(semEmail.length){toast(`E-mail inválido: ${semEmail[0].nome}`,'err');return;}
+
+  // Garante que o cliente Supabase está pronto
+  const sb = window._sb;
+  if(!sb){toast('Erro: conexão com o banco não está pronta. Aguarde e tente novamente.','err');return;}
+
+  document.getElementById('btnGerar').disabled=true;
+  document.getElementById('spGerar').style.display='block';
+  document.getElementById('btnGerarTxt').style.display='none';
+
+  try{
+    const num=`CTR-${new Date().getFullYear()}-${String(Date.now()).slice(-5)}`;
+
+    // ⚠️ PRIVACIDADE: apenas dados não-sensíveis vão para o banco.
+    // CPF, CNPJ, endereços, salário ficam SOMENTE no HTML do contrato (conteudo_html).
+    const dados={
+      tipo: _tipo,
+      titulo: `Contrato ${_tipo==='clt'?'CLT':'de Estágio'} — ${v('nome_candidato')}`,
+      numero_contrato: num,
+      criado_por: window._userEmail || 'admin',
+      status: 'enviado',
+      conteudo_html: gerarHTML(num)   // HTML já tem todos os dados embutidos
+    };
+
+    const{data:contrato,error:e1}=await sb.from('cr_contratos').insert(dados).select().single();
+    if(e1)throw e1;
+
+    // Signatários: só papel, nome e e-mail — sem CPF nem dados pessoais extras
+    const rows=_signatarios.map(s=>({
+      contrato_id: contrato.id,
+      papel: s.papel,
+      nome: s.nome,
+      email: s.email,
+      status: 'pendente'
+    }));
+    const{data:sigs,error:e2}=await sb.from('cr_signatarios').insert(rows).select();
+    if(e2)throw e2;
+
+    // Mostra links no step 3
+    renderLinks(contrato, sigs);
+    goStep(3);
+    document.getElementById('step3btn').className='step active';
+    toast('✅ Contrato gerado!');
+  }catch(err){
+    toast('Erro: '+(err.message||JSON.stringify(err)),'err');
+    console.error(err);
+  }finally{
+    document.getElementById('btnGerar').disabled=false;
+    document.getElementById('spGerar').style.display='none';
+    document.getElementById('btnGerarTxt').style.display='inline';
+  }
+}
+
+function renderLinks(contrato, sigs){
+  const el=document.getElementById('linksResult');
+  el.innerHTML=sigs.map(s=>{
+    const url=`${BASE_URL}assinar.html?t=${s.token}`;
+    const wa=`https://wa.me/?text=${encodeURIComponent(`Olá ${s.nome}! Você foi convidado para assinar "${contrato.titulo}". Acesse o link para ler e assinar:\n${url}\n\nOrizon Consultoria`)}`;
+    const ml=`mailto:${s.email}?subject=${encodeURIComponent(`Assinatura: ${contrato.titulo}`)}&body=${encodeURIComponent(`Olá ${s.nome},\n\nVocê foi convidado a assinar o documento "${contrato.titulo}".\n\nClique no link abaixo para ler e assinar digitalmente:\n${url}\n\nEste link é pessoal e intransferível.\n\nAtenciosamente,\nOrizon Consultoria`)}`;
+    return `
+      <div class="link-result-card">
+        <div class="link-papel">${PAPEL_LABEL[s.papel]||s.papel}</div>
+        <div class="link-nome">${PAPEL_ICO[s.papel]||'👤'} ${s.nome} <span style="color:var(--muted);font-weight:400;font-size:.72rem">&lt;${s.email}&gt;</span></div>
+        <div class="link-box">
+          <span>${url}</span>
+          <button class="copy-btn" onclick="copiar('${url}',this)">📋 Copiar</button>
+        </div>
+        <div style="display:flex;gap:.4rem;margin-top:.5rem;flex-wrap:wrap">
+          <a href="${ml}" class="btn btn-ghost btn-sm" style="font-size:.65rem">📧 Abrir e-mail</a>
+          <a href="${wa}" target="_blank" class="btn btn-green btn-sm" style="font-size:.65rem">📱 WhatsApp</a>
+          <a href="${url}" target="_blank" class="btn btn-blue btn-sm" style="font-size:.65rem">👁 Pré-visualizar</a>
+        </div>
+      </div>`;
+  }).join('');
+}
+
+function gerarHTML(num){
+  const fmt=d=>d?new Date(d+'T12:00:00').toLocaleDateString('pt-BR'):'—';
+  const brl=v=>v?'R$ '+Number(v).toLocaleString('pt-BR',{minimumFractionDigits:2}):'—';
+  const nome=v('nome_candidato'), cpf=v('cpf_candidato'), cargo=v('cargo');
+  const emp=v('empresa'), cnpj=v('cnpj_empresa'), endEmp=v('endereco_emp');
+  const ini=fmt(v('data_inicio')), fim=v('data_fim')?fmt(v('data_fim')):'prazo indeterminado';
+  const sal=brl(parseFloat(v('salario'))||0);
+  const ch=v('carga_horaria')||(_tipo==='clt'?'44 horas semanais':'30 horas semanais');
+  const cidade=v('cidade_emissao')||'Guaíba/RS';
+  const endCand=v('endereco_cand');
+
+  if(_tipo==='clt') return `<div style="font-family:Georgia,serif;max-width:700px;margin:0 auto;line-height:1.9;color:#1a1a1a;font-size:14px">
+    <div style="text-align:center;margin-bottom:2rem;padding-bottom:1rem;border-bottom:2px solid #333">
+      <img src="logo.png" style="height:60px;margin-bottom:.5rem" onerror="this.style.display='none'"/>
+      <div style="font-size:.6rem;letter-spacing:3px;text-transform:uppercase;color:#555">Orizon Consultoria</div>
+      <h1 style="font-size:1.1rem;text-transform:uppercase;letter-spacing:2px;margin:.5rem 0 .2rem">Contrato Individual de Trabalho</h1>
+      <div style="font-size:.8rem;color:#555">Regime CLT · ${fim==='prazo indeterminado'?'Prazo Indeterminado':'Prazo Determinado'} · Nº ${num}</div>
+    </div>
+    <p>Pelo presente instrumento particular de contrato individual de trabalho, de um lado, <strong>${emp}</strong>, pessoa jurídica de direito privado, inscrita no CNPJ nº <strong>${cnpj||'—'}</strong>, com sede em ${endEmp||'—'}, doravante denominada <strong>EMPREGADORA</strong>;</p>
+    <p>E de outro lado, <strong>${nome}</strong>, CPF nº <strong>${cpf||'—'}</strong>${endCand?', residente em '+endCand:''},  doravante denominado(a) <strong>EMPREGADO(A)</strong>;</p>
+    <p>Têm entre si justo e contratado o presente Contrato de Trabalho, na forma da Consolidação das Leis do Trabalho (CLT) e demais legislações aplicáveis, mediante as cláusulas e condições seguintes:</p>
+    <h3 style="margin:1.2rem 0 .4rem;font-size:1rem;text-transform:uppercase;letter-spacing:1px">Cláusula 1ª – Da Admissão e Função</h3>
+    <p>O(A) EMPREGADO(A) é admitido(a) a partir de <strong>${ini}</strong>${fim!=='prazo indeterminado'?' com término previsto em <strong>'+fim+'</strong>':''} para exercer a função de <strong>${cargo}</strong>, sujeitando-se às atribuições inerentes ao cargo e às normas internas da empresa.</p>
+    <h3 style="margin:1.2rem 0 .4rem;font-size:1rem;text-transform:uppercase;letter-spacing:1px">Cláusula 2ª – Da Jornada de Trabalho</h3>
+    <p>A jornada de trabalho será de <strong>${ch}</strong>, conforme dispõe o Art. 58 da CLT, podendo ser redistribuída mediante acordo, respeitados os limites legais e o descanso semanal remunerado.</p>
+    <h3 style="margin:1.2rem 0 .4rem;font-size:1rem;text-transform:uppercase;letter-spacing:1px">Cláusula 3ª – Da Remuneração</h3>
+    <p>O(A) EMPREGADO(A) receberá salário mensal de <strong>${sal}</strong>, pago até o 5º dia útil do mês subsequente, mediante depósito bancário ou outra forma acordada pelas partes.</p>
+    <h3 style="margin:1.2rem 0 .4rem;font-size:1rem;text-transform:uppercase;letter-spacing:1px">Cláusula 4ª – Do Local de Trabalho</h3>
+    <p>As atividades serão prestadas nas dependências da EMPREGADORA, localizadas em <strong>${endEmp||'—'}</strong>, ou em outro local determinado pela empresa conforme necessidade operacional.</p>
+    <h3 style="margin:1.2rem 0 .4rem;font-size:1rem;text-transform:uppercase;letter-spacing:1px">Cláusula 5ª – Das Obrigações do Empregado</h3>
+    <p>O(A) EMPREGADO(A) compromete-se a: cumprir fielmente as obrigações do cargo; guardar sigilo das informações confidenciais da empresa; observar as normas internas, código de ética e regulamentos internos; exercer suas funções com dedicação, lealdade e competência técnica.</p>
+    <h3 style="margin:1.2rem 0 .4rem;font-size:1rem;text-transform:uppercase;letter-spacing:1px">Cláusula 6ª – Dos Direitos Trabalhistas</h3>
+    <p>São assegurados ao(à) EMPREGADO(A) todos os direitos previstos na CLT e legislação vigente, incluindo: férias anuais remuneradas acrescidas de 1/3; décimo terceiro salário; recolhimento do FGTS (8%); descanso semanal remunerado; e demais benefícios legais.</p>
+    <h3 style="margin:1.2rem 0 .4rem;font-size:1rem;text-transform:uppercase;letter-spacing:1px">Cláusula 7ª – Da Intermediação</h3>
+    <p>Este contrato foi intermediado pela <strong>Orizon Consultoria</strong>, na qualidade de agência de recrutamento e seleção, não configurando vínculo empregatício entre o(a) EMPREGADO(A) e a referida agência.</p>
+    <h3 style="margin:1.2rem 0 .4rem;font-size:1rem;text-transform:uppercase;letter-spacing:1px">Cláusula 8ª – Do Foro</h3>
+    <p>As partes elegem o foro da comarca de Guaíba/RS para dirimir quaisquer controvérsias oriundas do presente instrumento, renunciando a qualquer outro, por mais privilegiado que seja.</p>
+    <p style="margin-top:2rem">${cidade}, ${fmt(new Date().toISOString().slice(0,10))}.</p>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:3rem;margin-top:3.5rem;text-align:center">
+      <div><div style="border-top:1.5px solid #333;padding-top:.6rem"><strong>${emp}</strong><br/>CNPJ: ${cnpj||'—'}<br/>EMPREGADORA</div></div>
+      <div><div style="border-top:1.5px solid #333;padding-top:.6rem"><strong>${nome}</strong><br/>CPF: ${cpf||'—'}<br/>EMPREGADO(A)</div></div>
+    </div>
+    <div style="margin-top:3rem;text-align:center;border-top:1px solid #ccc;padding-top:.8rem">
+      <div style="border-top:1.5px solid #333;display:inline-block;padding-top:.6rem;min-width:280px"><strong>Orizon Consultoria</strong><br/>INTERMEDIADORA / TESTEMUNHA</div>
+    </div>
+  </div>`;
+
+  // ESTÁGIO
+  const ies=v('instituicao');
+  return `<div style="font-family:Georgia,serif;max-width:700px;margin:0 auto;line-height:1.9;color:#1a1a1a;font-size:14px">
+    <div style="text-align:center;margin-bottom:2rem;padding-bottom:1rem;border-bottom:2px solid #333">
+      <img src="logo.png" style="height:60px;margin-bottom:.5rem" onerror="this.style.display='none'"/>
+      <div style="font-size:.6rem;letter-spacing:3px;text-transform:uppercase;color:#555">Orizon Consultoria</div>
+      <h1 style="font-size:1.1rem;text-transform:uppercase;letter-spacing:2px;margin:.5rem 0 .2rem">Termo de Compromisso de Estágio</h1>
+      <div style="font-size:.8rem;color:#555">Lei 11.788/2008 · Nº ${num}</div>
+    </div>
+    <p>Pelo presente instrumento, as partes abaixo qualificadas celebram o presente Termo de Compromisso de Estágio (TCE), nos termos da Lei nº 11.788, de 25 de setembro de 2008:</p>
+    <p><strong>CONCEDENTE:</strong> ${emp}, CNPJ nº ${cnpj||'—'}, com sede em ${endEmp||'—'}.</p>
+    <p><strong>ESTAGIÁRIO(A):</strong> ${nome}, CPF nº ${cpf||'—'}${endCand?', residente em '+endCand:''}.</p>
+    ${ies?`<p><strong>INSTITUIÇÃO DE ENSINO:</strong> ${ies}, responsável pelo acompanhamento e avaliação das atividades de estágio.</p>`:''}
+    <p><strong>AGENTE DE INTEGRAÇÃO:</strong> Orizon Consultoria, atuando como intermediadora nos termos do Art. 5º da Lei 11.788/2008.</p>
+    <h3 style="margin:1.2rem 0 .4rem;font-size:1rem;text-transform:uppercase;letter-spacing:1px">Cláusula 1ª – Do Objeto</h3>
+    <p>O presente TCE tem por objeto proporcionar ao(à) estagiário(a) a complementação de seu ensino e aprendizagem prática, através do exercício das atividades de <strong>${cargo}</strong> na concedente.</p>
+    <h3 style="margin:1.2rem 0 .4rem;font-size:1rem;text-transform:uppercase;letter-spacing:1px">Cláusula 2ª – Da Vigência</h3>
+    <p>O estágio terá início em <strong>${ini}</strong> e término em <strong>${fim}</strong>, podendo ser prorrogado por termo aditivo, respeitado o limite de 2 (dois) anos para estágio não obrigatório.</p>
+    <h3 style="margin:1.2rem 0 .4rem;font-size:1rem;text-transform:uppercase;letter-spacing:1px">Cláusula 3ª – Da Jornada</h3>
+    <p>A jornada de estágio será de <strong>${ch}</strong>, de segunda a sexta-feira, compatível com o horário escolar, conforme Art. 10 da Lei 11.788/2008.</p>
+    <h3 style="margin:1.2rem 0 .4rem;font-size:1rem;text-transform:uppercase;letter-spacing:1px">Cláusula 4ª – Da Bolsa-Auxílio</h3>
+    <p>O(A) estagiário(a) receberá bolsa-auxílio mensal no valor de <strong>${sal}</strong>, paga até o 5º dia útil do mês subsequente. O não recebimento de bolsa descaracteriza o estágio.</p>
+    <h3 style="margin:1.2rem 0 .4rem;font-size:1rem;text-transform:uppercase;letter-spacing:1px">Cláusula 5ª – Do Recesso</h3>
+    <p>A cada 12 meses de estágio, o(a) estagiário(a) terá direito a 30 dias de recesso remunerado, de acordo com o Art. 13 da Lei 11.788/2008.</p>
+    <h3 style="margin:1.2rem 0 .4rem;font-size:1rem;text-transform:uppercase;letter-spacing:1px">Cláusula 6ª – Do Seguro</h3>
+    <p>O(A) estagiário(a) estará coberto por seguro contra acidentes pessoais durante a vigência deste TCE, contratado pela concedente nos termos da lei.</p>
+    <p style="margin-top:2rem">${cidade}, ${fmt(new Date().toISOString().slice(0,10))}.</p>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:2rem;margin-top:3.5rem;text-align:center">
+      <div><div style="border-top:1.5px solid #333;padding-top:.6rem"><strong>${emp}</strong><br/>${cnpj||'—'}<br/>CONCEDENTE</div></div>
+      <div><div style="border-top:1.5px solid #333;padding-top:.6rem"><strong>${nome}</strong><br/>${cpf||'—'}<br/>ESTAGIÁRIO(A)</div></div>
+    </div>
+    ${ies?`<div style="margin-top:3rem;text-align:center"><div style="border-top:1.5px solid #333;display:inline-block;padding-top:.6rem;min-width:280px"><strong>${ies}</strong><br/>INSTITUIÇÃO DE ENSINO</div></div>`:''}
+    <div style="margin-top:2rem;text-align:center"><div style="border-top:1.5px solid #333;display:inline-block;padding-top:.6rem;min-width:280px"><strong>Orizon Consultoria</strong><br/>AGENTE DE INTEGRAÇÃO</div></div>
+  </div>`;
+}
+
+function copiar(txt,btn){
+  navigator.clipboard.writeText(txt).then(()=>{
+    const orig=btn.textContent;btn.textContent='✅ Copiado!';setTimeout(()=>btn.textContent=orig,2000);
+  });
+}
+
+function resetForm(){
+  _signatarios=[];
+  document.querySelectorAll('.fi').forEach(el=>{if(el.tagName==='INPUT'&&el.type!=='date')el.value='';});
+  document.getElementById('data_inicio').value=new Date().toISOString().slice(0,10);
+  document.getElementById('data_fim').value='';
+  document.getElementById('cidade_emissao').value='Guaíba/RS';
+  renderSigList();
+  goStep(1);
+}
+
+function v(id){return(document.getElementById(id)?.value||'').trim();}
+function maskCPF(el){let v=el.value.replace(/\D/g,'');v=v.replace(/(\d{3})(\d)/,'$1.$2').replace(/(\d{3})(\d)/,'$1.$2').replace(/(\d{3})(\d{1,2})$/,'$1-$2');el.value=v;}
+function maskCNPJ(el){let v=el.value.replace(/\D/g,'');v=v.replace(/(\d{2})(\d)/,'$1.$2').replace(/(\d{3})(\d)/,'$1.$2').replace(/(\d{3})(\d)/,'$1/$2').replace(/(\d{4})(\d{1,2})$/,'$1-$2');el.value=v;}
+function toast(msg,tipo='ok'){const el=document.createElement('div');el.className=`toast ${tipo}`;el.textContent=msg;document.getElementById('toast-ct').appendChild(el);setTimeout(()=>el.remove(),3500);}
+function toggleSidebar(){document.querySelector('.sidebar').classList.toggle('mob-open');document.getElementById('mobOverlay').classList.toggle('open');}
+function closeSidebar(){document.querySelector('.sidebar').classList.remove('mob-open');document.getElementById('mobOverlay').classList.remove('open');}
+document.querySelectorAll('.sb-item').forEach(el=>{el.addEventListener('click',()=>{if(window.innerWidth<=768)closeSidebar();});});
+</script>
+</body>
+</html>

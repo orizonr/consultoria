@@ -1,0 +1,843 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+<link rel="icon" type="image/png" sizes="32x32" href="../imagens/favicon-32x32.png"/>
+<link rel="icon" type="image/png" sizes="192x192" href="../imagens/favicon-192x192.png"/>
+<link rel="shortcut icon" href="../imagens/icone.png" type="image/png"/>
+<link rel="apple-touch-icon" href="../imagens/icone.png"/>
+<link rel="manifest" href="../imagens/site.webmanifest"/>
+<meta name="description" content="Orizon Consultoria — Sistema de Gestão Financeira de Contratos"/>
+<meta name="robots" content="noindex, nofollow"/>
+<title>Consultores — Contratos · Orizon Consultoria</title>
+<link rel="stylesheet" href="assets/cc-style.css"/>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+.rec-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;transition:border-color .18s;}
+.rec-card:hover{border-color:var(--border2);}
+.rec-card-head{padding:1rem 1.1rem;background:var(--bg2);display:flex;align-items:center;gap:.75rem;border-bottom:1px solid var(--border);}
+.rec-av{width:42px;height:42px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:.9rem;font-weight:900;color:#fff;flex-shrink:0;}
+.rec-card-body{padding:1rem 1.1rem;display:flex;flex-direction:column;gap:.5rem;}
+.rec-stat-row{display:flex;justify-content:space-between;align-items:center;font-size:.78rem;}
+.rec-stat-label{color:var(--muted);}
+.rec-stat-val{font-weight:700;}
+.rec-card-foot{padding:.7rem 1.1rem;border-top:1px solid var(--border);background:rgba(59,130,246,.03);display:flex;justify-content:space-between;align-items:center;}
+.rec-total-label{font-size:.62rem;color:var(--muted);text-transform:uppercase;letter-spacing:.8px;}
+.rec-total-val{font-size:1.1rem;font-weight:900;color:var(--accent);}
+
+.rec-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:.9rem;margin-bottom:1.2rem;}
+
+.contrato-mini{display:flex;align-items:center;gap:.5rem;padding:.38rem .5rem;border-radius:7px;background:rgba(255,255,255,.025);border:1px solid var(--border);font-size:.72rem;}
+.contrato-mini-nome{flex:1;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.contrato-mini-val{font-weight:800;color:var(--accent);white-space:nowrap;}
+
+/* modal detalhes */
+.det-section{margin-bottom:1rem;}
+.det-section-title{font-size:.7rem;font-weight:800;text-transform:uppercase;letter-spacing:.8px;color:var(--muted);margin-bottom:.5rem;padding-bottom:.35rem;border-bottom:1px solid var(--border);}
+
+/* período histórico mensal */
+.mes-bar-row{display:flex;align-items:center;gap:.6rem;margin-bottom:.35rem;}
+.mes-bar-label{font-size:.65rem;color:var(--muted);width:55px;text-align:right;flex-shrink:0;}
+.mes-bar-outer{flex:1;height:8px;border-radius:99px;background:rgba(59,130,246,.1);overflow:hidden;}
+.mes-bar-inner{height:100%;border-radius:99px;background:linear-gradient(90deg,var(--primary),var(--accent));transition:width .5s ease;}
+.mes-bar-val{font-size:.65rem;font-weight:700;color:var(--accent);width:72px;text-align:right;flex-shrink:0;}
+
+/* ── Pagamentos ── */
+.pag-section{margin-top:1.5rem;}
+.pag-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:.8rem;}
+.pag-tabs{display:flex;gap:.4rem;margin-bottom:1rem;}
+.pag-tab{padding:.32rem .8rem;border-radius:8px;border:1px solid var(--border);background:transparent;color:var(--muted);font-size:.72rem;font-weight:600;cursor:pointer;transition:all .15s;}
+.pag-tab.active{background:var(--accent);border-color:var(--accent);color:#fff;}
+.pag-list{display:flex;flex-direction:column;gap:.4rem;max-height:260px;overflow-y:auto;}
+.pag-item{display:flex;align-items:center;gap:.6rem;padding:.55rem .75rem;border-radius:9px;background:rgba(255,255,255,.025);border:1px solid var(--border);font-size:.75rem;}
+.pag-item-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+.dot-pagar{background:#f39c12;}
+.dot-recebido{background:#2ecc71;}
+.pag-item-desc{flex:1;font-weight:600;}
+.pag-item-data{color:var(--muted);font-size:.66rem;white-space:nowrap;}
+.pag-item-val{font-weight:800;white-space:nowrap;}
+.val-pagar{color:#f39c12;}
+.val-recebido{color:#2ecc71;}
+.pag-item-del{background:none;border:none;cursor:pointer;color:var(--muted);font-size:.8rem;padding:.1rem .3rem;border-radius:4px;opacity:.5;transition:opacity .15s;}
+.pag-item-del:hover{opacity:1;color:#e74c3c;}
+.pag-saldo{display:flex;justify-content:space-between;align-items:center;padding:.7rem 1rem;border-radius:10px;background:rgba(59,130,246,.05);border:1px solid var(--border);margin-bottom:.8rem;}
+.pag-saldo-label{font-size:.7rem;color:var(--muted);text-transform:uppercase;letter-spacing:.8px;}
+.pag-saldo-val{font-size:1.15rem;font-weight:900;}
+.saldo-positivo{color:#2ecc71;}
+.saldo-negativo{color:#e74c3c;}
+.saldo-neutro{color:var(--muted);}
+.pag-empty{color:var(--muted);font-size:.75rem;text-align:center;padding:1.5rem 0;}
+</style>
+</head>
+<body>
+<div class="app">
+
+<!-- SIDEBAR -->
+<aside class="sidebar" id="sidebar">
+  <div class="sb-head">
+    <div class="sb-logo-ico"><img src="../imagens/fundo.png" alt="Orizon" style="width:44px;height:44px;object-fit:contain"/></div>
+    <div class="sb-logo-txt">
+      <div class="sb-logo-name">Orizon <span>Consultoria</span></div>
+      <div class="sb-logo-sub">Contratos</div>
+    </div>
+  </div>
+  <nav class="sb-nav">
+    <div class="sb-sep">Visão Geral</div>
+    <a class="sb-item" href="index.html"><span class="ico">📊</span><span class="lbl">Dashboard</span></a>
+    <div class="sb-sep">Controles</div>
+    <a class="sb-item" href="estagiarios.html"><span class="ico">🎓</span><span class="lbl">Estagiários</span></a>
+    <a class="sb-item" href="clt.html"><span class="ico">💼</span><span class="lbl">CLTs</span></a>
+    <div class="sb-sep">Gestão</div>
+    <a class="sb-item" href="financeiro-mensal.html"><span class="ico">📅</span><span class="lbl">Financeiro Mensal</span></a>
+    <a class="sb-item" href="relatorios.html"><span class="ico">📈</span><span class="lbl">Relatórios</span></a>
+    <a class="sb-item" href="relatorio-pdf.html"><span class="ico">📄</span><span class="lbl">Relatório PDF</span></a>
+    <a class="sb-item" href="balanco-financeiro.html"><span class="ico">💰</span><span class="lbl">Balanço Financeiro</span></a>
+    <a class="sb-item" href="despesas-fixas.html"><span class="ico">📌</span><span class="lbl">Despesas Fixas</span></a>
+    <div class="sb-sep">Equipe</div>
+    <a class="sb-item active" href="consultores.html"><span class="ico">🏆</span><span class="lbl">Consultores</span></a>
+    <a class="sb-item" href="pipeline.html"><span class="ico">🔄</span><span class="lbl">Pipeline de Projetos</span></a>
+    <div class="sb-sep">Sistema</div>
+    <a class="sb-item" href="configuracoes.html"><span class="ico">⚙️</span><span class="lbl">Configurações</span></a>
+  </nav>
+  <div class="sb-foot">
+    <div class="sb-av"><img src="../imagens/fundo.png" alt="" style="width:18px;height:18px;object-fit:contain"/></div>
+    <div class="sb-uinfo"><div class="sb-uname" id="user-nome">—</div><div class="sb-urole" id="user-email">—</div></div>
+    <button class="sb-toggle" onclick="if(window.ccLogout)window.ccLogout()" title="Sair" style="margin-right:.2rem;opacity:.4">⏻</button>
+    <button class="sb-toggle" id="sb-toggle">◀</button>
+  </div>
+</aside>
+
+<div class="main">
+  <div class="topbar">
+    <div class="tb-bc"><a href="index.html">Dashboard</a><span class="sep"> / </span><span>Consultores</span></div>
+    <div class="tb-right">
+      <span id="tb-date" class="tb-date"></span>
+      <button class="btn btn-ghost btn-sm" onclick="exportarCSV()">📊 CSV</button>
+      <button class="btn btn-ghost btn-sm" onclick="abrirPagamentos()">💳 Pagamentos</button>
+      <button class="btn btn-primary btn-sm" onclick="abrirNovoRecrutador()">＋ Novo Recrutador</button>
+    </div>
+  </div>
+
+  <div class="content">
+    <div class="sec-hd">
+      <div>
+        <div class="sec-title">🏆 <span>Consultores</span></div>
+        <div class="sec-sub">Ganhos, comissões e contratos por recrutador</div>
+      </div>
+      <div class="sec-hd-actions">
+        <select class="fi" id="filtPeriodo" style="font-size:.72rem;padding:.32rem .65rem;width:auto" onchange="render()">
+          <option value="mes">Este Mês</option>
+          <option value="trimestre">Últimos 3 Meses</option>
+          <option value="ano">Este Ano</option>
+          <option value="total" selected>Total Acumulado</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- KPIs gerais -->
+    <div class="four-col" id="kpiArea" style="margin-bottom:1.2rem"></div>
+
+    <!-- Ranking + Gráfico -->
+    <div class="two-col" style="margin-bottom:1.2rem">
+      <div class="tbl-wrap" style="padding:1.2rem">
+        <div class="tbl-title" style="margin-bottom:.9rem">🥇 Ranking de Comissões</div>
+        <div id="rankingArea"></div>
+      </div>
+      <div class="tbl-wrap" style="padding:1.2rem">
+        <div class="tbl-title" style="margin-bottom:.9rem">📊 Comissão Mensal (últ. 6 meses)</div>
+        <div class="chart-wrap"><canvas id="chartMensal"></canvas></div>
+      </div>
+    </div>
+
+    <!-- Cards individuais -->
+    <div class="tbl-title" style="margin-bottom:.7rem">👥 Detalhes por Recrutador</div>
+    <div class="rec-grid" id="cardsArea"></div>
+
+    <!-- Tabela completa -->
+    <div class="tbl-wrap">
+      <div class="tbl-hd" onclick="toggleTabelaRec()" style="cursor:pointer;user-select:none">
+        <span class="tbl-title">📋 Contratos por Recrutador</span>
+        <div class="tbl-actions" onclick="event.stopPropagation()">
+          <div class="search-box"><span>🔍</span><input placeholder="Buscar recrutador ou empresa..." oninput="UI.filtrar('tbodyRec',this.value)"/></div>
+          <button class="btn btn-ghost btn-sm" id="btnToggleTabelaRec" onclick="event.stopPropagation();toggleTabelaRec()" style="font-size:.75rem">▼ Mostrar contratos</button>
+        </div>
+      </div>
+      <div id="tabelaRecCorpo" style="display:none">
+      <div class="tbl-scroll">
+        <table>
+          <thead>
+            <tr>
+              <th>Recrutador</th>
+              <th>Contratado</th>
+              <th>Empresa</th>
+              <th>Tipo</th>
+              <th>Base (R$)</th>
+              <th>Taxa %</th>
+              <th>Receita Ag.</th>
+              <th>Tipo Comissão</th>
+              <th>Comissão Rec.</th>
+              <th>Situação</th>
+            </tr>
+          </thead>
+          <tbody id="tbodyRec"></tbody>
+          <tfoot><tr id="tfootRec"><td colspan="10" style="text-align:center;color:var(--muted);font-size:.72rem">Carregando...</td></tr></tfoot>
+        </table>
+      </div>
+      </div>
+    </div>
+    <!-- Pagamentos por Consultor -->
+    <div class="pag-section">
+      <div class="pag-header">
+        <div class="tbl-title">💳 Valores a Pagar / Recebidos por Consultor</div>
+        <button class="btn btn-primary btn-sm" onclick="abrirPagamentos()">＋ Lançar Valor</button>
+      </div>
+      <div id="pagSummaryArea"></div>
+    </div>
+
+  </div>
+</div>
+</div>
+
+<!-- Modal Detalhes Recrutador -->
+<div class="overlay" id="modalDet">
+  <div class="modal modal-lg">
+    <div class="modal-hd">
+      <span class="modal-title" id="modalDetTitulo">Recrutador</span>
+      <button class="modal-close" onclick="UI.closeModal('modalDet')">✕</button>
+    </div>
+    <div id="modalDetBody"></div>
+  </div>
+</div>
+
+<!-- Modal Novo Recrutador -->
+<div class="overlay" id="modalNovo">
+  <div class="modal">
+    <div class="modal-hd">
+      <span class="modal-title">＋ Cadastrar Recrutador</span>
+      <button class="modal-close" onclick="UI.closeModal('modalNovo')">✕</button>
+    </div>
+    <p style="font-size:.74rem;color:var(--muted);margin-bottom:1rem;line-height:1.6">
+      O recrutador é vinculado ao cadastrá-lo nos contratos (campo "Recrutador" em Estagiários e CLTs). Aqui você pode pré-cadastrar o nome para garantir consistência.
+    </p>
+    <div class="form-group">
+      <label class="fl">Nome do Recrutador</label>
+      <input class="fi" id="novoRecNome" placeholder="Ex: Ana Silva"/>
+    </div>
+    <div class="modal-ft">
+      <button class="btn btn-ghost" onclick="UI.closeModal('modalNovo')">Cancelar</button>
+      <button class="btn btn-primary" onclick="salvarNovoRecrutador()">✓ Cadastrar</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Pagamentos -->
+<div class="overlay" id="modalPag">
+  <div class="modal">
+    <div class="modal-hd">
+      <span class="modal-title">💳 Lançar Valor</span>
+      <button class="modal-close" onclick="UI.closeModal('modalPag')">✕</button>
+    </div>
+    <div style="padding:1.2rem 1.4rem">
+      <div class="form-group">
+        <label class="fl">Consultor</label>
+        <select class="fi" id="pagConsultor"></select>
+      </div>
+      <div class="form-group">
+        <label class="fl">Tipo</label>
+        <div style="display:flex;gap:.5rem">
+          <button class="pag-tab active" id="tabPagar" onclick="selectTipo('pagar')">💳 A Pagar</button>
+          <button class="pag-tab" id="tabRecebido" onclick="selectTipo('recebido')">✅ Recebido</button>
+        </div>
+        <input type="hidden" id="pagTipo" value="pagar"/>
+      </div>
+      <div class="form-group">
+        <label class="fl">Descrição</label>
+        <input class="fi" id="pagDesc" placeholder="Ex: Comissão Janeiro, Adiantamento..."/>
+      </div>
+      <div class="form-group">
+        <label class="fl">Valor (R$)</label>
+        <input class="fi" type="number" id="pagValor" placeholder="0,00" min="0" step="0.01"/>
+      </div>
+      <div class="form-group">
+        <label class="fl">Data</label>
+        <input class="fi" type="date" id="pagData"/>
+      </div>
+      <div class="form-group">
+        <label class="fl">Observação <span style="color:var(--muted)">(opcional)</span></label>
+        <input class="fi" id="pagObs" placeholder="Referência, período, nota..."/>
+      </div>
+    </div>
+    <div class="modal-ft">
+      <button class="btn btn-ghost" onclick="UI.closeModal('modalPag')">Cancelar</button>
+      <button class="btn btn-primary" onclick="salvarPagamento()">✓ Lançar</button>
+    </div>
+  </div>
+</div>
+
+<div id="toast-ct"></div>
+<script src="assets/cc-auth.js"></script>
+<script src="assets/cc-core.js"></script>
+<script>
+let _contratos = [];
+let _cfg = {};
+let _chartMensal = null;
+
+function toggleTabelaRec() {
+  const corpo = document.getElementById('tabelaRecCorpo');
+  const btn   = document.getElementById('btnToggleTabelaRec');
+  if (!corpo) return;
+  const aberto = corpo.style.display !== 'none';
+  corpo.style.display = aberto ? 'none' : '';
+  if (btn) btn.textContent = aberto ? '▼ Mostrar contratos' : '▲ Ocultar contratos';
+}
+
+// ── Nomes de recrutadores extras pré-cadastrados ──
+const RECS_KEY = 'ex_cc_recrutadores_extra';
+function getConsultoresExtra() {
+  try { return JSON.parse(localStorage.getItem(RECS_KEY)) || []; } catch { return []; }
+}
+function saveConsultoresExtra(arr) {
+  localStorage.setItem(RECS_KEY, JSON.stringify(arr));
+}
+
+// ── Aguarda CC.init() disparado pelo auth ──
+const _initWait = setInterval(() => {
+  if (window._ccAccessToken !== undefined) {
+    clearInterval(_initWait);
+    init();
+  }
+}, 80);
+
+async function init() {
+  _cfg = CC.getConfig();
+  _contratos = CC.getContratos();
+  render();
+  // Atualiza com dados frescos do Supabase
+  _contratos = await CC.getContratosAsync();
+  render();
+}
+
+function render() {
+  const filtro = document.getElementById('filtPeriodo').value;
+  const contratos = _filtrarPorPeriodo(_contratos, filtro);
+  const recMap = _agruparPorRecrutador(contratos);
+  _renderKPIs(recMap, contratos);
+  _renderRanking(recMap);
+  _renderCards(recMap);
+  _renderTabela(contratos);
+  _renderChartMensal(_contratos);
+  _renderPagSummary();
+}
+
+// ── Filtro de período ──
+function _filtrarPorPeriodo(lista, filtro) {
+  if (filtro === 'total') return lista;
+  const hoje = new Date();
+  return lista.filter(c => {
+    const dataRef = c.tipo === 'estagiario' ? c.inicio1 : c.admissao;
+    if (!dataRef) return false;
+    const d = new Date(dataRef+'T12:00:00');
+    if (filtro === 'mes') {
+      return d.getFullYear() === hoje.getFullYear() && d.getMonth() === hoje.getMonth();
+    }
+    if (filtro === 'trimestre') {
+      const diff = (hoje.getFullYear()-d.getFullYear())*12 + (hoje.getMonth()-d.getMonth());
+      return diff >= 0 && diff < 3;
+    }
+    if (filtro === 'ano') {
+      return d.getFullYear() === hoje.getFullYear();
+    }
+    return true;
+  });
+}
+
+// ── Agrupa por recrutador ──
+function _agruparPorRecrutador(lista) {
+  const map = {};
+  const extras = getConsultoresExtra();
+  extras.forEach(n => { if (!map[n]) map[n] = { nome:n, contratos:[], totalReceita:0, totalComissao:0 }; });
+
+  lista.forEach(c => {
+    const rec = (c.recrutador || '').trim();
+    if (!rec) return;
+    if (!map[rec]) map[rec] = { nome:rec, contratos:[], totalReceita:0, totalComissao:0 };
+    const receita   = Calc.receita(c);
+    const comissao  = Calc.comissaoRecrutador(c);
+    map[rec].contratos.push(c);
+    map[rec].totalReceita  += receita;
+    map[rec].totalComissao += comissao;
+  });
+  return map;
+}
+
+// ── KPIs ──
+function _renderKPIs(recMap, contratos) {
+  const nomes = Object.keys(recMap);
+  const totalComissao = nomes.reduce((s,n) => s + recMap[n].totalComissao, 0);
+  const totalReceita  = contratos.reduce((s,c) => s + Calc.receita(c), 0);
+  const semRec = contratos.filter(c => !c.recrutador || !c.recrutador.trim()).length;
+
+  document.getElementById('kpiArea').innerHTML = `
+    <div class="kpi"><div class="kpi-v">${nomes.length}</div><div class="kpi-l">Consultores Ativos</div></div>
+    <div class="kpi"><div class="kpi-v c-accent">${Fmt.brl(totalComissao)}</div><div class="kpi-l">Total em Comissões</div></div>
+    <div class="kpi"><div class="kpi-v">${Fmt.brl(totalReceita)}</div><div class="kpi-l">Receita Total Consultoria</div></div>
+    <div class="kpi"><div class="kpi-v c-orange">${semRec}</div><div class="kpi-l">Contratos Sem Recrutador</div></div>
+  `;
+}
+
+// ── Ranking ──
+function _renderRanking(recMap) {
+  const nomes = Object.keys(recMap).sort((a,b) => recMap[b].totalComissao - recMap[a].totalComissao);
+  const max = nomes.length ? recMap[nomes[0]].totalComissao : 1;
+  const posClass = ['gold','silver','bronze'];
+
+  if (!nomes.length) {
+    document.getElementById('rankingArea').innerHTML = '<div style="color:var(--muted);font-size:.76rem">Nenhum recrutador com comissão registrada.</div>';
+    return;
+  }
+
+  document.getElementById('rankingArea').innerHTML = nomes.map((n,i) => {
+    const r = recMap[n];
+    const pct = max > 0 ? (r.totalComissao / max * 100) : 0;
+    const cls = posClass[i] || '';
+    const medal = i === 0 ? '🥇' : i === 1 ? '🥈' : i === 2 ? '🥉' : '';
+    return `
+      <div class="rank-item" style="cursor:pointer" onclick="abrirDetalhe('${n.replace(/'/g,"\\'")}')">
+        <div class="rank-pos ${cls}">${medal || (i+1)}</div>
+        <div class="rank-bar-wrap">
+          <div class="rank-name">${n} <span style="font-size:.65rem;color:var(--muted);font-weight:400">(${r.contratos.length} contrato${r.contratos.length!==1?'s':''})</span></div>
+          <div class="rank-bar"><div class="rank-bar-fill" style="width:${pct}%"></div></div>
+        </div>
+        <div class="rank-val">${Fmt.brl(r.totalComissao)}</div>
+      </div>`;
+  }).join('');
+}
+
+// ── Cards individuais ──
+function _renderCards(recMap) {
+  const nomes = Object.keys(recMap).sort((a,b) => recMap[b].totalComissao - recMap[a].totalComissao);
+  if (!nomes.length) {
+    document.getElementById('cardsArea').innerHTML = '<div style="color:var(--muted);font-size:.76rem;padding:.5rem">Nenhum recrutador cadastrado nos contratos ainda. Vincule um recrutador ao cadastrar estagiários ou CLTs.</div>';
+    return;
+  }
+
+  document.getElementById('cardsArea').innerHTML = nomes.map((n,i) => {
+    const r = recMap[n];
+    const ativos    = r.contratos.filter(c => c.situacao === 'ativo').length;
+    const inativos  = r.contratos.length - ativos;
+    const avCls     = ['av-g','av-b','av-p','av-o','av-a'][i % 5];
+    const ini       = n.trim().split(/\s+/);
+    const sigla     = (ini[0]?.[0]||'') + (ini[1]?.[0]||'');
+    const maisRecente = r.contratos.slice().sort((a,b)=>{
+      const da = a.tipo==='estagiario'?a.inicio1:a.admissao;
+      const db = b.tipo==='estagiario'?b.inicio1:b.admissao;
+      return (db||'') > (da||'') ? 1 : -1;
+    })[0];
+
+    return `
+      <div class="rec-card" style="cursor:pointer" onclick="abrirDetalhe('${n.replace(/'/g,"\\'")}')">
+        <div class="rec-card-head">
+          <div class="rec-av ${avCls}">${sigla}</div>
+          <div style="overflow:hidden;flex:1">
+            <div style="font-weight:800;font-size:.88rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${n}</div>
+            <div style="font-size:.64rem;color:var(--muted)">${r.contratos.length} contrato${r.contratos.length!==1?'s':''} · ${ativos} ativo${ativos!==1?'s':''}</div>
+          </div>
+          <button onclick="event.stopPropagation();excluirConsultor('${n.replace(/'/g,"\\'")}',${r.contratos.length})" title="Excluir consultor" style="background:none;border:none;cursor:pointer;color:var(--muted);font-size:.85rem;padding:.3rem .4rem;border-radius:6px;opacity:.5;transition:opacity .15s;flex-shrink:0" onmouseover="this.style.opacity='1';this.style.color='#e74c3c'" onmouseout="this.style.opacity='.5';this.style.color='var(--muted)'">✕</button>
+        </div>
+        <div class="rec-card-body">
+          <div class="rec-stat-row"><span class="rec-stat-label">Receita gerada</span><span class="rec-stat-val">${Fmt.brl(r.totalReceita)}</span></div>
+          <div class="rec-stat-row"><span class="rec-stat-label">Inativos/Concluídos</span><span class="rec-stat-val c-muted">${inativos}</span></div>
+          ${maisRecente ? `<div class="rec-stat-row"><span class="rec-stat-label">Mais recente</span><span class="rec-stat-val" style="font-size:.72rem">${maisRecente.nome}</span></div>` : ''}
+        </div>
+        <div class="rec-card-foot">
+          <div>
+            <div class="rec-total-label">Comissão Total</div>
+            <div class="rec-total-val">${Fmt.brl(r.totalComissao)}</div>
+          </div>
+          <span style="font-size:.72rem;color:var(--muted)">ver detalhes →</span>
+        </div>
+      </div>`;
+  }).join('');
+}
+
+// ── Tabela ──
+function _renderTabela(contratos) {
+  const cfg = _cfg;
+  const comRec = contratos.filter(c => c.recrutador && c.recrutador.trim());
+
+  const tbody = document.getElementById('tbodyRec');
+  const tfoot = document.getElementById('tfootRec');
+
+  if (!comRec.length) {
+    tbody.innerHTML = '';
+    tfoot.innerHTML = '<tr><td colspan="10" style="text-align:center;color:var(--muted);font-size:.72rem;padding:1.2rem">Nenhum contrato com recrutador vinculado.</td></tr>';
+    return;
+  }
+
+  let totalReceita = 0, totalComissao = 0;
+
+  tbody.innerHTML = comRec.map(c => {
+    const base     = c.tipo === 'estagiario' ? (c.bolsa||0) : (c.salario||0);
+    const receita  = Calc.receita(c);
+    const comissao = Calc.comissaoRecrutador(c);
+    totalReceita  += receita;
+    totalComissao += comissao;
+    const st = Calc.statusContrato(c, cfg);
+    const tipoLabel = c.tipoComissao === 'percentual' ? `${c.comissaoRec}%` :
+                      c.tipoComissao === 'fixo'        ? 'Fixo' : 'Sem comissão';
+
+    const searchStr = `${c.recrutador} ${c.nome} ${c.empresa}`.toLowerCase();
+    return `<tr data-search="${searchStr}">
+      <td><strong>${c.recrutador}</strong></td>
+      <td><div class="ci"><div class="av ${Fmt.avCls(c.id)}">${Fmt.ini(c.nome)}</div><div><div class="ci-name">${c.nome}</div></div></div></td>
+      <td>${c.empresa}</td>
+      <td><span class="tag ${c.tipo==='estagiario'?'tag-purple':'tag-blue'}">${c.tipo==='estagiario'?'Estágio':'CLT'}</span></td>
+      <td>${Fmt.brl(base)}</td>
+      <td>${c.taxa}%</td>
+      <td class="c-accent fw7">${Fmt.brl(receita)}</td>
+      <td>${tipoLabel}</td>
+      <td class="c-green fw8">${Fmt.brl(comissao)}</td>
+      <td><span class="tag ${st.cls}">${st.txt}</span></td>
+    </tr>`;
+  }).join('');
+
+  tfoot.innerHTML = `<tr>
+    <td colspan="6" style="text-align:right;color:var(--muted)">Totais</td>
+    <td class="c-accent fw8">${Fmt.brl(totalReceita)}</td>
+    <td></td>
+    <td class="c-green fw8">${Fmt.brl(totalComissao)}</td>
+    <td></td>
+  </tr>`;
+}
+
+// ── Gráfico mensal ──
+function _renderChartMensal(todos) {
+  const meses = [];
+  const hoje = new Date();
+  for (let i = 5; i >= 0; i--) {
+    const d = new Date(hoje.getFullYear(), hoje.getMonth()-i, 1);
+    meses.push({ ano: d.getFullYear(), mes: d.getMonth(), label: d.toLocaleDateString('pt-BR',{month:'short',year:'2-digit'}) });
+  }
+
+  // Agrupa recrutadores
+  const recNames = [...new Set(todos.filter(c=>c.recrutador&&c.recrutador.trim()).map(c=>c.recrutador.trim()))].slice(0,5);
+  const COLORS = ['#3b82f6','#2ecc71','#f39c12','#a78bfa','#e74c3c'];
+
+  const datasets = recNames.map((nome,idx) => ({
+    label: nome,
+    data: meses.map(m => {
+      return todos.filter(c => {
+        if ((c.recrutador||'').trim() !== nome) return false;
+        const dataRef = c.tipo==='estagiario'?c.inicio1:c.admissao;
+        if (!dataRef) return false;
+        const d = new Date(dataRef+'T12:00:00');
+        return d.getFullYear()===m.ano && d.getMonth()===m.mes;
+      }).reduce((s,c) => s + Calc.comissaoRecrutador(c), 0);
+    }),
+    backgroundColor: COLORS[idx] + '22',
+    borderColor: COLORS[idx],
+    borderWidth: 2,
+    tension: 0.4,
+    fill: false,
+    pointRadius: 4,
+  }));
+
+  if (_chartMensal) _chartMensal.destroy();
+  const ctx = document.getElementById('chartMensal').getContext('2d');
+  _chartMensal = new Chart(ctx, {
+    type: 'line',
+    data: { labels: meses.map(m=>m.label), datasets },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: { labels: { color:'#aaa', font:{ size:10 }, boxWidth:12 } },
+        tooltip: { callbacks: { label: ctx => `${ctx.dataset.label}: ${Fmt.brl(ctx.parsed.y)}` } },
+      },
+      scales: {
+        x: { grid:{ color:'rgba(255,255,255,.04)' }, ticks:{ color:'#666', font:{size:10} } },
+        y: { grid:{ color:'rgba(255,255,255,.04)' }, ticks:{ color:'#666', font:{size:10}, callback: v => Fmt.brl(v) } },
+      },
+    },
+  });
+}
+
+// ── Modal Detalhe ──
+function abrirDetalhe(nome) {
+  const recMap = _agruparPorRecrutador(_contratos);
+  const r = recMap[nome];
+  if (!r) return;
+
+  document.getElementById('modalDetTitulo').textContent = `🏆 ${nome}`;
+
+  // Últimos 6 meses de comissão
+  const hoje = new Date();
+  const meses = [];
+  for (let i=5;i>=0;i--) {
+    const d = new Date(hoje.getFullYear(), hoje.getMonth()-i, 1);
+    const val = r.contratos.filter(c => {
+      const ref = c.tipo==='estagiario'?c.inicio1:c.admissao;
+      if(!ref) return false;
+      const cd = new Date(ref+'T12:00:00');
+      return cd.getFullYear()===d.getFullYear() && cd.getMonth()===d.getMonth();
+    }).reduce((s,c)=>s+Calc.comissaoRecrutador(c),0);
+    meses.push({ label: d.toLocaleDateString('pt-BR',{month:'short',year:'2-digit'}), val });
+  }
+  const maxMes = Math.max(...meses.map(m=>m.val), 1);
+
+  const ativos   = r.contratos.filter(c=>c.situacao==='ativo');
+  const inativos = r.contratos.filter(c=>c.situacao!=='ativo');
+  const cfg = _cfg;
+
+  document.getElementById('modalDetBody').innerHTML = `
+    <div class="det-section">
+      <div class="det-section-title">Resumo</div>
+      <div class="result-box">
+        <div class="rb-row"><span>Total de contratos</span><span>${r.contratos.length}</span></div>
+        <div class="rb-row"><span>Ativos</span><span class="c-green">${ativos.length}</span></div>
+        <div class="rb-row"><span>Inativos/Concluídos</span><span class="c-muted">${inativos.length}</span></div>
+        <div class="rb-row"><span>Receita total gerada</span><span class="c-accent">${Fmt.brl(r.totalReceita)}</span></div>
+        <div class="rb-row total"><span>Comissão acumulada</span><span class="c-green">${Fmt.brl(r.totalComissao)}</span></div>
+      </div>
+    </div>
+
+    <div class="det-section">
+      <div class="det-section-title">Comissão por Mês (últimos 6 meses)</div>
+      ${meses.map(m=>`
+        <div class="mes-bar-row">
+          <div class="mes-bar-label">${m.label}</div>
+          <div class="mes-bar-outer"><div class="mes-bar-inner" style="width:${maxMes>0?m.val/maxMes*100:0}%"></div></div>
+          <div class="mes-bar-val">${Fmt.brl(m.val)}</div>
+        </div>`).join('')}
+    </div>
+
+    ${ativos.length ? `
+    <div class="det-section">
+      <div class="det-section-title">Contratos Ativos (${ativos.length})</div>
+      <div style="display:flex;flex-direction:column;gap:.35rem">
+        ${ativos.map(c=>{
+          const st = Calc.statusContrato(c,cfg);
+          return `<div class="contrato-mini">
+            <div class="av av-g" style="width:26px;height:26px;font-size:.58rem;border-radius:6px">${Fmt.ini(c.nome)}</div>
+            <div class="contrato-mini-nome">${c.nome} · ${c.empresa}</div>
+            <span class="tag ${st.cls}" style="font-size:.56rem">${st.txt}</span>
+            <div class="contrato-mini-val">${Fmt.brl(Calc.comissaoRecrutador(c))}/mês</div>
+          </div>`;
+        }).join('')}
+      </div>
+    </div>` : ''}
+
+    ${inativos.length ? `
+    <div class="det-section">
+      <div class="det-section-title" style="color:var(--muted)">Histórico Inativo (${inativos.length})</div>
+      <div style="display:flex;flex-direction:column;gap:.35rem">
+        ${inativos.map(c=>`
+          <div class="contrato-mini" style="opacity:.55">
+            <div class="av av-g" style="width:26px;height:26px;font-size:.58rem;border-radius:6px;opacity:.5">${Fmt.ini(c.nome)}</div>
+            <div class="contrato-mini-nome">${c.nome} · ${c.empresa}</div>
+            <span class="tag tag-gray" style="font-size:.56rem">${c.situacao}</span>
+          </div>`).join('')}
+      </div>
+    </div>` : ''}
+  `;
+
+  UI.openModal('modalDet');
+}
+
+// ── Novo recrutador ──
+function abrirNovoRecrutador() {
+  document.getElementById('novoRecNome').value = '';
+  UI.openModal('modalNovo');
+}
+
+function salvarNovoRecrutador() {
+  const nome = document.getElementById('novoRecNome').value.trim();
+  if (!nome) { UI.toast('Informe o nome', 'err'); return; }
+  const lista = getConsultoresExtra();
+  if (!lista.includes(nome)) { lista.push(nome); saveConsultoresExtra(lista); }
+  UI.toast(`Recrutador "${nome}" cadastrado!`, 'ok');
+  UI.closeModal('modalNovo');
+  render();
+}
+
+function excluirConsultor(nome, qtdContratos) {
+  const msg = qtdContratos > 0
+    ? `Excluir o consultor "${nome}"?\n\nEle tem ${qtdContratos} contrato(s) vinculado(s). O consultor será removido da lista, mas os contratos não serão apagados.`
+    : `Excluir o consultor "${nome}"?`;
+  if (!confirm(msg)) return;
+  // Remove dos extras cadastrados manualmente
+  const extras = getConsultoresExtra().filter(n => n !== nome);
+  saveConsultoresExtra(extras);
+  UI.toast(`Consultor "${nome}" removido`, 'wrn');
+  render();
+}
+
+// ══════════════════════════════════════
+// PAGAMENTOS
+// ══════════════════════════════════════
+const PAG_KEY = 'ex_cc_pagamentos_consultores';
+
+function getPagamentos() {
+  try { return JSON.parse(localStorage.getItem(PAG_KEY)) || []; } catch { return []; }
+}
+function savePagamentos(arr) {
+  localStorage.setItem(PAG_KEY, JSON.stringify(arr));
+}
+
+function _todosConsultores() {
+  const recMap = _agruparPorRecrutador(_contratos);
+  const extras = getConsultoresExtra();
+  const nomes = new Set([...Object.keys(recMap), ...extras]);
+  return [...nomes].sort();
+}
+
+function abrirPagamentos() {
+  // Preenche select de consultores
+  const sel = document.getElementById('pagConsultor');
+  const todos = _todosConsultores();
+  sel.innerHTML = todos.length
+    ? todos.map(n => `<option value="${n}">${n}</option>`).join('')
+    : '<option value="">— Nenhum consultor cadastrado —</option>';
+
+  // Data padrão: hoje
+  document.getElementById('pagData').value = new Date().toISOString().slice(0,10);
+  document.getElementById('pagDesc').value = '';
+  document.getElementById('pagValor').value = '';
+  document.getElementById('pagObs').value = '';
+  selectTipo('pagar');
+  UI.openModal('modalPag');
+}
+
+function selectTipo(tipo) {
+  document.getElementById('pagTipo').value = tipo;
+  document.getElementById('tabPagar').classList.toggle('active', tipo === 'pagar');
+  document.getElementById('tabRecebido').classList.toggle('active', tipo === 'recebido');
+}
+
+function salvarPagamento() {
+  const consultor = document.getElementById('pagConsultor').value.trim();
+  const tipo      = document.getElementById('pagTipo').value;
+  const desc      = document.getElementById('pagDesc').value.trim();
+  const valor     = parseFloat(document.getElementById('pagValor').value);
+  const data      = document.getElementById('pagData').value;
+  const obs       = document.getElementById('pagObs').value.trim();
+
+  if (!consultor) { UI.toast('Selecione um consultor', 'err'); return; }
+  if (!desc)      { UI.toast('Informe a descrição', 'err'); return; }
+  if (!valor || valor <= 0) { UI.toast('Informe um valor válido', 'err'); return; }
+  if (!data)      { UI.toast('Informe a data', 'err'); return; }
+
+  const pags = getPagamentos();
+  pags.push({ id: Date.now(), consultor, tipo, desc, valor, data, obs });
+  savePagamentos(pags);
+
+  UI.toast(`Valor lançado para ${consultor}!`, 'ok');
+  UI.closeModal('modalPag');
+  _renderPagSummary();
+}
+
+function excluirPagamento(id) {
+  if (!confirm('Excluir este lançamento?')) return;
+  const pags = getPagamentos().filter(p => p.id !== id);
+  savePagamentos(pags);
+  _renderPagSummary();
+  UI.toast('Lançamento removido', 'wrn');
+}
+
+function _renderPagSummary() {
+  const pags = getPagamentos();
+  const todos = _todosConsultores();
+
+  if (!todos.length && !pags.length) {
+    document.getElementById('pagSummaryArea').innerHTML =
+      '<div style="color:var(--muted);font-size:.76rem;padding:.5rem">Nenhum consultor cadastrado ainda.</div>';
+    return;
+  }
+
+  // Agrupa por consultor
+  const mapa = {};
+  todos.forEach(n => { mapa[n] = { pagar: [], recebido: [] }; });
+  pags.forEach(p => {
+    if (!mapa[p.consultor]) mapa[p.consultor] = { pagar: [], recebido: [] };
+    mapa[p.consultor][p.tipo].push(p);
+  });
+
+  const html = Object.entries(mapa).map(([nome, dados]) => {
+    const totalPagar    = dados.pagar.reduce((s,p) => s+p.valor, 0);
+    const totalRecebido = dados.recebido.reduce((s,p) => s+p.valor, 0);
+    const saldo         = totalRecebido - totalPagar;
+    const saldoCls      = saldo > 0 ? 'saldo-positivo' : saldo < 0 ? 'saldo-negativo' : 'saldo-neutro';
+    const saldoLabel    = saldo >= 0 ? `+${Fmt.brl(saldo)}` : Fmt.brl(saldo);
+
+    const allPags = [...dados.pagar.map(p=>({...p,_tipo:'pagar'})), ...dados.recebido.map(p=>({...p,_tipo:'recebido'}))]
+      .sort((a,b) => b.data.localeCompare(a.data));
+
+    return `
+      <div class="tbl-wrap" style="margin-bottom:.9rem;padding:1.2rem">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.8rem">
+          <div style="font-weight:800;font-size:.92rem">${nome}</div>
+          <button class="btn btn-ghost btn-sm" onclick="abrirPagConsultor('${nome.replace(/'/g,"\\'")}')">＋ Lançar</button>
+        </div>
+        <div class="pag-saldo">
+          <div>
+            <div class="pag-saldo-label">Saldo</div>
+            <div class="pag-saldo-val ${saldoCls}">${saldoLabel}</div>
+          </div>
+          <div style="display:flex;gap:1.5rem;text-align:right">
+            <div>
+              <div class="pag-saldo-label">A Pagar</div>
+              <div style="font-size:.9rem;font-weight:800;color:#f39c12">${Fmt.brl(totalPagar)}</div>
+            </div>
+            <div>
+              <div class="pag-saldo-label">Recebido</div>
+              <div style="font-size:.9rem;font-weight:800;color:#2ecc71">${Fmt.brl(totalRecebido)}</div>
+            </div>
+          </div>
+        </div>
+        ${allPags.length ? `
+        <div class="pag-list">
+          ${allPags.map(p => `
+            <div class="pag-item">
+              <div class="pag-item-dot ${p._tipo==='pagar'?'dot-pagar':'dot-recebido'}"></div>
+              <div class="pag-item-desc">${p.desc}${p.obs?` <span style="color:var(--muted);font-weight:400;font-size:.66rem">· ${p.obs}</span>`:''}</div>
+              <div class="pag-item-data">${Fmt.dt(p.data)}</div>
+              <div class="pag-item-val ${p._tipo==='pagar'?'val-pagar':'val-recebido'}">${p._tipo==='pagar'?'-':'+'} ${Fmt.brl(p.valor)}</div>
+              <button class="pag-item-del" onclick="excluirPagamento(${p.id})" title="Excluir">✕</button>
+            </div>`).join('')}
+        </div>` : `<div class="pag-empty">Nenhum lançamento ainda — clique em "＋ Lançar"</div>`}
+      </div>`;
+  }).join('');
+
+  document.getElementById('pagSummaryArea').innerHTML = html;
+}
+
+function abrirPagConsultor(nome) {
+  const sel = document.getElementById('pagConsultor');
+  const todos = _todosConsultores();
+  sel.innerHTML = todos.map(n => `<option value="${n}" ${n===nome?'selected':''}>${n}</option>`).join('');
+  document.getElementById('pagData').value = new Date().toISOString().slice(0,10);
+  document.getElementById('pagDesc').value = '';
+  document.getElementById('pagValor').value = '';
+  document.getElementById('pagObs').value = '';
+  selectTipo('pagar');
+  UI.openModal('modalPag');
+}
+
+// ── Exportar CSV ──
+function exportarCSV() {
+  const filtro = document.getElementById('filtPeriodo').value;
+  const contratos = _filtrarPorPeriodo(_contratos, filtro).filter(c=>c.recrutador&&c.recrutador.trim());
+  Export.csv(
+    ['Recrutador','Contratado','Empresa','Tipo','Base (R$)','Taxa %','Receita Ag.','Tipo Comissão','Comissão Rec.','Situação'],
+    contratos.map(c=>[
+      c.recrutador, c.nome, c.empresa,
+      c.tipo==='estagiario'?'Estágio':'CLT',
+      Fmt.brl(c.tipo==='estagiario'?c.bolsa:c.salario),
+      c.taxa+'%', Fmt.brl(Calc.receita(c)),
+      c.tipoComissao, Fmt.brl(Calc.comissaoRecrutador(c)), c.situacao
+    ]),
+    `recrutadores_${new Date().toISOString().slice(0,10)}.csv`
+  );
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,1663 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Gerador de Currículo Estratégico | Orizon</title>
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="192x192" href="favicon-192x192.png" />
+  <link rel="shortcut icon" href="icone.png" type="image/png" />
+  <link rel="apple-touch-icon" href="icone.png" />
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;700;800;900&display=swap" rel="stylesheet"/>
+  <style>
+    :root{
+      --primary:#3b82f6;--accent:#60a5fa;
+      --bg:#0a0a0a;--card:#131313;--card2:#1a1a1a;
+      --border:rgba(59,130,246,0.15);--border2:rgba(59,130,246,0.3);
+      --text:#f0f0f0;--muted:#777;--muted2:#444;
+      --D:#e74c3c;--I:#f39c12;--S:#2ecc71;--C:#3498db;
+    }
+    *{margin:0;padding:0;box-sizing:border-box;}
+    html,body{min-height:100vh;background:var(--bg);color:var(--text);font-family:'Sora',sans-serif;overflow-x:hidden;}
+    body::before{content:'';position:fixed;inset:0;z-index:0;background-image:linear-gradient(rgba(59,130,246,0.03) 1px,transparent 1px),linear-gradient(90deg,rgba(59,130,246,0.03) 1px,transparent 1px);background-size:48px 48px;pointer-events:none;}
+
+    /* ── HEADER ── */
+    .site-header{position:sticky;top:0;z-index:50;background:rgba(10,10,10,0.95);backdrop-filter:blur(16px);border-bottom:1px solid var(--border);padding:0.8rem 1.5rem;display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap;}
+    .header-brand{display:flex;align-items:center;gap:0.8rem;}
+    .header-logo{width:36px;height:36px;border-radius:10px;background:rgba(59,130,246,0.1);border:1px solid var(--border2);display:flex;align-items:center;justify-content:center;overflow:hidden;}
+    .header-logo img{width:26px;height:26px;object-fit:contain;}
+    .header-title{font-size:0.9rem;font-weight:800;}
+    .header-title span{color:var(--accent);}
+    .header-badge{font-size:0.6rem;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--muted);background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08);border-radius:99px;padding:0.2rem 0.7rem;}
+    .header-actions{display:flex;gap:0.6rem;flex-wrap:wrap;}
+    .btn-save-data{background:rgba(59,130,246,0.1);color:var(--accent);border:1px solid var(--border2);border-radius:10px;padding:0.45rem 1rem;font-family:inherit;font-size:0.78rem;font-weight:700;cursor:pointer;transition:all 0.2s;}
+    .btn-save-data:hover{background:rgba(59,130,246,0.18);}
+    .btn-load-data{background:rgba(255,255,255,0.05);color:var(--muted);border:1px solid rgba(255,255,255,0.1);border-radius:10px;padding:0.45rem 1rem;font-family:inherit;font-size:0.78rem;font-weight:600;cursor:pointer;transition:all 0.2s;}
+    .btn-load-data:hover{background:rgba(255,255,255,0.1);color:var(--text);}
+
+    /* ── WRAPPER ── */
+    .wrapper{position:relative;z-index:1;max-width:980px;margin:0 auto;padding:2rem 1.2rem 5rem;}
+
+    /* ── HERO ── */
+    .hero{margin-bottom:2rem;text-align:center;}
+    .hero-eyebrow{font-size:0.65rem;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;color:var(--accent);opacity:0.8;margin-bottom:0.5rem;}
+    .hero-title{font-size:1.8rem;font-weight:900;margin-bottom:0.4rem;}
+    .hero-title span{color:var(--accent);}
+    .hero-sub{font-size:0.85rem;color:var(--muted);line-height:1.6;max-width:580px;margin:0 auto;}
+
+    /* ── STEP TABS ── */
+    /* ── STEPS NAV ── */
+
+    /* ── STEPS NAV ── */
+    .steps-nav{display:flex;flex-direction:row;align-items:center;gap:2px;background:rgba(255,255,255,0.03);border:1px solid var(--border);border-radius:16px;padding:4px;margin-bottom:2rem;}
+    .step-btn{flex:1;min-width:0;border:none;border-radius:11px;font-family:inherit;font-weight:700;cursor:pointer;transition:all 0.2s;background:transparent;color:var(--muted);display:flex;align-items:center;justify-content:center;gap:4px;padding:9px 2px;font-size:0.68rem;white-space:nowrap;touch-action:manipulation;}
+    .step-btn.active{background:var(--card);color:var(--accent);box-shadow:0 2px 8px rgba(0,0,0,0.3);}
+    .step-btn.done{color:rgba(59,130,246,0.55);}
+    .step-num{width:18px;height:18px;min-width:18px;border-radius:50%;background:rgba(255,255,255,0.08);font-size:0.62rem;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+    .step-btn.active .step-num{background:var(--accent);color:#fff;}
+    .step-btn.done .step-num{background:rgba(59,130,246,0.22);color:var(--accent);}
+    @media(max-width:620px){
+      .steps-nav{display:grid;grid-template-columns:1fr 1fr;gap:6px;padding:6px;border-radius:14px;}
+      .step-btn{justify-content:flex-start;gap:8px;padding:11px 12px;font-size:0.8rem;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:10px;}
+      .step-btn.active{background:rgba(59,130,246,0.12);border-color:rgba(59,130,246,0.4);color:var(--accent);}
+      .step-btn.done{background:rgba(59,130,246,0.05);border-color:rgba(59,130,246,0.15);}
+      .step-num{width:24px;height:24px;min-width:24px;font-size:0.72rem;}
+    }
+
+    /* ── PANES ── */
+    .step-pane{display:none;}
+    .step-pane.active{display:block;}
+
+    /* ── SECTION CARD ── */
+    .form-section{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:1.5rem;margin-bottom:1.2rem;}
+    .form-section-title{font-size:0.65rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--accent);opacity:0.85;margin-bottom:1.2rem;display:flex;align-items:center;gap:0.6rem;}
+    .form-section-title::after{content:'';flex:1;height:1px;background:var(--border);}
+    .form-section-hint{font-size:0.78rem;color:var(--muted);line-height:1.6;background:rgba(59,130,246,0.05);border:1px solid rgba(59,130,246,0.12);border-radius:10px;padding:0.7rem 1rem;margin-bottom:1.2rem;}
+    .form-section-hint strong{color:var(--accent);}
+
+    /* ── GRID ── */
+    .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:0.8rem;margin-bottom:0.8rem;}
+    .grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:0.8rem;margin-bottom:0.8rem;}
+    .grid-4{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:0.8rem;margin-bottom:0.8rem;}
+    @media(max-width:640px){
+      .grid-2,.grid-3,.grid-4{grid-template-columns:1fr;}
+      .hero-title{font-size:1.3rem;}
+    }
+
+    /* ── FIELDS ── */
+    .field-group{margin-bottom:0.8rem;}
+    .field-label{font-size:0.7rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.6px;display:block;margin-bottom:0.35rem;}
+    .field-label .req{color:var(--accent);}
+    .field-input{width:100%;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:10px;padding:0.65rem 0.9rem;color:var(--text);font-family:inherit;font-size:0.85rem;outline:none;transition:border-color 0.2s;}
+    .field-input:focus{border-color:var(--accent);background:rgba(59,130,246,0.03);}
+    .field-input::placeholder{color:var(--muted2);font-size:0.8rem;}
+    .field-textarea{resize:vertical;line-height:1.65;min-height:90px;}
+    .field-hint{font-size:0.7rem;color:var(--muted);margin-top:0.3rem;line-height:1.5;}
+    .field-hint em{color:#f39c12;}
+
+    /* ── EXPERIÊNCIA CARD ── */
+    .exp-card{background:var(--card2);border:1px solid rgba(255,255,255,0.08);border-radius:16px;padding:1.2rem;margin-bottom:1rem;position:relative;}
+    .exp-card-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem;gap:0.5rem;flex-wrap:wrap;}
+    .exp-card-num{font-size:0.65rem;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--accent);}
+    .exp-card-actions{display:flex;gap:0.4rem;}
+    .btn-exp-up,.btn-exp-down,.btn-exp-del{background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08);border-radius:7px;color:var(--muted);font-size:0.75rem;padding:0.3rem 0.55rem;cursor:pointer;font-family:inherit;transition:all 0.2s;}
+    .btn-exp-up:hover,.btn-exp-down:hover{background:rgba(59,130,246,0.1);color:var(--accent);border-color:var(--border2);}
+    .btn-exp-del:hover{background:rgba(231,76,60,0.1);color:#e74c3c;border-color:rgba(231,76,60,0.3);}
+
+    /* ── BULLET POINTS ── */
+    .bullets-wrap{margin-top:0.8rem;}
+    .bullet-row{display:flex;gap:0.5rem;align-items:flex-start;margin-bottom:0.5rem;}
+    .bullet-dot{color:var(--accent);font-size:1rem;margin-top:0.6rem;flex-shrink:0;}
+    .bullet-textarea{flex:1;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:8px;padding:0.55rem 0.8rem;color:var(--text);font-family:inherit;font-size:0.82rem;outline:none;transition:border-color 0.2s;resize:none;line-height:1.55;min-height:58px;}
+    .bullet-textarea:focus{border-color:var(--accent);}
+    .bullet-textarea::placeholder{color:var(--muted2);font-size:0.78rem;}
+    .btn-bullet-del{background:none;border:none;color:rgba(231,76,60,0.3);cursor:pointer;font-size:0.9rem;padding:0.4rem;border-radius:6px;transition:all 0.2s;margin-top:0.35rem;flex-shrink:0;}
+    .btn-bullet-del:hover{color:#e74c3c;background:rgba(231,76,60,0.1);}
+    .btn-add-bullet{background:none;border:1px dashed rgba(59,130,246,0.25);border-radius:8px;color:var(--muted);font-family:inherit;font-size:0.75rem;padding:0.4rem 0.8rem;cursor:pointer;transition:all 0.2s;margin-top:0.2rem;}
+    .btn-add-bullet:hover{border-color:var(--accent);color:var(--accent);}
+    .bullets-counter{font-size:0.68rem;color:var(--muted);margin-top:0.3rem;}
+    .bullets-counter.warn{color:#f39c12;}
+    .bullets-counter.max{color:#e74c3c;}
+
+    /* ── ADD BUTTONS ── */
+    .btn-add-section{width:100%;background:rgba(59,130,246,0.06);border:1px dashed rgba(59,130,246,0.25);border-radius:14px;color:var(--accent);font-family:inherit;font-size:0.82rem;font-weight:700;padding:0.85rem;cursor:pointer;transition:all 0.2s;display:flex;align-items:center;justify-content:center;gap:0.5rem;margin-top:0.4rem;}
+    .btn-add-section:hover{background:rgba(59,130,246,0.1);border-color:var(--accent);}
+
+    /* ── IDIOMAS / HABILIDADES TAGS ── */
+    .tag-input-wrap{display:flex;gap:0.5rem;margin-bottom:0.6rem;}
+    .tag-input{flex:1;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:10px;padding:0.55rem 0.8rem;color:var(--text);font-family:inherit;font-size:0.82rem;outline:none;transition:border-color 0.2s;}
+    .tag-input:focus{border-color:var(--accent);}
+    .btn-tag-add{background:rgba(59,130,246,0.12);color:var(--accent);border:1px solid var(--border2);border-radius:10px;padding:0.55rem 1rem;font-family:inherit;font-size:0.82rem;font-weight:700;cursor:pointer;white-space:nowrap;}
+    .tags-list{display:flex;flex-wrap:wrap;gap:0.4rem;}
+    .tag-item{background:rgba(59,130,246,0.1);border:1px solid rgba(59,130,246,0.25);border-radius:99px;padding:0.28rem 0.7rem;font-size:0.78rem;font-weight:600;color:var(--accent);display:flex;align-items:center;gap:0.4rem;cursor:default;}
+    .tag-item button{background:none;border:none;color:rgba(231,76,60,0.5);cursor:pointer;font-size:0.75rem;padding:0;line-height:1;}
+    .tag-item button:hover{color:#e74c3c;}
+
+    /* ── LEVEL SELECT ── */
+    .nivel-select{background:#1a1a1a;border:1px solid rgba(255,255,255,0.1);border-radius:10px;padding:0.55rem 0.8rem;color:var(--text);font-family:inherit;font-size:0.82rem;outline:none;-webkit-appearance:none;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23777' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 0.8rem center;padding-right:2.2rem;cursor:pointer;}
+    .nivel-select:focus{border-color:var(--accent);}
+    .nivel-select option{background:#1a1a1a;color:var(--text);}
+    /* força select field-input a também ficar escuro */
+    select.field-input{background:#1a1a1a !important;color:var(--text) !important;-webkit-appearance:none;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23777' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E") !important;background-repeat:no-repeat !important;background-position:right 0.8rem center !important;padding-right:2.2rem !important;cursor:pointer;}
+    select.field-input option{background:#1a1a1a;color:var(--text);}
+    /* grid de data mes+ano */
+    .grid-mes-ano{display:grid;grid-template-columns:1fr 1fr;gap:0.5rem;}
+
+    /* ── GENERATE PANEL ── */
+    .generate-panel{background:var(--card);border:1px solid var(--border2);border-radius:20px;padding:2rem;margin-bottom:1.2rem;}
+    .generate-title{font-size:1.1rem;font-weight:800;margin-bottom:0.3rem;color:var(--text);}
+    .generate-sub{font-size:0.82rem;color:var(--muted);margin-bottom:1.5rem;line-height:1.6;}
+    .generate-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1rem;}
+    .gen-card{border-radius:16px;padding:1.4rem;text-align:center;cursor:default;transition:all 0.25s;border:1px solid rgba(255,255,255,0.08);background:rgba(255,255,255,0.03);}
+    .gen-card.email{border-color:rgba(59,130,246,0.3);background:rgba(59,130,246,0.04);}
+    .gen-card.whatsapp{border-color:rgba(37,211,102,0.3);background:rgba(37,211,102,0.04);}
+    .gen-card.ats{border-color:rgba(52,152,219,0.3);background:rgba(52,152,219,0.04);}
+    .gen-icon{font-size:2rem;margin-bottom:0.7rem;}
+    .gen-name{font-size:0.95rem;font-weight:800;margin-bottom:0.3rem;color:var(--text);}
+    .gen-desc{font-size:0.75rem;color:var(--muted);line-height:1.5;}
+    .gen-btn{margin-top:1rem;width:100%;border:none;border-radius:10px;padding:0.7rem;font-family:inherit;font-size:0.82rem;font-weight:700;cursor:pointer;transition:all 0.2s;}
+    .gen-btn.email{background:linear-gradient(135deg,var(--primary),var(--accent));color:#fff;}
+    .gen-btn.whatsapp{background:linear-gradient(135deg,#128C7E,#25D366);color:#fff;}
+    .gen-btn.ats{background:linear-gradient(135deg,#1a5276,#3498db);color:#fff;}
+    .gen-btn:hover{opacity:0.88;transform:translateY(-1px);}
+
+    /* ── PAGE ALERT ── */
+    .page-alert{display:none;background:rgba(231,76,60,0.1);border:1px solid rgba(231,76,60,0.3);border-radius:12px;padding:0.8rem 1.1rem;font-size:0.8rem;color:#e74c3c;margin-bottom:1rem;}
+    .page-alert.warn{background:rgba(243,156,18,0.1);border-color:rgba(243,156,18,0.3);color:#f39c12;}
+    .page-alert.show{display:flex;align-items:center;gap:0.6rem;}
+
+    /* ── NAVIGATION ── */
+    .step-nav-bar{display:flex;justify-content:space-between;align-items:center;margin-top:1.5rem;gap:0.8rem;flex-wrap:wrap;}
+    .btn-prev{background:rgba(255,255,255,0.05);color:var(--muted);border:1px solid rgba(255,255,255,0.1);border-radius:12px;padding:0.75rem 1.4rem;font-family:inherit;font-size:0.85rem;font-weight:600;cursor:pointer;transition:all 0.2s;}
+    .btn-prev:hover{background:rgba(255,255,255,0.1);color:var(--text);}
+    .btn-next{background:linear-gradient(135deg,var(--primary),var(--accent));color:#fff;border:none;border-radius:12px;padding:0.75rem 1.6rem;font-family:inherit;font-size:0.85rem;font-weight:700;cursor:pointer;transition:all 0.2s;touch-action:manipulation;-webkit-tap-highlight-color:rgba(59,130,246,0.3);position:relative;z-index:5;}
+    .btn-next:hover{opacity:0.88;transform:translateY(-1px);}
+
+
+    /* ── TOAST ── */
+    .toast{position:fixed;bottom:2rem;left:50%;transform:translateX(-50%) translateY(20px);background:#2ecc71;color:#fff;font-family:'Sora',sans-serif;font-size:0.85rem;font-weight:700;padding:0.7rem 1.6rem;border-radius:99px;opacity:0;pointer-events:none;transition:all 0.3s;z-index:999;}
+    .toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+    .toast.erro{background:#e74c3c;}
+    .toast.warn{background:#f39c12;}
+    /* ── PREVIEW MODAL ── */
+    .preview-overlay{position:fixed;inset:0;z-index:200;background:rgba(0,0,0,0.92);display:flex;flex-direction:column;}
+    .preview-overlay.hidden{display:none!important;}
+    .preview-toolbar{background:#1a3a5c;padding:0.7rem 1.2rem;display:flex;align-items:center;gap:0.8rem;flex-wrap:wrap;flex-shrink:0;z-index:201;}
+    .preview-title{color:#fff;font-size:0.85rem;font-weight:700;flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+    .preview-tipo{font-size:0.7rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:#3b82f6;background:rgba(59,130,246,0.15);border:1px solid rgba(59,130,246,0.3);border-radius:99px;padding:0.2rem 0.7rem;flex-shrink:0;}
+    .btn-download-pdf{background:#3b82f6;color:#fff;border:none;border-radius:8px;padding:0.55rem 1.2rem;font-family:inherit;font-size:0.82rem;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:0.4rem;transition:all 0.2s;flex-shrink:0;}
+    .btn-download-pdf:hover{background:#7ab535;}
+    .btn-fechar-preview{background:rgba(255,255,255,0.1);color:#fff;border:1px solid rgba(255,255,255,0.2);border-radius:8px;padding:0.55rem 0.9rem;font-family:inherit;font-size:0.82rem;cursor:pointer;flex-shrink:0;}
+    .preview-frame-wrap{flex:1;overflow:auto;background:#666;display:flex;justify-content:center;padding:1rem;}
+    .preview-frame{background:#fff;width:210mm;max-width:100%;box-shadow:0 4px 32px rgba(0,0,0,0.5);font-family:Calibri,Arial,sans-serif;}
+    @media(max-width:640px){
+      .preview-frame{width:100%;min-width:0;}
+      .preview-toolbar{padding:0.5rem 0.8rem;gap:0.5rem;}
+      .preview-title{font-size:0.75rem;}
+      .btn-download-pdf,.btn-fechar-preview{padding:0.45rem 0.7rem;font-size:0.75rem;}
+    }
+    /* ── DICA IMPRESSÃO MODAL ── */
+    .dica-modal-overlay{position:fixed;inset:0;z-index:300;background:rgba(0,0,0,0.75);backdrop-filter:blur(6px);display:flex;align-items:center;justify-content:center;padding:1rem;}
+    .dica-modal-overlay.hidden{display:none!important;}
+    .dica-modal{background:#161616;border:1px solid rgba(59,130,246,0.3);border-radius:20px;padding:1.8rem;width:100%;max-width:480px;}
+    .dica-modal-title{font-size:1rem;font-weight:800;margin-bottom:0.3rem;color:var(--accent);}
+    .dica-modal-sub{font-size:0.8rem;color:var(--muted);margin-bottom:1.2rem;line-height:1.6;}
+    .dica-step{display:flex;align-items:flex-start;gap:0.7rem;margin-bottom:0.75rem;font-size:0.82rem;color:var(--text);line-height:1.5;}
+    .dica-num{width:22px;height:22px;border-radius:50%;background:var(--accent);color:#fff;font-size:0.7rem;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;}
+    .dica-ok-btn{width:100%;background:linear-gradient(135deg,var(--primary),var(--accent));color:#fff;border:none;border-radius:12px;padding:0.8rem;font-family:inherit;font-size:0.88rem;font-weight:700;cursor:pointer;margin-top:0.8rem;}
+    .filter-type-btn{background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:10px;padding:0.55rem 1rem;font-family:inherit;font-size:0.78rem;font-weight:600;cursor:pointer;color:var(--muted);transition:all 0.2s;}
+    .filter-type-btn.active{background:rgba(59,130,246,0.12);border-color:var(--border2);color:var(--accent);}
+    .filter-type-btn:hover{background:rgba(255,255,255,0.08);color:var(--text);}
+    /* ── IA BUTTONS ── */
+    .ia-bar{display:flex;align-items:center;gap:0.5rem;margin-bottom:0.8rem;flex-wrap:wrap;}
+    .btn-ia{display:inline-flex;align-items:center;gap:0.4rem;background:linear-gradient(135deg,rgba(30,64,175,0.25),rgba(59,130,246,0.15));border:1px solid rgba(59,130,246,0.4);border-radius:10px;color:var(--accent);font-family:inherit;font-size:0.75rem;font-weight:700;padding:0.45rem 0.9rem;cursor:pointer;transition:all 0.2s;white-space:nowrap;}
+    .btn-ia:hover:not(:disabled){background:linear-gradient(135deg,rgba(30,64,175,0.4),rgba(59,130,246,0.25));border-color:var(--accent);transform:translateY(-1px);}
+    .btn-ia:disabled{opacity:0.5;cursor:not-allowed;transform:none;}
+    .btn-ia .ia-spin{display:inline-block;animation:spin 0.8s linear infinite;}
+    @keyframes spin{to{transform:rotate(360deg);}}
+    .ia-output{background:rgba(59,130,246,0.06);border:1px solid rgba(59,130,246,0.2);border-radius:12px;padding:1rem;margin-top:0.6rem;font-size:0.82rem;line-height:1.65;color:var(--text);display:none;}
+    .ia-output.show{display:block;}
+    .ia-output-title{font-size:0.65rem;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--accent);margin-bottom:0.6rem;}
+    .ia-output-text{white-space:pre-wrap;color:var(--muted);}
+    .btn-ia-usar{margin-top:0.7rem;background:rgba(59,130,246,0.15);border:1px solid rgba(59,130,246,0.35);border-radius:8px;color:var(--accent);font-family:inherit;font-size:0.75rem;font-weight:700;padding:0.4rem 0.9rem;cursor:pointer;transition:all 0.2s;}
+    .btn-ia-usar:hover{background:rgba(59,130,246,0.25);}
+    .ia-api-warn{font-size:0.7rem;color:var(--muted);display:flex;align-items:center;gap:0.3rem;}
+
+    /* mobile geral */
+    @media(max-width:480px){
+      .site-header{padding:0.6rem 0.8rem;}
+      .header-badge{display:none;}
+      .btn-save-data,.btn-load-data{padding:0.4rem 0.7rem;font-size:0.72rem;}
+      .hero-title{font-size:1.2rem;}
+      .hero-sub{font-size:0.78rem;}
+      .generate-grid{grid-template-columns:1fr;}
+      .form-section{padding:1rem;}
+      .filter-type-btn{font-size:0.72rem;padding:0.45rem 0.7rem;}
+    }
+  </style>
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="site-header">
+  <div class="header-brand">
+    <div class="header-logo"><img src="fundo.png" alt="Orizon"/></div>
+    <div style="font-size:0.9rem;font-weight:800;">Orizon</span></div>
+    <span class="header-badge">Gerador de Currículo</span>
+  </div>
+  <div class="header-actions">
+    <button class="btn-load-data" onclick="carregarDados()">📂 Carregar dados</button>
+    <button class="btn-save-data" onclick="salvarDados()">💾 Salvar rascunho</button>
+  </div>
+</header>
+
+<div class="wrapper">
+
+  <div class="hero">
+    <p class="hero-eyebrow">Currículo estratégico</p>
+    <h1 class="hero-title">Gerador de <span>Currículo</span> Profissional</h1>
+    <p class="hero-sub">Preencha uma vez e gere 3 versões otimizadas: para e-mail, WhatsApp e sistemas ATS (robôs de triagem). Cada campo tem instruções do que e como escrever.</p>
+  </div>
+
+  <!-- PAGE ALERT -->
+  <div class="page-alert" id="pageAlert"></div>
+
+  <!-- STEPS NAV -->
+  <div class="steps-nav" id="stepsNav">
+    <button class="step-btn active" onclick="irPara(0)" id="stepBtn0"><span class="step-num">1</span> Cabeçalho</button>
+    <button class="step-btn" onclick="irPara(1)" id="stepBtn1"><span class="step-num">2</span> Resumo</button>
+    <button class="step-btn" onclick="irPara(2)" id="stepBtn2"><span class="step-num">3</span> Experiências</button>
+    <button class="step-btn" onclick="irPara(3)" id="stepBtn3"><span class="step-num">4</span> Formação</button>
+    <button class="step-btn" onclick="irPara(4)" id="stepBtn4"><span class="step-num">5</span> Habilidades</button>
+    <button class="step-btn" onclick="irPara(5)" id="stepBtn5"><span class="step-num">6</span> Gerar PDF</button>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════ -->
+  <!-- PASSO 1 — CABEÇALHO -->
+  <!-- ══════════════════════════════════════════════════ -->
+  <div class="step-pane active" id="pane0">
+
+    <div class="form-section">
+      <div class="form-section-title">👤 Identificação pessoal</div>
+      <div class="form-section-hint">
+<strong>💡 Dica estratégica:</strong> O cabeçalho é a primeira coisa que o recrutador vê. Use seu nome completo, a cidade onde mora, telefone com WhatsApp e um e-mail profissional. 
+<em>Evite e-mails como "sexyboy2005@" — use <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="e58b8a8880cb968a8797808b8a8880a58088848c89cb868a88">[email&#160;protected]</a>. Não coloque endereço completo, apenas a cidade.</em>
+      </div>
+
+      <div class="field-group">
+        <label class="field-label">Nome completo <span class="req">*</span></label>
+        <input type="text" class="field-input" id="cNome" placeholder="" oninput="autosave()"/>
+        <div class="field-hint">Escreva seu nome completo como aparece em documentos. Não use apelidos.</div>
+      </div>
+
+      <div class="grid-3">
+        <div class="field-group">
+          <label class="field-label">Cidade e estado <span class="req">*</span></label>
+          <input type="text" class="field-input" id="cCidade" placeholder="" oninput="autosave()"/>
+        </div>
+        <div class="field-group">
+          <label class="field-label">Bairro (opcional)</label>
+          <input type="text" class="field-input" id="cBairro" placeholder="" oninput="autosave()"/>
+        </div>
+        <div class="field-group">
+          <label class="field-label">E-mail profissional <span class="req">*</span></label>
+          <input type="email" class="field-input" id="cEmail" placeholder="" oninput="autosave()"/>
+        </div>
+      </div>
+
+      <div class="grid-3">
+        <div class="field-group">
+          <label class="field-label">Telefone / WhatsApp <span class="req">*</span></label>
+          <input type="tel" class="field-input" id="cTelefone" placeholder="" oninput="autosave()"/>
+          <div class="field-hint">Formato: <em>(DDD) 9XXXX-XXXX</em>. Nas versões digitais o número vira link clicável.</div>
+        </div>
+        <div class="field-group">
+          <label class="field-label">Telefone secundário (opcional)</label>
+          <input type="tel" class="field-input" id="cTelefone2" placeholder="" oninput="autosave()"/>
+        </div>
+        <div class="field-group">
+          <label class="field-label">LinkedIn (opcional)</label>
+          <input type="text" class="field-input" id="cLinkedin" placeholder="" oninput="autosave()"/>
+          <div class="field-hint">Aparecerá nas versões e-mail e WhatsApp. Não aparece na versão ATS.</div>
+        </div>
+      </div>
+
+      <div class="field-group">
+        <label class="field-label">Portfólio / Site pessoal (opcional)</label>
+        <input type="text" class="field-input" id="cPortfolio" placeholder="" oninput="autosave()"/>
+        <div class="field-hint">Só inclua se estiver atualizado e profissional. Não aparece na versão ATS.</div>
+      </div>
+    </div>
+
+    <div class="step-nav-bar">
+      <span></span>
+      <button class="btn-next" onclick="irPara(1)">Resumo →</button>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════ -->
+  <!-- PASSO 2 — RESUMO PROFISSIONAL -->
+  <!-- ══════════════════════════════════════════════════ -->
+  <div class="step-pane" id="pane1">
+
+    <div class="form-section">
+      <div class="form-section-title">📝 Resumo ou Objetivo profissional</div>
+      <div class="form-section-hint">
+        <strong>💡 Qual usar?</strong><br/>
+        • <strong>Resumo profissional</strong> → para quem <strong>já tem experiência</strong>. Mostre o que já fez, com números e resultados reais.<br/>
+        • <strong>Objetivo profissional</strong> → para quem <strong>está começando</strong> (estágio, jovem aprendiz, primeiro emprego). Fale sobre seus projetos escolares, trabalhos voluntários ou autônomos — eles têm peso real!<br/><br/>
+        <strong>⚠️ Atenção:</strong> <em>Não use linguagem robótica ("Sou um profissional dinâmico e proativo..."). Escreva com sua voz, de forma natural, com dados e histórias reais. Evite inventar verbos de ação para ações que você não executou.</em>
+      </div>
+
+      <!-- SELETOR TIPO -->
+      <div style="display:flex;gap:0.6rem;margin-bottom:1.2rem;flex-wrap:wrap;">
+        <button id="btnTipoResumo" class="filter-type-btn active" onclick="setTipoResumo('resumo')">📋 Tenho experiência — Resumo profissional</button>
+        <button id="btnTipoObjetivo" class="filter-type-btn" onclick="setTipoResumo('objetivo')">🌱 Estou começando — Objetivo profissional</button>
+      </div>
+
+      <!-- RESUMO -->
+      <div id="blocoResumo">
+        <div class="field-hint" style="margin-bottom:0.8rem;background:rgba(59,130,246,0.06);border:1px solid rgba(59,130,246,0.15);border-radius:8px;padding:0.7rem 0.9rem;">
+          <strong>Estrutura ideal do resumo:</strong> <em>[Área] + [competências-chave com números] + [o que você entrega de valor].</em><br/>
+          Exemplo: <em>"Profissional de RH com experiência em recrutamento estratégico e triagem de +30 mil currículos. Especialista em entrevistas STAR/Talent, com alcance de +2,2 milhões de pessoas e recolocações em até 7 dias."</em>
+        </div>
+        <div class="field-group">
+          <label class="field-label">Resumo profissional <span class="req">*</span></label>
+          <div class="ia-bar">
+            <button class="btn-ia" id="btnIaResumo" onclick="iaGerarResumo()">✨ Gerar com IA</button>
+            <span class="ia-api-warn">🤖 IA gratuita</span>
+          </div>
+          <textarea class="field-input field-textarea" id="rResumo" rows="5"
+            placeholder=""
+            oninput="contarResumo('resumo')"></textarea>
+          <div class="field-hint" id="resumoCounter"><em>Ideal: 50 a 80 palavras. Use dados reais — números tornam seu resumo memorável.</em></div>
+          <div class="ia-output" id="iaOutputResumo">
+            <div class="ia-output-title">✨ Sugestão da IA</div>
+            <div class="ia-output-text" id="iaOutputResumoText"></div>
+            <button class="btn-ia-usar" onclick="iaUsarResumo()">↑ Usar este texto</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- OBJETIVO -->
+      <div id="blocoObjetivo" style="display:none;">
+        <div class="field-hint" style="margin-bottom:0.8rem;background:rgba(52,152,219,0.06);border:1px solid rgba(52,152,219,0.15);border-radius:8px;padding:0.7rem 0.9rem;">
+          <strong>💡 Projetos escolares, trabalhos voluntários e experiências autônomas contam muito!</strong> Se você ajudou a organizar um evento na escola, fez um projeto de pesquisa, prestou serviço como autônomo ou fez trabalho voluntário — isso é experiência real. Coloque aqui com orgulho.<br/><br/>
+          Estrutura: <em>"Estudante de [curso] com interesse em [área]. Realizei [projeto/experiência relevante], desenvolvendo habilidades em [competências]. Busco oportunidade para [o que quer aprender/contribuir]."</em>
+        </div>
+        <div class="field-group">
+          <label class="field-label">Objetivo profissional <span class="req">*</span></label>
+          <div class="ia-bar">
+            <button class="btn-ia" id="btnIaObjetivo" onclick="iaGerarObjetivo()">✨ Gerar com IA</button>
+            <span class="ia-api-warn">🤖 IA gratuita</span>
+          </div>
+          <textarea class="field-input field-textarea" id="rObjetivo" rows="5"
+            placeholder=""
+            oninput="contarResumo('objetivo')"></textarea>
+          <div class="field-hint" id="objetivoCounter"><em>Ideal: 40 a 70 palavras. Seja autêntico — recrutadores percebem quando o texto é genuíno.</em></div>
+          <div class="ia-output" id="iaOutputObjetivo">
+            <div class="ia-output-title">✨ Sugestão da IA</div>
+            <div class="ia-output-text" id="iaOutputObjetivoText"></div>
+            <button class="btn-ia-usar" onclick="iaUsarObjetivo()">↑ Usar este texto</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="step-nav-bar">
+      <button class="btn-prev" onclick="irPara(0)">← Cabeçalho</button>
+      <button class="btn-next" onclick="irPara(2)">Experiências →</button>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════ -->
+  <!-- PASSO 3 — EXPERIÊNCIAS PROFISSIONAIS -->
+  <!-- ══════════════════════════════════════════════════ -->
+  <div class="step-pane" id="pane2">
+
+    <div class="form-section">
+      <div class="form-section-title">💼 Experiências profissionais</div>
+      <div class="form-section-hint">
+        <strong>💡 Regras de ouro das experiências:</strong><br/>
+        • Coloque no máximo <strong>6 experiências</strong>, priorizando as mais relevantes para a vaga.<br/>
+        • Cada bullet point deve seguir a lógica: <strong>Verbo de ação + O que fez + Resultado/Número.</strong><br/>
+        • <em>Exemplos de verbos:</em> Reduzi, Implementei, Liderei, Aumentei, Desenvolvi, Conduzi, Criei, Gerenciei, Otimizei...<br/>
+        • <em>Exemplo de bullet:</em> "Conduzi triagem de +20 mil currículos, aumentando em 20% a contratação local e reduzindo o custo por hire."<br/>
+        • Máximo <strong>5 bullets por experiência</strong>. Use números sempre que possível — eles contam sua história.
+      </div>
+
+      <div id="expsContainer"></div>
+
+      <button class="btn-add-section" onclick="adicionarExp()" id="btnAddExp">
+        ➕ Adicionar experiência
+      </button>
+    </div>
+
+    <div class="step-nav-bar">
+      <button class="btn-prev" onclick="irPara(1)">← Resumo</button>
+      <button class="btn-next" onclick="irPara(3)">Formação →</button>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════ -->
+  <!-- PASSO 4 — FORMAÇÃO ACADÊMICA -->
+  <!-- ══════════════════════════════════════════════════ -->
+  <div class="step-pane" id="pane3">
+
+    <div class="form-section">
+      <div class="form-section-title">🎓 Formação acadêmica</div>
+      <div class="form-section-hint">
+        <strong>💡 Coloque primeiro a formação mais recente ou mais relevante.</strong> Se ainda está cursando, escreva "Em andamento" no ano de conclusão.<br/>
+        <em>Para técnicos: coloque o curso técnico mesmo que não tenha graduação — é valorizado!</em>
+      </div>
+
+      <div id="formacoesContainer"></div>
+
+      <button class="btn-add-section" onclick="adicionarFormacao()">
+        ➕ Adicionar formação
+      </button>
+    </div>
+
+    <div class="form-section" style="margin-top:1.2rem;">
+      <div class="form-section-title">📜 Cursos & Certificações</div>
+      <div class="form-section-hint">
+        <strong>💡 Liste cursos relevantes para a área.</strong> Prefira os mais recentes e com carga horária. <em>Evite listar cursos de menos de 4 horas — priorizem qualidade, não quantidade.</em>
+      </div>
+
+      <div id="cursosContainer"></div>
+
+      <button class="btn-add-section" onclick="adicionarCurso()">
+        ➕ Adicionar curso / certificação
+      </button>
+    </div>
+
+    <div class="step-nav-bar">
+      <button class="btn-prev" onclick="irPara(2)">← Experiências</button>
+      <button class="btn-next" onclick="irPara(4)">Habilidades →</button>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════ -->
+  <!-- PASSO 5 — HABILIDADES E IDIOMAS -->
+  <!-- ══════════════════════════════════════════════════ -->
+  <div class="step-pane" id="pane4">
+
+    <div class="form-section">
+      <div class="form-section-title">🛠️ Habilidades técnicas</div>
+      <div class="form-section-hint">
+        <strong>💡 Liste ferramentas, sistemas, softwares e conhecimentos técnicos.</strong><br/>
+        <em>Exemplos: Excel Avançado, Pacote Office, ATS Gupy, SAP, AutoCAD, Python, LinkedIn Recruiter, Notas Fiscais, ISO 9001...</em><br/>
+        Digite e pressione <strong>Enter</strong> ou clique em <strong>Adicionar</strong>.
+      </div>
+
+      <div class="tag-input-wrap">
+        <input type="text" class="tag-input" id="habTecInput" placeholder="" onkeydown="if(event.key==='Enter'){event.preventDefault();addTag('tec');}"/>
+        <button class="btn-tag-add" onclick="addTag('tec')">+ Adicionar</button>
+      </div>
+      <div class="tags-list" id="habTecList"></div>
+    </div>
+
+    <div class="form-section">
+      <div class="form-section-title">💡 Habilidades comportamentais (soft skills)</div>
+      <div class="form-section-hint">
+        <strong>💡 Escolha no máximo 6-8.</strong> Muitas soft skills genéricas perdem valor. Selecione as que realmente te definem.<br/>
+        <em>Exemplos: Liderança, Comunicação assertiva, Trabalho em equipe, Resolução de problemas, Proatividade, Inteligência emocional, Pensamento analítico...</em>
+      </div>
+
+      <div class="tag-input-wrap">
+        <input type="text" class="tag-input" id="habCompInput" placeholder="" onkeydown="if(event.key==='Enter'){event.preventDefault();addTag('comp');}"/>
+        <button class="btn-tag-add" onclick="addTag('comp')">+ Adicionar</button>
+      </div>
+      <div class="tags-list" id="habCompList"></div>
+    </div>
+
+    <div class="form-section">
+      <div class="form-section-title">🌍 Idiomas</div>
+      <div class="form-section-hint">
+        <strong>💡 Seja honesto com o nível.</strong> Recrutadores testam idiomas na entrevista. Só coloque se realmente domina o nível indicado.<br/>
+        <em>Básico = entendo palavras comuns | Intermediário = me comunico com esforço | Avançado = converso com fluência | Fluente = penso no idioma</em>
+      </div>
+
+      <div id="idiomasContainer"></div>
+      <button class="btn-add-section" onclick="adicionarIdioma()">
+        ➕ Adicionar idioma
+      </button>
+    </div>
+
+    <div class="step-nav-bar">
+      <button class="btn-prev" onclick="irPara(3)">← Formação</button>
+      <button class="btn-next" onclick="irPara(5)">Gerar PDF →</button>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════ -->
+  <!-- PASSO 6 — GERAR PDF -->
+  <!-- ══════════════════════════════════════════════════ -->
+  <div class="step-pane" id="pane5">
+
+    <div class="generate-panel">
+      <div class="generate-title">🚀 Gerar seu currículo</div>
+      <div class="generate-sub">
+        Escolha a versão ideal para cada situação. Os dados preenchidos são os mesmos — o que muda é o formato e os links.
+      </div>
+
+      <div class="generate-grid">
+
+        <!-- E-MAIL -->
+        <div class="gen-card email">
+          <div class="gen-icon">📧</div>
+          <div class="gen-name">Versão E-mail</div>
+          <div class="gen-desc">Layout limpo e profissional com links clicáveis para LinkedIn e portfólio. Ideal para enviar como anexo em candidaturas por e-mail.</div>
+          <button class="gen-btn email" onclick="gerarEBaixarPDF('email')">⬇ Baixar PDF</button>
+        </div>
+
+        <!-- WHATSAPP -->
+        <div class="gen-card whatsapp">
+          <div class="gen-icon">💬</div>
+          <div class="gen-name">Versão WhatsApp</div>
+          <div class="gen-desc">Igual à versão e-mail, com botão clicável do WhatsApp no cabeçalho para facilitar o contato imediato do recrutador.</div>
+          <button class="gen-btn whatsapp" onclick="gerarEBaixarPDF('whatsapp')">⬇ Baixar PDF</button>
+        </div>
+
+        <!-- ATS -->
+        <div class="gen-card ats">
+          <div class="gen-icon">🤖</div>
+          <div class="gen-name">Versão ATS</div>
+          <div class="gen-desc">Otimizado para robôs de triagem (Gupy, LinkedIn, Catho, InfoJobs). Sem links, sem imagens — texto limpo e estruturado para máxima leitura automatizada.</div>
+          <button class="gen-btn ats" onclick="gerarEBaixarPDF('ats')">⬇ Baixar PDF</button>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="form-section" style="background:rgba(243,156,18,0.05);border-color:rgba(243,156,18,0.2);">
+      <div class="form-section-title" style="color:#f39c12;">⚠️ Dicas antes de gerar</div>
+      <div style="font-size:0.82rem;color:var(--muted);line-height:1.8;">
+        <div>📄 <strong style="color:var(--text);">Versão E-mail / WhatsApp:</strong> Salve como PDF no navegador (Ctrl+P → Salvar como PDF). Garanta que fique em até 2 páginas.</div>
+        <div>🤖 <strong style="color:var(--text);">Versão ATS:</strong> Faça o upload diretamente em plataformas como Gupy, Catho, LinkedIn, Indeed. Não envie por e-mail — é para upload.</div>
+        <div>✏️ <strong style="color:var(--text);">Personalização:</strong> Adapte o resumo e os bullets para cada vaga específica — currículos genéricos têm taxa de retorno muito baixa.</div>
+        <div>📏 <strong style="color:var(--text);">2 páginas no máximo:</strong> Recrutadores levam de 6 a 30 segundos na primeira leitura. Seja direto e estratégico.</div>
+      </div>
+    </div>
+
+
+    <div class="step-nav-bar">
+      <button class="btn-prev" onclick="irPara(4)">← Habilidades</button>
+      <span style="font-size:0.75rem;color:var(--muted);">Dados salvos automaticamente</span>
+    </div>
+  </div>
+
+</div><!-- /wrapper -->
+
+
+<!-- MODAL DICA IMPRESSÃO -->
+<div class="dica-modal-overlay hidden" id="dicaImpressaoModal">
+  <div class="dica-modal">
+    <div class="dica-modal-title">🖨️ Como salvar sem cabeçalho/rodapé</div>
+    <div class="dica-modal-sub">A janela de impressão do seu navegador foi aberta. Siga os passos abaixo para salvar o PDF limpo, sem data, URL ou número de página:</div>
+    <div class="dica-step"><span class="dica-num">1</span><span>Na janela de impressão, clique em <strong>"Mais configurações"</strong> ou <strong>"Configurações avançadas"</strong></span></div>
+    <div class="dica-step"><span class="dica-num">2</span><span>Desmarque a opção <strong>"Cabeçalhos e rodapés"</strong> (ou "Headers and footers")</span></div>
+    <div class="dica-step"><span class="dica-num">3</span><span>Em <strong>Destino</strong>, selecione <strong>"Salvar como PDF"</strong></span></div>
+    <div class="dica-step"><span class="dica-num">4</span><span>Clique em <strong>"Salvar"</strong> e escolha onde guardar o arquivo</span></div>
+    <button class="dica-ok-btn" onclick="fecharDicaImpressao()">✅ Entendi</button>
+  </div>
+</div>
+
+<!-- MODAL PDF MOBILE -->
+<div class="dica-modal-overlay hidden" id="dicaMobileModal">
+  <div class="dica-modal">
+    <div class="dica-modal-title">📱 Salvar PDF no celular</div>
+    <div class="dica-modal-sub">O arquivo <strong>.html</strong> foi baixado. Abra-o e siga os passos para salvar como PDF:</div>
+    <div class="dica-step"><span class="dica-num">1</span><span>Abra o arquivo no <strong>Chrome</strong> (Android) ou <strong>Safari</strong> (iPhone)</span></div>
+    <div class="dica-step"><span class="dica-num">2</span><span>Toque no menu <strong>⋮</strong> ou ícone de <strong>compartilhar</strong> (□↑)</span></div>
+    <div class="dica-step"><span class="dica-num">3</span><span>Selecione <strong>"Imprimir"</strong></span></div>
+    <div class="dica-step"><span class="dica-num">4</span><span>Em destino escolha <strong>"Salvar como PDF"</strong> e confirme</span></div>
+    <button class="dica-ok-btn" onclick="document.getElementById('dicaMobileModal').classList.add('hidden')">✅ Entendi</button>
+  </div>
+</div>
+
+<div class="preview-overlay hidden" id="previewOverlay">
+  <div class="preview-toolbar">
+    <span class="preview-title" id="previewTitle">Pré-visualização</span>
+    <span class="preview-tipo" id="previewTipo"></span>
+    <button class="btn-download-pdf" id="btnDownloadPDF" onclick="downloadPDF()">🖨️ Salvar como PDF</button>
+    <button class="btn-fechar-preview" onclick="fecharPreview()">✕ Fechar</button>
+  </div>
+  <div class="preview-frame-wrap" id="previewFrameWrap"></div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+// ══════════════════════════════════════════════════
+// ESTADO GLOBAL
+// ══════════════════════════════════════════════════
+let stepAtual = 0;
+let exps = [];
+let formacoes = [];
+let cursos = [];
+let idiomas = [];
+let habTec = [];
+let habComp = [];
+let _autosaveTimer = null;
+
+// ══════════════════════════════════════════════════
+// NAVEGAÇÃO
+// ══════════════════════════════════════════════════
+function irPara(n){
+  try{
+    var pa=document.getElementById('pane'+stepAtual);
+    var pb=document.getElementById('pane'+n);
+    if(!pa||!pb) return;
+    pa.style.display='none'; pa.classList.remove('active');
+    var ba=document.getElementById('stepBtn'+stepAtual);
+    if(ba){ba.classList.remove('active');ba.classList.add('done');}
+    stepAtual=n;
+    pb.style.display='block'; pb.classList.add('active');
+    var bb=document.getElementById('stepBtn'+n);
+    if(bb){bb.classList.add('active');bb.classList.remove('done');}
+    try{window.scrollTo({top:0,behavior:'smooth'});}catch(e){}
+    try{salvarDados();}catch(e){}
+  }catch(err){}
+}
+
+// ══════════════════════════════════════════════════
+// RESUMO — tipo e contador
+// ══════════════════════════════════════════════════
+let tipoResumo = 'resumo';
+
+function setTipoResumo(tipo){
+  tipoResumo = tipo;
+  document.getElementById('blocoResumo').style.display = tipo==='resumo' ? 'block' : 'none';
+  document.getElementById('blocoObjetivo').style.display = tipo==='objetivo' ? 'block' : 'none';
+  document.getElementById('btnTipoResumo').classList.toggle('active', tipo==='resumo');
+  document.getElementById('btnTipoObjetivo').classList.toggle('active', tipo==='objetivo');
+}
+
+function contarResumo(campo){
+  const id = campo==='objetivo' ? 'rObjetivo' : 'rResumo';
+  const counterId = campo==='objetivo' ? 'objetivoCounter' : 'resumoCounter';
+  const el = document.getElementById(id);
+  const counter = document.getElementById(counterId);
+  if(!el||!counter) return;
+  const words = el.value.trim() ? el.value.trim().split(/\s+/).length : 0;
+  const min = campo==='objetivo' ? 40 : 50;
+  const max = campo==='objetivo' ? 70 : 80;
+  let cor = words < min ? '#e74c3c' : words > max ? '#f39c12' : '#2ecc71';
+  let msg = words < min ? `⚠️ Muito curto — adicione mais detalhes e dados reais.` :
+            words > max ? `⚠️ Muito longo — resuma para no máximo ${max} palavras.` : `✅ Ótimo tamanho!`;
+  counter.innerHTML = `<span style="color:${cor};font-weight:700;">${words} palavras</span> — <em>${msg}</em>`;
+  autosave();
+}
+
+// ══════════════════════════════════════════════════
+// EXPERIÊNCIAS
+// ══════════════════════════════════════════════════
+function adicionarExp(data){
+  if(exps.length >= 6){ toast('Máximo de 6 experiências atingido.','warn'); return; }
+  const id = Date.now();
+  const bullets = data?.bullets || [''];
+  exps.push({ id, empresa: data?.empresa||'', cargo: data?.cargo||'', periodo: data?.periodo||'', mesIni: data?.mesIni||'', anoIni: data?.anoIni||'', mesFim: data?.mesFim||'', anoFim: data?.anoFim||'Atualmente', local: data?.local||'', bullets });
+  renderExps();
+}
+
+function renderExps(){
+  const c = document.getElementById('expsContainer');
+  if(!exps.length){
+    c.innerHTML = '<p style="text-align:center;color:var(--muted);font-size:0.82rem;padding:1rem;">Nenhuma experiência adicionada ainda. Clique em "+ Adicionar experiência" abaixo.</p>';
+    return;
+  }
+  c.innerHTML = exps.map((e,i) => `
+    <div class="exp-card" id="expCard${e.id}">
+      <div class="exp-card-header">
+        <span class="exp-card-num">Experiência ${i+1} ${i===0?'<span style="color:#f39c12;margin-left:4px;">(mais recente / relevante)</span>':''}</span>
+        <div class="exp-card-actions">
+          ${i>0?`<button class="btn-exp-up" onclick="moverExp(${i},-1)" title="Mover para cima">↑</button>`:''}
+          ${i<exps.length-1?`<button class="btn-exp-down" onclick="moverExp(${i},1)" title="Mover para baixo">↓</button>`:''}
+          <button class="btn-exp-del" onclick="removerExp(${i})">✕ Remover</button>
+        </div>
+      </div>
+
+      <div class="grid-2">
+        <div class="field-group">
+          <label class="field-label">Empresa <span class="req">*</span></label>
+          <input type="text" class="field-input" placeholder="" value="${esc(e.empresa)}"
+            oninput="exps[${i}].empresa=this.value;autosave()"/>
+          <div class="field-hint">Nome da empresa. Se foi terceirizado, coloque: "Empresa X (via Empresa Y)".</div>
+        </div>
+        <div class="field-group">
+          <label class="field-label">Cargo / função <span class="req">*</span></label>
+          <input type="text" class="field-input" placeholder="" value="${esc(e.cargo)}"
+            oninput="exps[${i}].cargo=this.value;autosave()"/>
+        </div>
+      </div>
+
+      <div class="grid-2">
+        <div class="field-group">
+          <label class="field-label">Início <span class="req">*</span></label>
+          <div class="grid-mes-ano">
+            <select class="field-input nivel-select" id="expMesIni${e.id}" onchange="atualizarPeriodo(${i})">
+              <option value="">Mês</option>
+              ${['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'].map((m,mi)=>{const v=String(mi+1).padStart(2,'0');return '<option value="'+v+'"'+(e.mesIni===v?' selected':'')+'>'+m+'</option>';}).join('')}
+            </select>
+            <select class="field-input nivel-select" id="expAnoIni${e.id}" onchange="atualizarPeriodo(${i})">
+              <option value="">Ano</option>
+              ${Array.from({length:50},(_,k)=>String(new Date().getFullYear()-k)).map(a=>'<option value="'+a+'"'+(e.anoIni===a?' selected':'')+'>'+a+'</option>').join('')}
+            </select>
+          </div>
+        </div>
+        <div class="field-group">
+          <label class="field-label">Término <span class="req">*</span></label>
+          <div class="grid-mes-ano">
+            <select class="field-input nivel-select" id="expMesFim${e.id}" onchange="atualizarPeriodo(${i})">
+              <option value="">Mês</option>
+              ${['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'].map((m,mi)=>{const v=String(mi+1).padStart(2,'0');return '<option value="'+v+'"'+(e.mesFim===v?' selected':'')+'>'+m+'</option>';}).join('')}
+            </select>
+            <select class="field-input nivel-select" id="expAnoFim${e.id}" onchange="atualizarPeriodo(${i})">
+              <option value="">Ano</option>
+              <option value="Atualmente" ${e.anoFim==='Atualmente'?'selected':''}>Atualmente</option>
+              ${Array.from({length:50},(_,k)=>String(new Date().getFullYear()-k)).map(a=>'<option value="'+a+'"'+(e.anoFim===a?' selected':'')+'>'+a+'</option>').join('')}
+            </select>
+          </div>
+          <div class="field-hint">Se ainda trabalha aqui, selecione "Atualmente".</div>
+        </div>
+      </div>
+      <div class="field-group">
+        <label class="field-label">Cidade / Estado (opcional)</label>
+        <input type="text" class="field-input" placeholder="" value="${esc(e.local)}"
+          oninput="exps[${i}].local=this.value;autosave()"/>
+      </div>
+
+      <div class="bullets-wrap">
+        <label class="field-label">Bullet points de atividades e resultados <span class="req">*</span></label>
+        <div class="field-hint" style="margin-bottom:0.6rem;">
+          <strong>Regra dos bullets:</strong> <em>Cada bullet = 2 a 3 linhas. Verbo de ação + história/atividade + resultado com número.</em><br/>
+          Exemplos: <em>"Conduzi triagem de +20 mil currículos em processos nacionais, aumentando em 20% a contratação local e reduzindo custo por hire."</em><br/>
+          <strong>⚠️ Não invente:</strong> escreva apenas o que realmente executou. Números reais têm mais impacto que adjetivos genéricos.
+        </div>
+        <div class="ia-bar" style="margin-bottom:0.5rem;">
+          <button class="btn-ia" id="btnIaBullet${i}" onclick="iaGerarBullets(${i})">✨ Sugerir bullets com IA</button>
+          <span class="ia-api-warn">🤖 IA gratuita</span>
+        </div>
+        <div class="ia-output" id="iaOutputBullet${i}">
+          <div class="ia-output-title">✨ Sugestões da IA</div>
+          <div class="ia-output-text" id="iaOutputBulletText${i}"></div>
+          <button class="btn-ia-usar" onclick="iaUsarBullets(${i})">↑ Substituir bullets por estes</button>
+        </div>
+        <div id="bulletsWrap${e.id}">${renderBullets(e,i)}</div>
+        ${e.bullets.length < 5 ? `<button class="btn-add-bullet" onclick="adicionarBullet(${i})">+ Adicionar bullet point (${e.bullets.length}/5)</button>` : `<p class="bullets-counter max">✋ Máximo de 5 bullet points atingido — priorize os mais impactantes.</p>`}
+      </div>
+    </div>`).join('');
+
+  const btnAdd = document.getElementById('btnAddExp');
+  if(btnAdd) btnAdd.style.display = exps.length >= 6 ? 'none' : 'flex';
+}
+
+function renderBullets(e,i){
+  return e.bullets.map((b,j) => `
+    <div class="bullet-row">
+      <span class="bullet-dot">•</span>
+      <textarea class="bullet-textarea" rows="2"
+        placeholder=""
+        oninput="exps[${i}].bullets[${j}]=this.value;autosave()">${esc(b)}</textarea>
+      ${e.bullets.length>1?`<button class="btn-bullet-del" onclick="removerBullet(${i},${j})" title="Remover">✕</button>`:''}
+    </div>`).join('');
+}
+
+function adicionarBullet(i){
+  if(exps[i].bullets.length >= 5){ toast('Máximo de 5 bullets por experiência.','warn'); return; }
+  exps[i].bullets.push('');
+  renderExps();
+}
+
+function removerBullet(i,j){
+  if(exps[i].bullets.length <= 1){ toast('Pelo menos 1 bullet por experiência.','warn'); return; }
+  exps[i].bullets.splice(j,1);
+  renderExps();
+}
+
+function removerExp(i){
+  exps.splice(i,1);
+  renderExps();
+  autosave();
+}
+
+function moverExp(i,dir){
+  const ni = i+dir;
+  if(ni<0||ni>=exps.length) return;
+  [exps[i],exps[ni]]=[exps[ni],exps[i]];
+  renderExps();
+  autosave();
+}
+
+function atualizarPeriodo(i){
+  const e = exps[i];
+  if(!e) return;
+  const id = e.id;
+  const mesIni = document.getElementById('expMesIni'+id);
+  const anoIni = document.getElementById('expAnoIni'+id);
+  const mesFim = document.getElementById('expMesFim'+id);
+  const anoFim = document.getElementById('expAnoFim'+id);
+  if(mesIni) e.mesIni = mesIni.value;
+  if(anoIni) e.anoIni = anoIni.value;
+  if(mesFim) e.mesFim = mesFim.value;
+  if(anoFim) e.anoFim = anoFim.value;
+  // Monta string de período
+  const MESES_ABREV = ['','Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'];
+  const ini = [e.mesIni ? MESES_ABREV[parseInt(e.mesIni,10)] : '', e.anoIni].filter(Boolean).join('/');
+  const fim = e.anoFim === 'Atualmente' ? 'Atualmente' : [e.mesFim ? MESES_ABREV[parseInt(e.mesFim,10)] : '', e.anoFim].filter(Boolean).join('/');
+  e.periodo = [ini, fim].filter(Boolean).join(' – ');
+  autosave();
+}
+
+// ══════════════════════════════════════════════════
+// FORMAÇÃO ACADÊMICA
+// ══════════════════════════════════════════════════
+function adicionarFormacao(data){
+  formacoes.push({ curso: data?.curso||'', instituicao: data?.instituicao||'', ano: data?.ano||'', tipo: data?.tipo||'Bacharelado' });
+  renderFormacoes();
+}
+
+function renderFormacoes(){
+  const c = document.getElementById('formacoesContainer');
+  if(!formacoes.length){
+    c.innerHTML = '<p style="text-align:center;color:var(--muted);font-size:0.82rem;padding:0.8rem;">Nenhuma formação adicionada ainda.</p>';
+    return;
+  }
+  const MESES = ['','Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
+  const anoAtual = new Date().getFullYear();
+  const ANOS = ['Em andamento',...Array.from({length:50},(_,k)=>String(anoAtual-k))];
+  c.innerHTML = formacoes.map((f,i) => `
+    <div class="exp-card">
+      <div class="exp-card-header">
+        <span class="exp-card-num">Formação ${i+1}</span>
+        <button class="btn-exp-del" onclick="formacoes.splice(${i},1);renderFormacoes();autosave()">✕ Remover</button>
+      </div>
+      <div class="grid-2">
+        <div class="field-group">
+          <label class="field-label">Tipo de formação</label>
+          <select class="field-input nivel-select" oninput="formacoes[${i}].tipo=this.value;autosave()">
+            ${['Bacharelado','Tecnólogo','Licenciatura','Técnico','Pós-graduação','MBA','Mestrado','Doutorado','Curso Livre'].map(t=>`<option value="${t}" ${f.tipo===t?'selected':''}>${t}</option>`).join('')}
+          </select>
+        </div>
+        <div class="field-group">
+          <label class="field-label">Curso / Área <span class="req">*</span></label>
+          <input type="text" class="field-input" placeholder="" value="${esc(f.curso)}"
+            oninput="formacoes[${i}].curso=this.value;autosave()"/>
+        </div>
+      </div>
+      <div class="grid-2">
+        <div class="field-group">
+          <label class="field-label">Instituição <span class="req">*</span></label>
+          <input type="text" class="field-input" placeholder="" value="${esc(f.instituicao)}"
+            oninput="formacoes[${i}].instituicao=this.value;autosave()"/>
+        </div>
+        <div class="field-group">
+          <label class="field-label">Mês e Ano de conclusão</label>
+          <div class="grid-mes-ano">
+            <select class="field-input nivel-select" oninput="formacoes[${i}].mes=this.value;autosave()">
+              <option value="">Mês</option>
+              ${MESES.slice(1).map((m,mi)=>`<option value="${String(mi+1).padStart(2,'0')}" ${f.mes===String(mi+1).padStart(2,'0')?'selected':''}>${m}</option>`).join('')}
+            </select>
+            <select class="field-input nivel-select" oninput="formacoes[${i}].ano=this.value;autosave()">
+              ${ANOS.map(a=>`<option value="${a}" ${f.ano===a?'selected':''}>${a}</option>`).join('')}
+            </select>
+          </div>
+        </div>
+      </div>
+    </div>`).join('');
+}
+
+// ══════════════════════════════════════════════════
+// CURSOS
+// ══════════════════════════════════════════════════
+function adicionarCurso(data){
+  cursos.push({ nome: data?.nome||'', instituicao: data?.instituicao||'', carga: data?.carga||'', ano: data?.ano||'' });
+  renderCursos();
+}
+
+function renderCursos(){
+  const c = document.getElementById('cursosContainer');
+  if(!cursos.length){
+    c.innerHTML = '<p style="text-align:center;color:var(--muted);font-size:0.82rem;padding:0.8rem;">Nenhum curso adicionado ainda.</p>';
+    return;
+  }
+  const MESES = ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
+  const anoAtual = new Date().getFullYear();
+  const ANOS = ['Em andamento',...Array.from({length:50},(_,k)=>String(anoAtual-k))];
+  c.innerHTML = cursos.map((cr,i) => `
+    <div class="exp-card">
+      <div class="exp-card-header">
+        <span class="exp-card-num">Curso ${i+1}</span>
+        <button class="btn-exp-del" onclick="cursos.splice(${i},1);renderCursos();autosave()">✕ Remover</button>
+      </div>
+      <div class="grid-2">
+        <div class="field-group">
+          <label class="field-label">Nome do curso / certificação <span class="req">*</span></label>
+          <input type="text" class="field-input" placeholder="" value="${esc(cr.nome)}"
+            oninput="cursos[${i}].nome=this.value;autosave()"/>
+        </div>
+        <div class="field-group">
+          <label class="field-label">Instituição / Plataforma</label>
+          <input type="text" class="field-input" placeholder="" value="${esc(cr.instituicao)}"
+            oninput="cursos[${i}].instituicao=this.value;autosave()"/>
+        </div>
+      </div>
+      <div class="grid-2">
+        <div class="field-group">
+          <label class="field-label">Carga horária</label>
+          <input type="text" class="field-input" placeholder="" value="${esc(cr.carga)}"
+            oninput="cursos[${i}].carga=this.value;autosave()"/>
+        </div>
+        <div class="field-group">
+          <label class="field-label">Mês e Ano de conclusão</label>
+          <div class="grid-mes-ano">
+            <select class="field-input nivel-select" oninput="cursos[${i}].mes=this.value;autosave()">
+              <option value="">Mês</option>
+              ${MESES.map((m,mi)=>`<option value="${String(mi+1).padStart(2,'0')}" ${cr.mes===String(mi+1).padStart(2,'0')?'selected':''}>${m}</option>`).join('')}
+            </select>
+            <select class="field-input nivel-select" oninput="cursos[${i}].ano=this.value;autosave()">
+              ${ANOS.map(a=>`<option value="${a}" ${cr.ano===a?'selected':''}>${a}</option>`).join('')}
+            </select>
+          </div>
+        </div>
+      </div>
+    </div>`).join('');
+}
+
+// ══════════════════════════════════════════════════
+// IDIOMAS
+// ══════════════════════════════════════════════════
+function adicionarIdioma(data){
+  idiomas.push({ idioma: data?.idioma||'', nivel: data?.nivel||'Básico' });
+  renderIdiomas();
+}
+
+function renderIdiomas(){
+  const c = document.getElementById('idiomasContainer');
+  if(!idiomas.length){
+    c.innerHTML = '<p style="text-align:center;color:var(--muted);font-size:0.82rem;padding:0.8rem;">Nenhum idioma adicionado ainda.</p>';
+    return;
+  }
+  const niveis = ['Básico','Intermediário','Avançado','Fluente','Nativo'];
+  c.innerHTML = idiomas.map((id,i) => `
+    <div class="exp-card" style="padding:0.9rem 1.1rem;">
+      <div style="display:flex;gap:0.8rem;align-items:center;flex-wrap:wrap;">
+        <div class="field-group" style="flex:2;margin-bottom:0;">
+          <input type="text" class="field-input" placeholder="" value="${esc(id.idioma)}"
+            oninput="idiomas[${i}].idioma=this.value;autosave()"/>
+        </div>
+        <div class="field-group" style="flex:1;margin-bottom:0;min-width:140px;">
+          <select class="field-input nivel-select" oninput="idiomas[${i}].nivel=this.value;autosave()">
+            ${niveis.map(n=>`<option value="${n}" ${id.nivel===n?'selected':''}>${n}</option>`).join('')}
+          </select>
+        </div>
+        <button class="btn-exp-del" style="flex-shrink:0;" onclick="idiomas.splice(${i},1);renderIdiomas();autosave()">✕</button>
+      </div>
+    </div>`).join('');
+}
+
+// ══════════════════════════════════════════════════
+// TAGS (habilidades)
+// ══════════════════════════════════════════════════
+function addTag(tipo){
+  const input = document.getElementById('hab'+capitalize(tipo)+'Input');
+  const val = input.value.trim();
+  if(!val) return;
+  const arr = tipo==='tec' ? habTec : habComp;
+  if(arr.includes(val)){ toast('Já adicionado!','warn'); return; }
+  arr.push(val);
+  input.value = '';
+  renderTags(tipo);
+  autosave();
+}
+
+function removeTag(tipo, i){
+  if(tipo==='tec') habTec.splice(i,1); else habComp.splice(i,1);
+  renderTags(tipo);
+  autosave();
+}
+
+function renderTags(tipo){
+  const arr = tipo==='tec' ? habTec : habComp;
+  const el = document.getElementById('hab'+capitalize(tipo)+'List');
+  el.innerHTML = arr.map((t,i) => `
+    <div class="tag-item">${esc(t)} <button onclick="removeTag('${tipo}',${i})" title="Remover">✕</button></div>`).join('');
+}
+
+function capitalize(s){ return s.charAt(0).toUpperCase()+s.slice(1); }
+
+// ══════════════════════════════════════════════════
+// SAVE / LOAD
+// ══════════════════════════════════════════════════
+const LS_KEY = 'orizon_curriculo_v2';
+
+function coletarTudo(){
+  return {
+    cabecalho:{
+      nome: v('cNome'), cidade: v('cCidade'), bairro: v('cBairro'),
+      email: v('cEmail'), telefone: v('cTelefone'), telefone2: v('cTelefone2'),
+      linkedin: v('cLinkedin'), portfolio: v('cPortfolio')
+    },
+    tipoResumo,
+    resumo: v('rResumo'),
+    objetivo: v('rObjetivo'),
+    exps, formacoes, cursos, idiomas, habTec, habComp
+  };
+}
+
+function v(id){ const el=document.getElementById(id); return el?el.value.trim():''; }
+
+function salvarDados(){
+  try{localStorage.setItem(LS_KEY, JSON.stringify(coletarTudo())); toast('Rascunho salvo!');}catch(e){toast('Rascunho não pôde ser salvo.','warn');}
+}
+
+function carregarDados(){
+  try{
+    var raw=null; try{raw=localStorage.getItem(LS_KEY);}catch(e){}
+    if(!raw){ toast('Nenhum dado salvo encontrado.','warn'); return; }
+    const d = JSON.parse(raw);
+    if(!d||!d.cabecalho){ toast('Nenhum dado salvo encontrado.','warn'); return; }
+    const c = d.cabecalho;
+    sv('cNome',c.nome); sv('cCidade',c.cidade); sv('cBairro',c.bairro);
+    sv('cEmail',c.email); sv('cTelefone',c.telefone); sv('cTelefone2',c.telefone2);
+    sv('cLinkedin',c.linkedin); sv('cPortfolio',c.portfolio);
+    sv('rResumo',d.resumo); sv('rObjetivo',d.objetivo);
+    if(d.tipoResumo) setTipoResumo(d.tipoResumo);
+    exps = d.exps||[]; formacoes = d.formacoes||[]; cursos = d.cursos||[];
+    idiomas = d.idiomas||[]; habTec = d.habTec||[]; habComp = d.habComp||[];
+    renderExps(); renderFormacoes(); renderCursos(); renderIdiomas();
+    renderTags('tec'); renderTags('comp');
+    contarResumo('resumo');
+    toast('Dados carregados com sucesso!');
+  }catch(e){ toast('Erro ao carregar dados.','erro'); }
+}
+
+function sv(id,val){ const el=document.getElementById(id); if(el&&val) el.value=val; }
+
+function autosave(){
+  clearTimeout(_autosaveTimer);
+  _autosaveTimer = setTimeout(()=>{ try{localStorage.setItem(LS_KEY, JSON.stringify(coletarTudo()));}catch(e){} }, 1500);
+}
+
+// ══════════════════════════════════════════════════
+// HELPERS
+// ══════════════════════════════════════════════════
+function esc(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+function escP(s){ return esc((s||'').replace(/\r/g,'').trim()); }
+
+function toast(msg, tipo=''){
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = 'toast show' + (tipo?' '+tipo:'');
+  clearTimeout(t._timer);
+  t._timer = setTimeout(()=>t.classList.remove('show'), 3000);
+}
+
+// ══════════════════════════════════════════════════
+// GERADOR DE CURRÍCULO
+// ══════════════════════════════════════════════════
+function gerarCurriculo(tipo){
+  const d = coletarTudo();
+  if(!d.cabecalho.nome){ toast('Preencha pelo menos o nome!','erro'); irPara(0); return; }
+  const textoResumo = d.tipoResumo==='objetivo' ? d.objetivo : d.resumo;
+  if(!textoResumo){ toast('Preencha o resumo ou objetivo profissional!','erro'); irPara(1); return; }
+
+  const c = d.cabecalho;
+  const isATS = tipo === 'ats';
+  const isWpp = tipo === 'whatsapp';
+
+  // Formata telefone para link WA
+  const telRaw = (c.telefone||'').replace(/\D/g,'');
+  const telLink = `https://wa.me/55${telRaw}`;
+  const telDisplay = c.telefone || '';
+
+  // Cores do layout
+  const COR = '#1a3a5c';
+  const COR_LINHA = '#2c5f8a';
+  const COR_TEXTO = '#111111';
+  const COR_MUTED = '#444444';
+  const COR_LABEL = '#1a3a5c';
+
+  // ── ESTILOS BASE ──
+  const css = `
+*{margin:0;padding:0;box-sizing:border-box;}
+html,body{background:#fff;}
+body{font-family:Calibri,Arial,sans-serif;font-size:11pt;line-height:1.35;color:${COR_TEXTO};}
+h1{font-size:17pt;font-weight:900;color:${COR_TEXTO};margin-bottom:2px;}
+h2{font-size:9pt;font-weight:700;color:${COR_LABEL};text-transform:uppercase;letter-spacing:1.2px;border-bottom:2px solid ${COR_LINHA};padding-bottom:2px;margin-bottom:5px;margin-top:9px;page-break-after:avoid;break-after:avoid;}
+h2:first-of-type{margin-top:8px;}
+.contato{font-size:10pt;color:${COR_MUTED};display:flex;flex-wrap:wrap;gap:0 14px;margin-top:3px;}
+.contato a{color:${COR_MUTED};text-decoration:none;}
+.contato span{display:flex;align-items:center;gap:4px;}
+.header-box{padding:0 0 7px 0;border-bottom:3px solid ${COR_LINHA};}
+.body-pad{padding:4px 0 0 0;}p{text-align:justify;word-wrap:break-word;overflow-wrap:break-word;margin-bottom:3px;font-size:11pt;color:${COR_MUTED};line-height:1.4;}
+.exp-bloco{margin-bottom:7px;padding-bottom:0;page-break-inside:avoid;break-inside:avoid;}
+.exp-bloco:last-child{margin-bottom:0;}
+.exp-topo{display:flex;justify-content:space-between;align-items:baseline;gap:8px;flex-wrap:wrap;margin-bottom:0;}
+.exp-empresa{font-size:11pt;font-weight:800;color:${COR_TEXTO};}
+.exp-periodo{font-size:10pt;color:${COR_MUTED};white-space:nowrap;font-weight:600;}
+.exp-cargo{font-size:10.5pt;font-weight:700;color:${COR};margin-bottom:1px;margin-top:0;}
+.exp-local{font-size:10pt;color:${COR_MUTED};}
+ul{padding-left:14px;margin:1px 0 0 0;}
+ul li{font-size:10.5pt;color:${COR_TEXTO};margin-bottom:2px;line-height:1.4;text-align:justify;orphans:3;widows:3;}
+.form-item{margin-bottom:3px;font-size:11pt;color:${COR_TEXTO};page-break-inside:avoid;break-inside:avoid;line-height:1.4;}
+.form-tipo{font-size:9pt;color:${COR};font-weight:700;text-transform:uppercase;}
+.tags-wrap{display:flex;flex-wrap:wrap;gap:3px;margin-top:2px;}
+.tag-pill{background:#eef3f8;border:1px solid #c5d5e8;border-radius:3px;padding:2px 6px;font-size:9pt;color:${COR};font-weight:600;}
+.idioma-row{display:inline-flex;align-items:center;gap:6px;margin-right:10px;margin-bottom:2px;font-size:10.5pt;}
+.idioma-nivel{font-size:8pt;color:#fff;background:${COR};border-radius:3px;padding:1px 5px;font-weight:700;}
+.nopr{display:none;}
+@media print{
+  html,body{background:#fff!important;}
+  body{-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+  .nopr{display:none!important;}
+  h2{page-break-after:avoid;break-after:avoid;}
+  .exp-bloco{page-break-inside:avoid;break-inside:avoid;}
+}`;
+
+  // ── CABEÇALHO ──
+  const tituloSecao = d.tipoResumo==='objetivo' ? 'Objetivo Profissional' : 'Resumo Profissional';
+
+  let header = `
+<div class="header-box">
+  <h1>${esc(c.nome)}</h1>
+  <div class="contato">
+    ${c.cidade ? `<span>📍 ${esc(c.cidade)}${c.bairro?' · '+esc(c.bairro):''}</span>` : ''}
+    ${c.telefone ? (isATS
+      ? `<span>📞 ${esc(c.telefone)}</span>`
+      : `<span>📞 <a href="${telLink}">${esc(c.telefone)}</a></span>`) : ''}
+    ${c.telefone2 ? `<span>📞 ${esc(c.telefone2)}</span>` : ''}
+    ${c.email ? (isATS
+      ? `<span>✉ ${esc(c.email)}</span>`
+      : `<span>✉ <a href="mailto:${esc(c.email)}">${esc(c.email)}</a></span>`) : ''}
+    ${!isATS && c.linkedin ? `<span>🔗 <a href="${esc(c.linkedin)}">${esc(c.linkedin)}</a></span>` : ''}
+    ${!isATS && c.portfolio ? `<span>🌐 <a href="${esc(c.portfolio)}">${esc(c.portfolio)}</a></span>` : ''}
+  </div>
+</div>`;
+
+  // ── RESUMO / OBJETIVO ──
+  const secResumo = textoResumo ? `
+<h2>${tituloSecao}</h2>
+<p>${escP(textoResumo)}</p>` : '';
+
+  // ── FORMAÇÃO ──
+  let secForm = '';
+  if(d.formacoes && d.formacoes.length){
+    secForm = `<h2>Formação Acadêmica</h2>` +
+    d.formacoes.map(f => {
+      const dataForm = f.mes && f.ano && f.ano!=='Em andamento' ? `${f.mes}/${f.ano}` : (f.ano||'');
+      return `
+<div class="form-item">
+  <span class="form-tipo">${esc(f.tipo)}</span> — <strong>${esc(f.curso)}</strong>${f.instituicao?', '+esc(f.instituicao):''}${dataForm?' · '+esc(dataForm):''}
+</div>`;
+    }).join('');
+  }
+
+  // ── CURSOS ──
+  let secCursos = '';
+  if(d.cursos && d.cursos.length){
+    secCursos = `<h2>Cursos & Certificações</h2>` +
+    d.cursos.map(cr => {
+      const dataCurso = cr.mes && cr.ano && cr.ano!=='Em andamento' ? `${cr.mes}/${cr.ano}` : (cr.ano||'');
+      return `
+<div class="form-item">
+  <strong>${esc(cr.nome)}</strong>${cr.instituicao?' · '+esc(cr.instituicao):''}${cr.carga?' · '+esc(cr.carga):''}${dataCurso?' · '+esc(dataCurso):''}
+</div>`;
+    }).join('');
+  }
+
+  // ── IDIOMAS ──
+  let secIdiomas = '';
+  if(d.idiomas && d.idiomas.length){
+    secIdiomas = `<h2>Idiomas</h2><div style="margin-top:3px;">` +
+    d.idiomas.map(id => `
+<div class="idioma-row"><strong>${esc(id.idioma)}</strong> <span class="idioma-nivel">${esc(id.nivel)}</span></div>`).join('') + `</div>`;
+  }
+
+  // ── HABILIDADES ──
+  let secHab = '';
+  const temTec = d.habTec && d.habTec.length;
+  const temComp = d.habComp && d.habComp.length;
+  if(temTec || temComp){
+    secHab = `<h2>Habilidades</h2>`;
+    if(temTec) secHab += `
+<div style="margin-bottom:6px;">
+  <div style="font-size:9pt;font-weight:700;color:${COR_LABEL};text-transform:uppercase;letter-spacing:0.8px;margin-bottom:4px;">Técnicas</div>
+  <div class="tags-wrap">${d.habTec.map(t=>`<span class="tag-pill">${esc(t)}</span>`).join('')}</div>
+</div>`;
+    if(temComp) secHab += `
+<div>
+  <div style="font-size:9pt;font-weight:700;color:${COR_LABEL};text-transform:uppercase;letter-spacing:0.8px;margin-bottom:4px;">Comportamentais</div>
+  <div class="tags-wrap">${d.habComp.map(t=>`<span class="tag-pill">${esc(t)}</span>`).join('')}</div>
+</div>`;
+  }
+
+  // ── EXPERIÊNCIAS — cada bloco não quebra página ──
+  let secExp = '';
+  if(d.exps && d.exps.length){
+    secExp = `<h2>Experiências Profissionais</h2>` +
+    d.exps.map(e => {
+      const bullets = (e.bullets||[]).filter(b=>b.trim());
+      return `
+<div class="exp-bloco">
+  <div class="exp-topo">
+    <div class="exp-empresa">${esc(e.empresa)}</div>
+    <div class="exp-periodo">${esc(e.periodo)}</div>
+  </div>
+  <div class="exp-cargo">${esc(e.cargo)}${e.local?' <span class="exp-local">· '+esc(e.local)+'</span>':''}</div>
+  ${bullets.length ? `<ul>${bullets.map(b=>`<li>${escP(b)}</li>`).join('')}</ul>` : ''}
+</div>`;
+    }).join('');
+  }
+
+  // ── TOOLBAR ──
+  const tipoLabel = {email:'E-mail',whatsapp:'WhatsApp',ats:'ATS (Upload)'}[tipo];
+
+  // Monta o HTML do currículo sem toolbar
+  const conteudo = `
+${header}
+<div class="body-pad">
+${secResumo}
+${secForm}
+${secCursos}
+${secIdiomas}
+${secHab}
+${secExp}
+</div>`;
+
+  // Abre modal de preview + botão de download
+  abrirPreviewCurriculo(conteudo, css, c.nome, tipoLabel);
+}
+
+// ══════════════════════════════════════════════════
+// PREVIEW + SALVAR PDF via iframe oculto
+// ══════════════════════════════════════════════════
+let _htmlCompleto = '';
+let _pdfNome = '';
+
+function abrirPreviewCurriculo(conteudo, css, nome, tipoLabel){
+  _pdfNome = nome;
+
+  // HTML para impressão
+  _htmlCompleto = `<!DOCTYPE html>
+<html lang="pt-BR"><head><meta charset="UTF-8"/><title></title>
+<style>
+${css}
+@page{size:A4 portrait;margin:10mm 12mm;}
+html,body{margin:0!important;padding:0!important;background:#fff!important;}
+body{-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+</style>
+</head><body>${conteudo}</body></html>`;
+
+  // Preview via iframe — CSS fica isolado, não vaza pro parent
+  const wrap = document.getElementById('previewFrameWrap');
+  wrap.innerHTML = '';
+  const iframe = document.createElement('iframe');
+  iframe.style.cssText = 'width:100%;height:100%;border:none;background:#fff;';
+  wrap.appendChild(iframe);
+  const doc = iframe.contentWindow.document;
+  doc.open();
+  doc.write(`<!DOCTYPE html><html><head><meta charset="UTF-8"/>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+${css}
+body{padding:10mm 12mm;background:#fff;}
+</style></head><body>${conteudo}</body></html>`);
+  doc.close();
+
+  document.getElementById('previewTitle').textContent = `Pré-visualização — ${nome}`;
+  document.getElementById('previewTipo').textContent = tipoLabel;
+  document.getElementById('previewOverlay').classList.remove('hidden');
+  document.body.style.overflow = 'hidden';
+}
+
+function fecharPreview(){
+  document.getElementById('previewOverlay').classList.add('hidden');
+  document.getElementById('previewFrameWrap').innerHTML = '';
+  document.body.style.overflow = '';
+}
+
+function downloadPDF(){
+  var isMobile=/Mobi|Android|iPhone|iPad/i.test(navigator.userAgent);
+  var scriptTag='<scr'+'ipt>window.addEventListener("load",function(){setTimeout(function(){window.print();},350);});<'+'/scr'+'ipt>';
+  var htmlFinal=_htmlCompleto+scriptTag;
+  if(isMobile){
+    try{
+      var blob=new Blob([htmlFinal],{type:'text/html;charset=utf-8'});
+      var url=URL.createObjectURL(blob);
+      var a=document.createElement('a');
+      a.href=url; a.download=(_pdfNome||'curriculo')+'.html';
+      document.body.appendChild(a); a.click();
+      setTimeout(function(){URL.revokeObjectURL(url);a.remove();},2000);
+      document.getElementById('dicaMobileModal').classList.remove('hidden');
+    }catch(err){ toast('Erro ao gerar. Tente no computador.','erro'); }
+    return;
+  }
+  var W=window.open('','_blank');
+  if(!W){ toast('Permita popups neste site e tente novamente.','erro'); return; }
+  W.document.open();
+  W.document.write(htmlFinal);
+  W.document.close();
+  setTimeout(function(){ mostrarDicaImpressao(); }, 600);
+}
+
+function mostrarDicaImpressao(){
+  document.getElementById('dicaImpressaoModal').classList.remove('hidden');
+}
+function fecharDicaImpressao(){
+  document.getElementById('dicaImpressaoModal').classList.add('hidden');
+}
+function init(){
+  renderExps();
+  renderFormacoes();
+  renderCursos();
+  renderIdiomas();
+
+  // Tenta carregar dados salvos automaticamente
+  var saved=null; try{saved=localStorage.getItem(LS_KEY);}catch(e){}
+  if(saved){
+    try{
+      const d = JSON.parse(saved);
+      if(d.cabecalho && d.cabecalho.nome){
+        // Carrega silenciosamente
+        const c = d.cabecalho;
+        sv('cNome',c.nome); sv('cCidade',c.cidade); sv('cBairro',c.bairro);
+        sv('cEmail',c.email); sv('cTelefone',c.telefone); sv('cTelefone2',c.telefone2);
+        sv('cLinkedin',c.linkedin); sv('cPortfolio',c.portfolio);
+        sv('rResumo',d.resumo); sv('rObjetivo',d.objetivo);
+        if(d.tipoResumo) setTipoResumo(d.tipoResumo);
+        exps = d.exps||[]; formacoes = d.formacoes||[]; cursos = d.cursos||[];
+        idiomas = d.idiomas||[]; habTec = d.habTec||[];         habComp = d.habComp||[];
+        renderExps(); renderFormacoes(); renderCursos(); renderIdiomas();
+        renderTags('tec'); renderTags('comp');
+        contarResumo('resumo');
+      }
+    }catch(e){}
+  }
+}
+
+
+// ══════════════════════════════════════════════════
+// BAIXAR PDF via janela dedicada + window.print()
+// ══════════════════════════════════════════════════
+function gerarEBaixarPDF(tipo) {
+  var d = coletarTudo();
+  if (!d.cabecalho.nome) {
+    toast('Preencha pelo menos o nome antes de gerar!', 'warn');
+    irPara(0); return;
+  }
+  var c = d.cabecalho;
+  var isATS = tipo === 'ats';
+  var COR = '#1a3a5c', COR_L = '#2c5f8a', CT = '#111111', CM = '#555555';
+  function esc(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+  var contatos = [];
+  if (c.cidade)              contatos.push('📍 '+esc(c.cidade)+(c.bairro?' · '+esc(c.bairro):''));
+  if (c.telefone)            contatos.push('📱 '+esc(c.telefone));
+  if (c.email)               contatos.push('✉ '+esc(c.email));
+  if (!isATS && c.linkedin)  contatos.push('🔗 '+esc(c.linkedin));
+  if (!isATS && c.portfolio) contatos.push('🌐 '+esc(c.portfolio));
+
+  var corpo = '';
+  var textoRes = d.tipoResumo==='objetivo' ? d.objetivo : d.resumo;
+  if (textoRes) {
+    corpo += '<section><h2>'+(d.tipoResumo==='objetivo'?'Objetivo Profissional':'Resumo Profissional')+'</h2>'
+           + '<p>'+esc(textoRes)+'</p></section>';
+  }
+  if (d.formacoes && d.formacoes.length) {
+    corpo += '<section><h2>Formação Acadêmica</h2>';
+    d.formacoes.forEach(function(f) {
+      var ano = (f.mes&&f.ano)?f.mes+'/'+f.ano:(f.ano||'');
+      corpo += '<p><b>'+esc(f.tipo||'')+'</b> em '+esc(f.curso||'')+' — '+esc(f.instituicao||'')+(ano?' ('+ano+')':'')+'</p>';
+    });
+    corpo += '</section>';
+  }
+  if (d.exps && d.exps.length) {
+    corpo += '<section><h2>Experiência Profissional</h2>';
+    d.exps.forEach(function(e) {
+      var bl = (e.bullets||[]).filter(function(b){return b.trim();});
+      corpo += '<div class="exp">'
+             + '<div class="exp-top"><b class="empresa">'+esc(e.empresa)+'</b><span class="periodo">'+esc(e.periodo)+'</span></div>'
+             + '<div class="cargo">'+esc(e.cargo)+(e.local?' <span class="local">· '+esc(e.local)+'</span>':'')+'</div>'
+             + (bl.length ? '<ul>'+bl.map(function(b){return '<li>'+esc(b.trim())+'</li>';}).join('')+'</ul>' : '')
+             + '</div>';
+    });
+    corpo += '</section>';
+  }
+  if (d.cursos && d.cursos.length) {
+    corpo += '<section><h2>Cursos e Certificações</h2>';
+    d.cursos.forEach(function(cr) {
+      var ano = (cr.mes&&cr.ano)?cr.mes+'/'+cr.ano:(cr.ano||'');
+      corpo += '<p>'+esc(cr.nome||'')+(cr.instituicao?' — '+esc(cr.instituicao):'')+(cr.carga?' ('+esc(cr.carga)+')':'')+(ano?' · '+ano:'')+'</p>';
+    });
+    corpo += '</section>';
+  }
+  if (d.idiomas && d.idiomas.length) {
+    corpo += '<section><h2>Idiomas</h2><p>'
+           + d.idiomas.map(function(x){return '<b>'+esc(x.idioma)+'</b> ('+esc(x.nivel)+')';}).join(' &nbsp;·&nbsp; ')
+           + '</p></section>';
+  }
+  if ((d.habTec&&d.habTec.length)||(d.habComp&&d.habComp.length)) {
+    corpo += '<section><h2>Habilidades</h2>';
+    if (d.habTec&&d.habTec.length)   corpo += '<p><b>Técnicas:</b> '+d.habTec.map(esc).join(' · ')+'</p>';
+    if (d.habComp&&d.habComp.length) corpo += '<p><b>Comportamentais:</b> '+d.habComp.map(esc).join(' · ')+'</p>';
+    corpo += '</section>';
+  }
+
+  var docHTML = '<!DOCTYPE html><html lang="pt-BR"><head><meta charset="UTF-8"/><title></title><style>'
+    + '@page{size:A4;margin:12mm 14mm}'
+    + '*{margin:0;padding:0;box-sizing:border-box}'
+    + 'body{font-family:Arial,Helvetica,sans-serif;font-size:10.5pt;color:'+CT+';background:#fff;-webkit-print-color-adjust:exact;print-color-adjust:exact}'
+    + 'header{border-bottom:3px solid '+COR_L+';padding-bottom:6px;margin-bottom:10px}'
+    + 'h1{font-size:17pt;font-weight:900;color:'+CT+';margin-bottom:4px}'
+    + '.contatos{font-size:9pt;color:'+CM+';display:flex;flex-wrap:wrap;gap:2px 14px}'
+    + 'section{margin-bottom:9px;page-break-inside:avoid}'
+    + 'h2{font-size:8.5pt;font-weight:700;color:'+COR+';text-transform:uppercase;letter-spacing:1px;border-bottom:2px solid '+COR_L+';padding-bottom:2px;margin-bottom:5px}'
+    + 'p{font-size:10.5pt;color:'+CM+';line-height:1.45;text-align:justify;margin-bottom:3px}'
+    + '.exp{margin-bottom:7px;page-break-inside:avoid}'
+    + '.exp-top{display:flex;justify-content:space-between;align-items:baseline;gap:8px}'
+    + '.empresa{font-size:11pt;font-weight:800;color:'+CT+'}'
+    + '.periodo{font-size:9.5pt;color:'+CM+';font-weight:600;white-space:nowrap}'
+    + '.cargo{font-size:10.5pt;font-weight:700;color:'+COR+';margin:1px 0 3px}'
+    + '.local{font-size:9.5pt;color:'+CM+';font-weight:400}'
+    + 'ul{padding-left:14px;margin-top:2px}'
+    + 'li{font-size:10pt;color:'+CT+';margin-bottom:2px;line-height:1.4;text-align:justify}'
+    + '</style></head><body>'
+    + '<header><h1>'+esc(c.nome)+'</h1>'
+    + '<div class="contatos">'+contatos.map(function(x){return '<span>'+x+'</span>';}).join('')+'</div>'
+    + '</header>'+corpo+'</body></html>';
+
+   var W = window.open('','_blank','width=900,height=700');
+  if (!W) { toast('Permita pop-ups neste site e tente novamente.','erro'); return; }
+  W.document.open();
+  W.document.write(docHTML);
+  W.document.close();
+  setTimeout(function(){ W.focus(); W.print(); }, 500);
+}
+
+// helper: lê valor de campo pelo id
+function gv(id){ var el=document.getElementById(id); return el ? el.value.trim() : ''; }
+
+// ══════════════════════════════════════════════════
+// IA — CLOUDFLARE WORKER PROXY (100% GRATUITO)
+// O usuário não precisa de chave — tudo transparente
+//
+// CONFIGURE AQUI: cole a URL do seu Worker após o deploy
+// Ex: https://orizon-curriculo.adm-orizon.workers.dev
+// ══════════════════════════════════════════════════
+
+const IA_WORKER_URL = 'https://orizon-curriculo.adm-orizon.workers.dev';
+
+async function iaChamarWorker(prompt, btnId, labelFinal) {
+  const btn = document.getElementById(btnId);
+  if (btn) { btn.disabled = true; btn.innerHTML = '<span class="ia-spin">⟳</span> Gerando...'; }
+  try {
+    const res = await fetch(IA_WORKER_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ prompt })
+    });
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}));
+      toast('Erro da IA: ' + (err?.error || res.status), 'erro');
+      return null;
+    }
+    const data = await res.json();
+    return data.resultado || null;
+  } catch(e) {
+    toast('Erro de conexão com a IA. Verifique sua internet.', 'erro');
+    return null;
+  } finally {
+    if (btn) { btn.disabled = false; btn.innerHTML = labelFinal || '✨ Gerar com IA'; }
+  }
+}
+
+// aliases usados pelas funções abaixo
+async function iaChamar(prompt, btnId)          { return iaChamarWorker(prompt, btnId, '✨ Gerar com IA'); }
+async function iaChamarBullet(prompt, btnId, i) { return iaChamarWorker(prompt, btnId, '✨ Sugerir bullets com IA'); }
+
+// Coleta contexto geral do candidato
+function iaContextoGeral() {
+  const nome   = gv('cNome') || 'candidato';
+  const cidade = gv('cCidade') || '';
+  const techs  = habTec.join(', ') || '';
+  const comps  = habComp.join(', ') || '';
+  const forms  = formacoes.map(f => `${f.tipo} em ${f.curso} pela ${f.instituicao}`).join('; ') || '';
+  const expStr = exps.map(e => `${e.cargo} na ${e.empresa} (${e.periodo})`).join('; ') || '';
+  return { nome, cidade, techs, comps, forms, expStr };
+}
+
+// ── GERAR RESUMO ──
+async function iaGerarResumo() {
+  const ctx = iaContextoGeral();
+  const prompt = `Você é um especialista em RH e redação de currículos profissionais brasileiros.
+
+Crie um RESUMO PROFISSIONAL para currículo com base nas informações abaixo.
+
+REGRAS OBRIGATÓRIAS:
+- Entre 50 e 80 palavras
+- Comece com área/especialização, não com o nome
+- Use dados e números quando disponíveis
+- Linguagem natural, não robótica
+- Foco em resultados e valor entregado
+- Não use frases clichê como "profissional dinâmico e proativo"
+- Escreva em primeira pessoa implícita (sem "eu")
+- Retorne APENAS o texto do resumo, sem explicações
+
+DADOS DO CANDIDATO:
+Nome: ${ctx.nome}
+Cidade: ${ctx.cidade}
+Experiências: ${ctx.expStr || 'não informadas'}
+Formação: ${ctx.forms || 'não informada'}
+Habilidades técnicas: ${ctx.techs || 'não informadas'}
+Habilidades comportamentais: ${ctx.comps || 'não informadas'}`;
+
+  const resultado = await iaChamar(prompt, 'btnIaResumo');
+  if (!resultado) return;
+  document.getElementById('iaOutputResumoText').textContent = resultado.trim();
+  document.getElementById('iaOutputResumo').classList.add('show');
+  toast('Resumo gerado com sucesso!');
+}
+
+function iaUsarResumo() {
+  const texto = document.getElementById('iaOutputResumoText').textContent;
+  document.getElementById('rResumo').value = texto;
+  contarResumo('resumo');
+  document.getElementById('iaOutputResumo').classList.remove('show');
+  toast('Resumo aplicado!');
+}
+
+// ── GERAR OBJETIVO ──
+async function iaGerarObjetivo() {
+  const ctx = iaContextoGeral();
+  const prompt = `Você é um especialista em RH e redação de currículos profissionais brasileiros.
+
+Crie um OBJETIVO PROFISSIONAL para currículo de quem está começando na carreira.
+
+REGRAS OBRIGATÓRIAS:
+- Entre 40 e 70 palavras
+- Tom autêntico e jovem, sem ser informal demais
+- Mencione área de interesse e o que tem a oferecer
+- Pode mencionar projetos escolares, trabalhos voluntários ou experiências autônomas
+- Não invente informações — use só o que foi fornecido
+- Retorne APENAS o texto do objetivo, sem explicações
+
+DADOS DO CANDIDATO:
+Nome: ${ctx.nome}
+Cidade: ${ctx.cidade}
+Formação: ${ctx.forms || 'não informada'}
+Habilidades técnicas: ${ctx.techs || 'não informadas'}
+Habilidades comportamentais: ${ctx.comps || 'não informadas'}`;
+
+  const resultado = await iaChamar(prompt, 'btnIaObjetivo');
+  if (!resultado) return;
+  document.getElementById('iaOutputObjetivoText').textContent = resultado.trim();
+  document.getElementById('iaOutputObjetivo').classList.add('show');
+  toast('Objetivo gerado com sucesso!');
+}
+
+function iaUsarObjetivo() {
+  const texto = document.getElementById('iaOutputObjetivoText').textContent;
+  document.getElementById('rObjetivo').value = texto;
+  contarResumo('objetivo');
+  document.getElementById('iaOutputObjetivo').classList.remove('show');
+  toast('Objetivo aplicado!');
+}
+
+// ── GERAR BULLETS ──
+let _iaBulletsTemp = {};
+
+async function iaGerarBullets(i) {
+  const e = exps[i];
+  if (!e) return;
+  if (!e.empresa || !e.cargo) {
+    toast('Preencha empresa e cargo antes de usar a IA.', 'warn');
+    return;
+  }
+  const bulletsAtuais = e.bullets.filter(b => b.trim()).join('\n') || '';
+  const prompt = `Você é um especialista em RH e redação de currículos profissionais brasileiros.
+
+Crie até 4 BULLET POINTS de experiência profissional para currículo.
+
+REGRAS OBRIGATÓRIAS:
+- Cada bullet: 1 a 2 linhas
+- Estrutura: Verbo de ação no passado + o que fez + resultado/impacto
+- Use números e percentuais quando plausível (mas não invente dados absurdos)
+- Verbos sugeridos: Desenvolvi, Implementei, Liderei, Conduzi, Reduzi, Aumentei, Gerenciei, Criei, Otimizei, Coordenei
+- Separe cada bullet com uma linha em branco
+- Retorne APENAS os bullets, sem numeração, sem traços, sem explicações
+
+DADOS DA EXPERIÊNCIA:
+Empresa: ${e.empresa}
+Cargo: ${e.cargo}
+Período: ${e.periodo || 'não informado'}
+Local: ${e.local || 'não informado'}
+${bulletsAtuais ? 'Bullets já escritos (melhore ou expanda): ' + bulletsAtuais : ''}`;
+
+  const resultado = await iaChamarBullet(prompt, 'btnIaBullet'+i, i);
+  if (!resultado) return;
+
+  // Parse bullets — separa por linhas vazias ou •
+  const linhas = resultado.trim().split(/\n+/).map(l => l.replace(/^[•\-\*]\s*/, '').trim()).filter(l => l.length > 10);
+  _iaBulletsTemp[i] = linhas;
+
+  document.getElementById('iaOutputBulletText'+i).textContent = linhas.map((l,n) => `${n+1}. ${l}`).join('\n\n');
+  document.getElementById('iaOutputBullet'+i).classList.add('show');
+  toast('Bullets gerados com sucesso!');
+}
+
+function iaUsarBullets(i) {
+  const bullets = _iaBulletsTemp[i];
+  if (!bullets || !bullets.length) return;
+  exps[i].bullets = bullets.slice(0, 5);
+  renderExps();
+  autosave();
+  toast('Bullets aplicados!');
+}
+
+window.addEventListener('DOMContentLoaded', init);
+</script>
+</body>
+</html>

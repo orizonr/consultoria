@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+<!-- Favicon -->
+  <!-- ═══ FAVICON ═══ -->
+  <link rel="icon" type="image/png" sizes="32x32" href="../imagens/favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="192x192" href="../imagens/favicon-192x192.png" />
+  <link rel="shortcut icon" href="../imagens/icone.png" type="image/png" />
+  <link rel="apple-touch-icon" href="../imagens/icone.png" />
+  <link rel="manifest" href="../imagens/site.webmanifest" />
+<!-- SEO -->
+<meta name="description" content="Orizon Consultoria — Sistema de Gestão Financeira de Contratos" />
+<meta name="robots" content="noindex, nofollow" />
+<title>Configurações — Contratos · Orizon Consultoria</title>
+<link rel="stylesheet" href="assets/cc-style.css"/>
+<style>.sb-head{padding:1.1rem 0.85rem 1rem;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:0.75rem;flex-shrink:0;}.sb-logo-ico{width:44px;height:44px;border-radius:13px;background:linear-gradient(135deg,rgba(30,64,175,0.35),rgba(59,130,246,0.18));border:1px solid rgba(59,130,246,0.28);display:flex;align-items:center;justify-content:center;overflow:hidden;flex-shrink:0;box-shadow:0 2px 10px rgba(59,130,246,0.15);}.sb-logo-ico img{width:44px;height:44px;object-fit:contain;}.sb-logo-txt{overflow:hidden;white-space:nowrap;}.sb-logo-name{font-size:1.18rem;font-weight:900;line-height:1.2;letter-spacing:-0.3px;}.sb-logo-name span{color:var(--accent);}.sb-logo-sub{font-size:0.6rem;color:var(--accent);text-transform:uppercase;letter-spacing:2px;opacity:0.65;margin-top:0.1rem;}.sb-av img{width:100%;height:100%;object-fit:contain;border-radius:inherit;}</style></head>
+<body>
+<div class="app">
+<aside class="sidebar" id="sidebar">
+  <div class="sb-head"><div class="sb-logo-ico"><img src="../imagens/fundo.png" alt="Orizon" style="width:44px;height:44px;object-fit:contain"/></div><div class="sb-logo-txt"><div class="sb-logo-name">Orizon <span>Consultoria</span></div><div class="sb-logo-sub">Contratos</div></div></div>
+  <nav class="sb-nav">
+    <div class="sb-sep">Visão Geral</div>
+    <a class="sb-item" href="index.html"><span class="ico">📊</span><span class="lbl">Dashboard</span></a>
+    <div class="sb-sep">Controles</div>
+    <a class="sb-item" href="estagiarios.html"><span class="ico">🎓</span><span class="lbl">Estagiários</span></a>
+    <a class="sb-item" href="clt.html"><span class="ico">💼</span><span class="lbl">CLTs</span></a>
+    <div class="sb-sep">Gestão</div>
+    <a class="sb-item" href="financeiro-mensal.html"><span class="ico">📅</span><span class="lbl">Financeiro Mensal</span></a>
+    <a class="sb-item" href="relatorios.html"><span class="ico">📈</span><span class="lbl">Relatórios</span></a>
+    <a class="sb-item" href="relatorio-pdf.html"><span class="ico">📄</span><span class="lbl">Relatório PDF</span></a>
+    <a class="sb-item" href="balanco-financeiro.html"><span class="ico">💰</span><span class="lbl">Balanço Financeiro</span></a>
+    <a class="sb-item" href="despesas-fixas.html"><span class="ico">📌</span><span class="lbl">Despesas Fixas</span></a>
+    <div class="sb-sep">Equipe</div>
+    <a class="sb-item" href="consultores.html"><span class="ico">🏆</span><span class="lbl">Consultores</span></a>
+    <a class="sb-item" href="pipeline.html"><span class="ico">🔄</span><span class="lbl">Pipeline de Projetos</span></a>
+    <div class="sb-sep">Sistema</div>
+    <a class="sb-item active" href="configuracoes.html"><span class="ico">⚙️</span><span class="lbl">Configurações</span></a>
+  </nav>
+  <div class="sb-foot"><div class="sb-av"><img src="../imagens/fundo.png" alt="EX" style="width:18px;height:18px;object-fit:contain"/></div><div class="sb-uinfo"><div class="sb-uname" id="user-nome">—</div><div class="sb-urole" id="user-email">—</div></div><button class="sb-toggle" onclick="if(window.ccLogout)window.ccLogout()" title="Sair" style="margin-right:.2rem;opacity:.4">⏻</button><button class="sb-toggle" id="sb-toggle">◀</button></div>
+</aside>
+
+<div class="main">
+  <div class="topbar">
+    <div class="tb-bc"><a href="index.html">Dashboard</a><span class="sep"> / </span><span>Configurações</span></div>
+    <div class="tb-right"><span id="tb-date" class="tb-date"></span></div>
+  </div>
+  <div class="content">
+    <div class="sec-hd">
+      <div><div class="sec-title">⚙️ <span>Configurações</span></div>
+      <div class="sec-sub">Taxas, parâmetros do sistema e backup de dados</div></div>
+    </div>
+
+    <!-- Perfil do Usuário -->
+    <div class="config-box" style="margin-bottom:1rem">
+      <div class="config-box-title">👤 Meu Perfil</div>
+      <div class="config-grid">
+        <div class="form-group">
+          <label class="fl">Nome de Exibição</label>
+          <input class="fi" id="cfgNomeExibicao" placeholder="Ex: Felipe Andrade"/>
+          <span style="font-size:.62rem;color:var(--muted);margin-top:.2rem">Este nome aparece no rodapé da barra lateral</span>
+        </div>
+        <div class="form-group">
+          <label class="fl">Cargo / Função</label>
+          <input class="fi" id="cfgCargoExibicao" placeholder="Ex: Consultor, Gerente..."/>
+          <span style="font-size:.62rem;color:var(--muted);margin-top:.2rem">Aparece abaixo do nome na barra lateral</span>
+        </div>
+      </div>
+      <div style="display:flex;justify-content:flex-end;margin-top:.8rem">
+        <button class="btn btn-primary btn-sm" onclick="salvarPerfil()">✓ Salvar Perfil</button>
+      </div>
+    </div>
+
+    <!-- Taxas -->
+    <div class="config-box">
+      <div class="config-box-title">💰 Taxas da Consultoria</div>
+      <div class="config-grid">
+        <div class="form-group"><label class="fl">Taxa Estagiário Padrão (%)</label>
+          <input type="number" class="fi" id="cfgTaxaEstPadrao" min="0" max="100" step="0.5"/>
+          <span style="font-size:.62rem;color:var(--muted);margin-top:.2rem">Aplicada por padrão ao cadastrar novo estagiário</span>
+        </div>
+        <div class="form-group"><label class="fl">Taxa Estagiário Mínima (%)</label>
+          <input type="number" class="fi" id="cfgTaxaEstMin" min="0" max="100" step="0.5"/>
+        </div>
+        <div class="form-group"><label class="fl">Taxa Estagiário Máxima (%)</label>
+          <input type="number" class="fi" id="cfgTaxaEstMax" min="0" max="100" step="0.5"/>
+        </div>
+        <div class="form-group"><label class="fl">Taxa CLT (% sobre salário)</label>
+          <input type="number" class="fi" id="cfgTaxaCLT" min="0" max="100" step="1"/>
+          <span style="font-size:.62rem;color:var(--muted);margin-top:.2rem">Padrão: 50% — 1 CLT ganha R$ 2.000 → consultoria recebe R$ 1.000</span>
+        </div>
+      </div>
+      <div class="config-note">💡 As taxas acima são os padrões aplicados ao cadastrar novos contratos. Cada contrato pode ter uma taxa individual diferente.</div>
+    </div>
+
+    <!-- Parâmetros legais -->
+    <div class="config-box" style="margin-top:1rem">
+      <div class="config-box-title">📋 Parâmetros Legais (Travados)</div>
+      <div class="config-grid">
+        <div class="form-group"><label class="fl">Duração de Cada Período (meses)</label>
+          <input class="fi fi-lock" value="6" readonly title="Fixo por Lei 11.788/2008"/></div>
+        <div class="form-group"><label class="fl">Máximo de Períodos por Estagiário</label>
+          <input class="fi fi-lock" value="4" readonly title="4 períodos = 24 meses = 2 anos máximo"/></div>
+        <div class="form-group"><label class="fl">Prazo Máximo de Estágio</label>
+          <input class="fi fi-lock" value="24 meses (2 anos)" readonly/></div>
+        <div class="form-group"><label class="fl">Alerta de Vencimento (dias antes)</label>
+          <input type="number" class="fi" id="cfgAlertaDias" min="7" max="90" step="1"/>
+          <span style="font-size:.62rem;color:var(--muted);margin-top:.2rem">Quantos dias antes do vencimento exibir o alerta laranja</span>
+        </div>
+      </div>
+      <div class="config-note">🔒 Campos em cinza são travados por lei e não podem ser alterados (Lei 11.788/2008 — Estágio).</div>
+    </div>
+
+    <div style="display:flex;justify-content:flex-end;margin-top:1rem">
+      <button class="btn btn-primary" onclick="salvar()">✓ Salvar Configurações</button>
+    </div>
+
+    <!-- Backup -->
+    <div class="two-col" style="margin-top:1.5rem">
+      <div class="tbl-wrap" style="padding:1.2rem">
+        <div class="tbl-title" style="margin-bottom:.9rem">💾 Backup e Exportação</div>
+        <p style="font-size:.76rem;color:var(--muted);margin-bottom:1rem;line-height:1.6">Exporte todos os dados em JSON para backup ou para importar em outro computador.</p>
+        <div style="display:flex;flex-direction:column;gap:.5rem">
+          <button class="btn btn-primary" onclick="exportarBackup()">💾 Exportar Backup JSON</button>
+          <button class="btn btn-ghost"   onclick="exportarTodoCSV()">📊 Exportar Todos (CSV)</button>
+          <label class="btn btn-blue" style="cursor:pointer;justify-content:center">
+            📂 Importar Backup
+            <input type="file" accept=".json" style="display:none" onchange="importar(this)"/>
+          </label>
+        </div>
+        <div class="info-box warn" style="margin-top:1rem">⚠️ A importação substitui todos os dados atuais. Faça backup antes.</div>
+      </div>
+      <div class="tbl-wrap" style="padding:1.2rem">
+        <div class="tbl-title" style="margin-bottom:.9rem">⚠️ Zona de Risco</div>
+        <div class="info-box" style="background:rgba(231,76,60,.07);border-color:rgba(231,76,60,.25);color:#f1948a;margin-bottom:1rem">⛔ Ações irreversíveis.</div>
+        <div style="display:flex;flex-direction:column;gap:.5rem">
+          <button class="btn btn-danger" onclick="limparTudo()">⛔ Limpar Todos os Contratos</button>
+          <button class="btn btn-danger" onclick="resetarConfig()">🔄 Resetar Configurações</button>
+        </div>
+        <div style="margin-top:1.2rem;padding-top:1rem;border-top:1px solid var(--border)">
+          <div style="font-size:.72rem;font-weight:700;margin-bottom:.5rem">📊 Uso do Storage</div>
+          <div id="storageInfo" style="font-size:.7rem;color:var(--muted)"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<div id="toast-ct"></div>
+<script src="assets/cc-auth.js"></script>
+<script src="assets/cc-core.js"></script>
+<script>
+function carregar() {
+  const cfg = CC.getConfig();
+  UI.setVal('cfgTaxaEstPadrao', cfg.taxaEstPadrao);
+  UI.setVal('cfgTaxaEstMin',    cfg.taxaEstMin);
+  UI.setVal('cfgTaxaEstMax',    cfg.taxaEstMax);
+  UI.setVal('cfgTaxaCLT',       cfg.taxaCLT);
+  UI.setVal('cfgAlertaDias',    cfg.alertaDias);
+  // Perfil
+  UI.setVal('cfgNomeExibicao',  localStorage.getItem('ex_cc_nome_exibicao') || '');
+  UI.setVal('cfgCargoExibicao', localStorage.getItem('ex_cc_cargo_exibicao') || '');
+  const keys = Object.keys(localStorage).filter(k=>k.startsWith('ex_cc_'));
+  let total = 0;
+  document.getElementById('storageInfo').innerHTML = keys.map(k=>{
+    const s=(localStorage.getItem(k)||'').length; total+=s;
+    return `<div style="display:flex;justify-content:space-between;margin-bottom:.3rem"><span>${k.replace('ex_cc_','')}</span><span>${(s/1024).toFixed(1)} KB</span></div>`;
+  }).join('') + `<div style="border-top:1px solid var(--border);margin-top:.3rem;padding-top:.3rem;font-weight:700">Total: ${(total/1024).toFixed(1)} KB</div>`;
+}
+
+function salvarPerfil() {
+  const nome  = UI.val('cfgNomeExibicao').trim();
+  const cargo = UI.val('cfgCargoExibicao').trim();
+  if (nome)  localStorage.setItem('ex_cc_nome_exibicao',  nome);
+  else       localStorage.removeItem('ex_cc_nome_exibicao');
+  if (cargo) localStorage.setItem('ex_cc_cargo_exibicao', cargo);
+  else       localStorage.removeItem('ex_cc_cargo_exibicao');
+  // Atualiza sidebar na hora
+  const nomeEl  = document.getElementById('user-nome');
+  const emailEl = document.getElementById('user-email');
+  if (nomeEl  && nome)  nomeEl.textContent  = nome;
+  if (emailEl && cargo) emailEl.textContent = cargo;
+  UI.toast('Perfil salvo! Aparecerá em todas as páginas.', 'ok');
+}
+
+function salvar() {
+  CC.saveConfig({
+    taxaEstPadrao: parseFloat(UI.val('cfgTaxaEstPadrao'))||15,
+    taxaEstMin:    parseFloat(UI.val('cfgTaxaEstMin'))||10,
+    taxaEstMax:    parseFloat(UI.val('cfgTaxaEstMax'))||15,
+    taxaCLT:       parseFloat(UI.val('cfgTaxaCLT'))||50,
+    alertaDias:    parseInt(UI.val('cfgAlertaDias'))||30,
+    mesesPeriodo:  6,
+    maxPeriodos:   4,
+  });
+  UI.toast('Configurações salvas!','ok');
+}
+
+function exportarBackup() {
+  const data = { versao:'1.0', gerado:new Date().toISOString(), contratos:CC.getContratos(), config:CC.getConfig() };
+  const a = Object.assign(document.createElement('a'),{
+    href: URL.createObjectURL(new Blob([JSON.stringify(data,null,2)],{type:'application/json'})),
+    download:`backup_contratos_${new Date().toISOString().slice(0,10)}.json`
+  });
+  a.click(); URL.revokeObjectURL(a.href);
+  UI.toast('Backup exportado!','ok');
+}
+
+function exportarTodoCSV() {
+  const c = CC.getContratos();
+  const cfg = CC.getConfig();
+  Export.csv(
+    ['Nome','Tipo','Empresa','Base (R$)','Taxa%','Receita/mês','Situação','Data Início','Obs'],
+    c.map(x=>[x.nome,x.tipo,x.empresa,Fmt.brl(x.tipo==='estagiario'?x.bolsa:(x.salario||0)),x.taxa+'%',
+      Fmt.brl(Calc.receita(x)),x.situacao,Fmt.dt(x.tipo==='estagiario'?x.inicio1:x.admissao),x.obs||'']),
+    'contratos_backup.csv'
+  );
+}
+
+function importar(input) {
+  const f = input.files[0]; if(!f) return;
+  const r = new FileReader();
+  r.onload = async e => {
+    try {
+      const d = JSON.parse(e.target.result);
+      if(d.contratos) { CC.set('contratos', d.contratos); try { await CC.getContratosAsync(); } catch(e){} }
+      if(d.config)    CC.saveConfig(d.config);
+      UI.toast('Backup importado!','ok');
+      carregar();
+    } catch { UI.toast('Erro — JSON inválido','err'); }
+  };
+  r.readAsText(f);
+}
+
+async function limparTudo() {
+  if(!confirm('Limpar TODOS os contratos? Esta ação é irreversível e apaga do Supabase!')) return;
+  UI.toast('Apagando...','wrn');
+  try {
+    await CC.deleteAllContratos();
+    UI.toast('Dados apagados.','wrn');
+  } catch(e) {
+    UI.toast('Erro ao apagar: '+e.message,'err');
+  }
+  carregar();
+}
+
+function resetarConfig() {
+  if(!confirm('Resetar configurações para os valores padrão?')) return;
+  CC.del('config');
+  carregar();
+  UI.toast('Configurações resetadas.','ok');
+}
+
+document.addEventListener('DOMContentLoaded', carregar);
+</script>
+</body>
+</html>

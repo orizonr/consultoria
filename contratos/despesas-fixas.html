@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+<link rel="icon" type="image/png" sizes="32x32" href="../imagens/favicon-32x32.png"/>
+<link rel="icon" type="image/png" sizes="192x192" href="../imagens/favicon-192x192.png"/>
+<link rel="shortcut icon" href="../imagens/icone.png" type="image/png"/>
+<link rel="apple-touch-icon" href="../imagens/icone.png"/>
+<link rel="manifest" href="../imagens/site.webmanifest"/>
+<meta name="description" content="Orizon Consultoria — Despesas Fixas"/>
+<meta name="robots" content="noindex, nofollow"/>
+<title>Despesas Fixas — Contratos · Orizon Consultoria</title>
+<link rel="stylesheet" href="assets/cc-style.css"/>
+<style>
+.sb-head{padding:1.1rem 0.85rem 1rem;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:0.75rem;flex-shrink:0;}
+.sb-logo-ico{width:44px;height:44px;border-radius:13px;background:linear-gradient(135deg,rgba(30,64,175,0.35),rgba(59,130,246,0.18));border:1px solid rgba(59,130,246,0.28);display:flex;align-items:center;justify-content:center;overflow:hidden;flex-shrink:0;}
+.sb-logo-ico img{width:44px;height:44px;object-fit:contain;}
+.sb-logo-txt{overflow:hidden;white-space:nowrap;}
+.sb-logo-name{font-size:1.18rem;font-weight:900;line-height:1.2;letter-spacing:-0.3px;}
+.sb-logo-name span{color:var(--accent);}
+.sb-logo-sub{font-size:0.6rem;color:var(--accent);text-transform:uppercase;letter-spacing:2px;opacity:0.65;margin-top:0.1rem;}
+.sb-av img{width:100%;height:100%;object-fit:contain;border-radius:inherit;}
+
+.desp-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;transition:border-color .15s;}
+.desp-card:hover{border-color:var(--border2);}
+.desp-row{display:flex;align-items:center;gap:1rem;padding:.85rem 1.1rem;border-bottom:1px solid var(--border);}
+.desp-row:last-child{border-bottom:none;}
+.desp-nome{flex:1;font-weight:700;font-size:.88rem;}
+.desp-cat{font-size:.65rem;color:var(--muted);margin-top:.15rem;}
+.desp-val{font-size:1rem;font-weight:900;color:var(--red);white-space:nowrap;}
+.desp-actions{display:flex;gap:.4rem;align-items:center;}
+.toggle-btn{position:relative;width:40px;height:22px;border-radius:99px;border:none;cursor:pointer;transition:background .2s;flex-shrink:0;}
+.toggle-btn.on{background:var(--accent);}
+.toggle-btn.off{background:var(--muted2);}
+.toggle-btn::after{content:'';position:absolute;width:16px;height:16px;border-radius:50%;background:#fff;top:3px;transition:left .2s;}
+.toggle-btn.on::after{left:21px;}
+.toggle-btn.off::after{left:3px;}
+.desp-inativa .desp-nome{opacity:.45;}
+.desp-inativa .desp-val{opacity:.45;}
+
+.summary-box{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:1.2rem;display:flex;flex-direction:column;gap:.6rem;}
+.summary-row{display:flex;justify-content:space-between;align-items:center;font-size:.82rem;}
+.summary-row.total{border-top:1px solid var(--border);padding-top:.6rem;margin-top:.2rem;font-weight:900;font-size:1rem;}
+</style>
+</head>
+<body>
+<div class="app">
+
+<aside class="sidebar" id="sidebar">
+  <div class="sb-head">
+    <div class="sb-logo-ico"><img src="../imagens/fundo.png" alt="Orizon" style="width:44px;height:44px;object-fit:contain"/></div>
+    <div class="sb-logo-txt">
+      <div class="sb-logo-name">Orizon <span>Consultoria</span></div>
+      <div class="sb-logo-sub">Contratos</div>
+    </div>
+  </div>
+  <nav class="sb-nav">
+    <div class="sb-sep">Visão Geral</div>
+    <a class="sb-item" href="index.html"><span class="ico">📊</span><span class="lbl">Dashboard</span></a>
+    <div class="sb-sep">Controles</div>
+    <a class="sb-item" href="estagiarios.html"><span class="ico">🎓</span><span class="lbl">Estagiários</span></a>
+    <a class="sb-item" href="clt.html"><span class="ico">💼</span><span class="lbl">CLTs</span></a>
+    <div class="sb-sep">Gestão</div>
+    <a class="sb-item" href="financeiro-mensal.html"><span class="ico">📅</span><span class="lbl">Financeiro Mensal</span></a>
+    <a class="sb-item" href="relatorios.html"><span class="ico">📈</span><span class="lbl">Relatórios</span></a>
+    <a class="sb-item" href="relatorio-pdf.html"><span class="ico">📄</span><span class="lbl">Relatório PDF</span></a>
+    <a class="sb-item" href="balanco-financeiro.html"><span class="ico">💰</span><span class="lbl">Balanço Financeiro</span></a>
+    <a class="sb-item active" href="despesas-fixas.html"><span class="ico">📌</span><span class="lbl">Despesas Fixas</span></a>
+    <div class="sb-sep">Equipe</div>
+    <a class="sb-item" href="consultores.html"><span class="ico">🏆</span><span class="lbl">Consultores</span></a>
+    <a class="sb-item" href="pipeline.html"><span class="ico">🔄</span><span class="lbl">Pipeline de Projetos</span></a>
+    <div class="sb-sep">Sistema</div>
+    <a class="sb-item" href="configuracoes.html"><span class="ico">⚙️</span><span class="lbl">Configurações</span></a>
+  </nav>
+  <div class="sb-foot">
+    <div class="sb-av"><img src="../imagens/fundo.png" alt="" style="width:18px;height:18px;object-fit:contain"/></div>
+    <div class="sb-uinfo"><div class="sb-uname" id="user-nome">—</div><div class="sb-urole" id="user-email">—</div></div>
+    <button class="sb-toggle" onclick="if(window.ccLogout)window.ccLogout()" title="Sair" style="margin-right:.2rem;opacity:.4">⏻</button>
+    <button class="sb-toggle" id="sb-toggle">◀</button>
+  </div>
+</aside>
+
+<div class="main">
+  <div class="topbar">
+    <div class="tb-bc"><a href="index.html">Dashboard</a><span class="sep"> / </span><span>Despesas Fixas</span></div>
+    <div class="tb-right">
+      <span id="tb-date" class="tb-date"></span>
+      <button class="btn btn-ghost btn-sm" onclick="lancarMesAtual()">📅 Lançar no Balanço</button>
+      <button class="btn btn-primary btn-sm" onclick="abrirModal()">＋ Nova Despesa</button>
+    </div>
+  </div>
+
+  <div class="content">
+    <div class="sec-hd">
+      <div>
+        <div class="sec-title">📌 <span>Despesas Fixas</span></div>
+        <div class="sec-sub">Gerencie despesas recorrentes mensais e lance no balanço com um clique</div>
+      </div>
+    </div>
+
+    <div class="info-box accent">
+      💡 Clique em <strong>Lançar no Balanço</strong> para registrar todas as despesas ativas do mês atual no Balanço Financeiro de uma vez. Despesas inativas são ignoradas.
+    </div>
+
+    <!-- KPIs -->
+    <div class="kpi-row" id="kpiArea" style="margin-bottom:1.2rem"></div>
+
+    <div class="two-col" style="align-items:start">
+      <!-- Lista de despesas -->
+      <div>
+        <div class="tbl-title" style="margin-bottom:.7rem">📋 Lista de Despesas</div>
+        <div class="desp-card" id="listArea">
+          <div style="padding:2rem;text-align:center;color:var(--muted);font-size:.8rem">⏳ Carregando...</div>
+        </div>
+      </div>
+
+      <!-- Resumo -->
+      <div>
+        <div class="tbl-title" style="margin-bottom:.7rem">💰 Resumo Mensal</div>
+        <div class="summary-box" id="summaryArea">
+          <div style="color:var(--muted);font-size:.8rem">Carregando...</div>
+        </div>
+
+        <div style="margin-top:1rem">
+          <div class="tbl-title" style="margin-bottom:.7rem">📅 Histórico de Lançamentos</div>
+          <div class="desp-card" id="historicoArea">
+            <div style="padding:1.5rem;text-align:center;color:var(--muted);font-size:.8rem">Carregando...</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- Modal Nova/Editar Despesa -->
+<div class="overlay" id="modalDesp">
+  <div class="modal">
+    <div class="modal-hd">
+      <span class="modal-title" id="modalTitulo">＋ Nova Despesa Fixa</span>
+      <button class="modal-close" onclick="UI.closeModal('modalDesp')">✕</button>
+    </div>
+    <div class="form-grid">
+      <div class="form-group fg-full">
+        <label class="fl">Nome da Despesa *</label>
+        <input class="fi" id="mNome" placeholder="Ex: Marketing e Divulgação Digital"/>
+      </div>
+      <div class="form-group">
+        <label class="fl">Valor Mensal (R$) *</label>
+        <input type="number" class="fi" id="mValor" min="0" step="0.01" placeholder="0,00"/>
+      </div>
+      <div class="form-group">
+        <label class="fl">Categoria</label>
+        <select class="fi" id="mCat">
+          <option>Marketing / Publicidade</option>
+          <option>Salários Internos</option>
+          <option>Encargos Trabalhistas</option>
+          <option>Aluguel</option>
+          <option>Água / Luz / Internet</option>
+          <option>Software / Assinaturas</option>
+          <option>Contabilidade</option>
+          <option>Jurídico / Legal</option>
+          <option>Treinamento</option>
+          <option>Material de Escritório</option>
+          <option>Impostos</option>
+          <option>Viagens / Transporte</option>
+          <option>Refeições</option>
+          <option>Outros Gastos</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="fl">Status</label>
+        <select class="fi" id="mAtiva">
+          <option value="true">Ativa</option>
+          <option value="false">Inativa</option>
+        </select>
+      </div>
+    </div>
+    <div class="modal-ft">
+      <button class="btn btn-ghost" onclick="UI.closeModal('modalDesp')">Cancelar</button>
+      <button class="btn btn-primary" onclick="salvar()">✓ Salvar</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Confirmar Lançamento -->
+<div class="overlay" id="modalLancar">
+  <div class="modal">
+    <div class="modal-hd">
+      <span class="modal-title">📅 Lançar no Balanço</span>
+      <button class="modal-close" onclick="UI.closeModal('modalLancar')">✕</button>
+    </div>
+    <div style="padding:.5rem 0 1rem">
+      <p style="font-size:.8rem;color:var(--muted);margin-bottom:1rem;line-height:1.6" id="lancarInfo"></p>
+      <div class="form-group">
+        <label class="fl">Mês de Referência</label>
+        <input type="month" class="fi" id="lancarMes"/>
+      </div>
+      <div class="info-box warn" style="margin-top:.5rem">
+        ⚠️ Somente as despesas <strong>ativas</strong> serão lançadas. Verifique se já não lançou este mês para evitar duplicatas.
+      </div>
+    </div>
+    <div class="modal-ft">
+      <button class="btn btn-ghost" onclick="UI.closeModal('modalLancar')">Cancelar</button>
+      <button class="btn btn-primary" onclick="confirmarLancamento()">✓ Confirmar Lançamento</button>
+    </div>
+  </div>
+</div>
+
+<div id="toast-ct"></div>
+<script src="assets/cc-auth.js"></script>
+<script src="assets/cc-core.js"></script>
+<script>
+const SB_URL_D  = 'https://yunoxkembhskpnprffoi.supabase.co';
+const SB_ANON_D = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inl1bm94a2VtYmhza3BucHJmZm9pIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg5Nzg2MzksImV4cCI6MjA5NDU1NDYzOX0.WhkzrBCHThvJaMuLeo6oVPjrWvc_MvfCoyz9B90-Yms';
+const TABLE_FIXAS = 'ex_despesas_fixas';
+const TABLE_LANC  = 'lancamentos_financeiros';
+
+let despesas = [];
+let editId = null;
+
+function _token() { return window._ccAccessToken || SB_ANON_D; }
+
+async function _fetch(path, opts = {}) {
+  const isWrite = opts.method && opts.method !== 'GET';
+  const res = await fetch(`${SB_URL_D}/rest/v1/${path}`, {
+    ...opts,
+    headers: {
+      'apikey': SB_ANON_D,
+      'Authorization': `Bearer ${_token()}`,
+      'Content-Type': 'application/json',
+      'Prefer': opts._prefer || (isWrite ? 'return=minimal' : 'return=representation'),
+      ...(opts.headers || {}),
+    },
+  });
+  if (res.status === 401) { window.location.replace('/Consultoria/contratos/login.html'); return []; }
+  if (!res.ok) { const e = await res.text(); throw new Error(`Supabase ${res.status}: ${e}`); }
+  const t = await res.text();
+  return t ? JSON.parse(t) : [];
+}
+
+// ── Carregar despesas ──
+async function carregar() {
+  try {
+    despesas = await _fetch(`${TABLE_FIXAS}?order=id.asc&select=*`);
+  } catch(e) {
+    UI.toast('Erro ao carregar: ' + e.message, 'err');
+    despesas = [];
+  }
+  renderTudo();
+}
+
+function renderTudo() {
+  renderKPIs();
+  renderLista();
+  renderSummary();
+  renderHistorico();
+}
+
+function renderKPIs() {
+  const ativas   = despesas.filter(d => d.ativa);
+  const inativas = despesas.filter(d => !d.ativa);
+  const totalAtivo = ativas.reduce((s, d) => s + Number(d.valor), 0);
+  const totalGeral = despesas.reduce((s, d) => s + Number(d.valor), 0);
+
+  document.getElementById('kpiArea').innerHTML = `
+    <div class="kpi"><div class="kpi-v c-red">${Fmt.brl(totalAtivo)}</div><div class="kpi-l">Total Mensal Ativo</div></div>
+    <div class="kpi"><div class="kpi-v">${ativas.length}</div><div class="kpi-l">Despesas Ativas</div></div>
+    <div class="kpi"><div class="kpi-v c-orange">${inativas.length}</div><div class="kpi-l">Despesas Inativas</div></div>
+    <div class="kpi"><div class="kpi-v" style="color:var(--muted)">${Fmt.brl(totalGeral)}</div><div class="kpi-l">Total Cadastrado</div></div>
+  `;
+}
+
+function renderLista() {
+  const el = document.getElementById('listArea');
+  if (!despesas.length) {
+    el.innerHTML = '<div style="padding:2rem;text-align:center;color:var(--muted);font-size:.8rem">Nenhuma despesa fixa cadastrada ainda.<br>Clique em <strong>＋ Nova Despesa</strong> para começar.</div>';
+    return;
+  }
+  el.innerHTML = despesas.map(d => `
+    <div class="desp-row ${d.ativa ? '' : 'desp-inativa'}">
+      <div style="flex:1">
+        <div class="desp-nome">${d.nome}</div>
+        <div class="desp-cat">${d.categoria}</div>
+      </div>
+      <div class="desp-val">− ${Fmt.brl(Number(d.valor))}</div>
+      <div class="desp-actions">
+        <button class="toggle-btn ${d.ativa ? 'on' : 'off'}" onclick="toggleAtiva(${d.id}, ${d.ativa})" title="${d.ativa ? 'Desativar' : 'Ativar'}"></button>
+        <button onclick="abrirModal(${d.id})" style="background:none;border:none;cursor:pointer;color:var(--muted);font-size:.85rem" title="Editar">✏️</button>
+        <button onclick="excluir(${d.id})" style="background:none;border:none;cursor:pointer;color:var(--red);font-size:.85rem" title="Excluir">🗑</button>
+      </div>
+    </div>
+  `).join('');
+}
+
+function renderSummary() {
+  const ativas = despesas.filter(d => d.ativa);
+  if (!ativas.length) {
+    document.getElementById('summaryArea').innerHTML = '<div style="color:var(--muted);font-size:.8rem">Nenhuma despesa ativa.</div>';
+    return;
+  }
+
+  // Agrupa por categoria
+  const cats = {};
+  ativas.forEach(d => { cats[d.categoria] = (cats[d.categoria] || 0) + Number(d.valor); });
+  const total = ativas.reduce((s, d) => s + Number(d.valor), 0);
+
+  const rows = Object.entries(cats).sort((a,b) => b[1]-a[1])
+    .map(([cat, val]) => `
+      <div class="summary-row">
+        <span style="color:var(--muted)">${cat}</span>
+        <span class="c-red fw7">${Fmt.brl(val)}</span>
+      </div>`).join('');
+
+  document.getElementById('summaryArea').innerHTML = `
+    ${rows}
+    <div class="summary-row total">
+      <span>Total Mensal</span>
+      <span class="c-red">${Fmt.brl(total)}</span>
+    </div>
+    <div class="summary-row" style="margin-top:.2rem">
+      <span style="color:var(--muted);font-size:.68rem">Anual estimado</span>
+      <span style="color:var(--muted);font-size:.78rem;font-weight:700">${Fmt.brl(total * 12)}</span>
+    </div>
+  `;
+}
+
+async function renderHistorico() {
+  // Busca lançamentos de despesas fixas no balanço (últimos 6 meses)
+  const hoje = new Date();
+  const ini  = new Date(hoje.getFullYear(), hoje.getMonth() - 5, 1).toISOString().slice(0,10);
+  const fim  = new Date(hoje.getFullYear(), hoje.getMonth() + 1, 0).toISOString().slice(0,10);
+
+  try {
+    const lanc = await _fetch(`${TABLE_LANC}?select=*&data=gte.${ini}&data=lte.${fim}&obs=like.*%5BFIXO%5D*&order=data.desc`);
+    const el = document.getElementById('historicoArea');
+    if (!lanc.length) {
+      el.innerHTML = '<div style="padding:1.2rem;text-align:center;color:var(--muted);font-size:.76rem">Nenhum lançamento de despesa fixa ainda.</div>';
+      return;
+    }
+    el.innerHTML = lanc.map(l => `
+      <div class="desp-row">
+        <div style="flex:1">
+          <div style="font-size:.8rem;font-weight:700">${l.descricao}</div>
+          <div style="font-size:.64rem;color:var(--muted)">${Fmt.dt(l.data)} · ${l.categoria}</div>
+        </div>
+        <div style="font-size:.88rem;font-weight:800;color:var(--red)">− ${Fmt.brl(Number(l.valor))}</div>
+      </div>
+    `).join('');
+  } catch(e) {
+    document.getElementById('historicoArea').innerHTML = '<div style="padding:1rem;color:var(--muted);font-size:.76rem">Erro ao carregar histórico.</div>';
+  }
+}
+
+// ── Toggle ativa/inativa ──
+async function toggleAtiva(id, atual) {
+  try {
+    await _fetch(`${TABLE_FIXAS}?id=eq.${id}`, {
+      method: 'PATCH',
+      body: JSON.stringify({ ativa: !atual }),
+      _prefer: 'return=minimal',
+    });
+    const idx = despesas.findIndex(d => d.id === id);
+    if (idx >= 0) despesas[idx].ativa = !atual;
+    renderTudo();
+  } catch(e) {
+    UI.toast('Erro: ' + e.message, 'err');
+  }
+}
+
+// ── Modal ──
+function abrirModal(id = null) {
+  editId = id;
+  const d = id ? despesas.find(x => x.id === id) : null;
+  document.getElementById('modalTitulo').textContent = id ? '✏️ Editar Despesa' : '＋ Nova Despesa Fixa';
+  UI.setVal('mNome',  d?.nome  || '');
+  UI.setVal('mValor', d?.valor || '');
+  UI.setVal('mCat',   d?.categoria || 'Marketing / Publicidade');
+  UI.setVal('mAtiva', d ? String(d.ativa) : 'true');
+  UI.openModal('modalDesp');
+}
+
+async function salvar() {
+  const nome  = UI.val('mNome').trim();
+  const valor = parseFloat(UI.val('mValor'));
+  const cat   = UI.val('mCat');
+  const ativa = UI.val('mAtiva') === 'true';
+
+  if (!nome)           { UI.toast('Informe o nome', 'err'); return; }
+  if (!valor || valor <= 0) { UI.toast('Informe um valor válido', 'err'); return; }
+
+  const payload = { nome, valor, categoria: cat, ativa };
+
+  try {
+    if (editId) {
+      await _fetch(`${TABLE_FIXAS}?id=eq.${editId}`, {
+        method: 'PATCH', body: JSON.stringify(payload), _prefer: 'return=minimal',
+      });
+      const idx = despesas.findIndex(d => d.id === editId);
+      if (idx >= 0) despesas[idx] = { ...despesas[idx], ...payload };
+      UI.toast('Despesa atualizada!', 'ok');
+    } else {
+      const res = await _fetch(TABLE_FIXAS, { method: 'POST', body: JSON.stringify(payload) });
+      despesas.push(Array.isArray(res) ? res[0] : res);
+      UI.toast('Despesa cadastrada!', 'ok');
+    }
+    UI.closeModal('modalDesp');
+    renderTudo();
+  } catch(e) {
+    UI.toast('Erro ao salvar: ' + e.message, 'err');
+  }
+}
+
+async function excluir(id) {
+  if (!confirm('Excluir esta despesa fixa?')) return;
+  try {
+    await _fetch(`${TABLE_FIXAS}?id=eq.${id}`, { method: 'DELETE', _prefer: 'return=minimal' });
+    despesas = despesas.filter(d => d.id !== id);
+    renderTudo();
+    UI.toast('Removida.', 'wrn');
+  } catch(e) {
+    UI.toast('Erro: ' + e.message, 'err');
+  }
+}
+
+// ── Lançar no Balanço ──
+function lancarMesAtual() {
+  const ativas = despesas.filter(d => d.ativa);
+  if (!ativas.length) { UI.toast('Nenhuma despesa ativa para lançar.', 'wrn'); return; }
+  const total = ativas.reduce((s, d) => s + Number(d.valor), 0);
+  const hoje  = new Date();
+  const mesStr = `${hoje.getFullYear()}-${String(hoje.getMonth()+1).padStart(2,'0')}`;
+  document.getElementById('lancarMes').value = mesStr;
+  document.getElementById('lancarInfo').innerHTML =
+    `Serão lançadas <strong>${ativas.length} despesa(s) ativas</strong> totalizando <strong style="color:var(--red)">${Fmt.brl(total)}</strong> no Balanço Financeiro.`;
+  UI.openModal('modalLancar');
+}
+
+async function confirmarLancamento() {
+  const mesVal = document.getElementById('lancarMes').value;
+  if (!mesVal) { UI.toast('Selecione o mês', 'err'); return; }
+  const ativas = despesas.filter(d => d.ativa);
+  if (!ativas.length) { UI.toast('Nenhuma despesa ativa.', 'wrn'); return; }
+
+  const [ano, mes] = mesVal.split('-');
+  const data = `${ano}-${mes}-01`;
+
+  UI.toast('Lançando despesas...', 'ok');
+
+  // Usa o mesmo cliente Supabase que o balanço financeiro usa
+  const sb = window.supabase.createClient(SB_URL_D, SB_ANON_D, {
+    global: { headers: { Authorization: `Bearer ${_token()}` } }
+  });
+
+  let erros = 0;
+  for (const d of ativas) {
+    try {
+      const payload = {
+        tipo:       'despesa',
+        data,
+        valor:      Number(d.valor),
+        categoria:  d.categoria,
+        descricao:  d.nome,
+        forma_pgto: 'Transferência',
+        obs:        `[FIXO] Despesa fixa — ${mes}/${ano}`,
+      };
+      const { error } = await sb.from(TABLE_LANC).insert(payload);
+      if (error) throw new Error(error.message);
+    } catch(e) {
+      erros++;
+      console.error('Erro ao lançar:', d.nome, e.message || e);
+    }
+  }
+
+  UI.closeModal('modalLancar');
+  if (erros === 0) {
+    UI.toast(`${ativas.length} despesa(s) lançadas no balanço!`, 'ok');
+  } else if (erros === ativas.length) {
+    UI.toast(`Erro ao lançar — verifique o console (F12)`, 'err');
+  } else {
+    UI.toast(`${ativas.length - erros} lançadas, ${erros} com erro.`, 'wrn');
+  }
+  renderHistorico();
+}
+
+// ── Init ──
+const _wait = setInterval(() => {
+  if (window._ccAccessToken !== undefined) {
+    clearInterval(_wait);
+    carregar();
+  }
+}, 80);
+</script>
+</body>
+</html>

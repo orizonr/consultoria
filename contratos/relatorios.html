@@ -1,0 +1,701 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <!-- ═══ FAVICON ═══ -->
+  <link rel="icon" type="image/png" sizes="32x32" href="../imagens/favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="192x192" href="../imagens/favicon-192x192.png" />
+  <link rel="shortcut icon" href="../imagens/icone.png" type="image/png" />
+  <link rel="apple-touch-icon" href="../imagens/icone.png" />
+  <link rel="manifest" href="../imagens/site.webmanifest" />
+<!-- SEO -->
+<meta name="description" content="Orizon Consultoria — Sistema de Gestão Financeira de Contratos" />
+<meta name="robots" content="noindex, nofollow" />
+<title>Relatórios — Contratos · Orizon Consultoria</title>
+<link rel="stylesheet" href="assets/cc-style.css"/>
+<style>.sb-head{padding:1.1rem 0.85rem 1rem;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:0.75rem;flex-shrink:0;}.sb-logo-ico{width:44px;height:44px;border-radius:13px;background:linear-gradient(135deg,rgba(30,64,175,0.35),rgba(59,130,246,0.18));border:1px solid rgba(59,130,246,0.28);display:flex;align-items:center;justify-content:center;overflow:hidden;flex-shrink:0;box-shadow:0 2px 10px rgba(59,130,246,0.15);}.sb-logo-ico img{width:44px;height:44px;object-fit:contain;}.sb-logo-txt{overflow:hidden;white-space:nowrap;}.sb-logo-name{font-size:1.18rem;font-weight:900;line-height:1.2;letter-spacing:-0.3px;}.sb-logo-name span{color:var(--accent);}.sb-logo-sub{font-size:0.6rem;color:var(--accent);text-transform:uppercase;letter-spacing:2px;opacity:0.65;margin-top:0.1rem;}.sb-av img{width:100%;height:100%;object-fit:contain;border-radius:inherit;}
+.rel-card{padding:1rem;cursor:pointer;transition:all .18s;border:1px solid rgba(59,130,246,.08);}
+.rel-card:hover{border-color:rgba(59,130,246,.28);transform:translateY(-2px);background:rgba(59,130,246,.04);}
+.rel-card-title{font-weight:800;font-size:.85rem;margin-bottom:.2rem;}
+.rel-card-sub{font-size:.68rem;color:var(--muted);line-height:1.4;margin-bottom:.6rem;}
+.rel-card-tags{display:flex;gap:.3rem;flex-wrap:wrap;}
+.seg-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:.5rem;flex-wrap:wrap;gap:.4rem;}
+.seg-title{font-size:.82rem;font-weight:800;}
+.seg-val{font-size:1.1rem;font-weight:900;color:var(--accent);}
+.seg-sub{font-size:.62rem;color:var(--muted);}
+.seg-bar{height:4px;border-radius:99px;background:rgba(255,255,255,.06);margin:.4rem 0;}
+.seg-bar-fill{height:100%;border-radius:99px;background:linear-gradient(90deg,var(--primary),var(--accent));transition:width .4s;}
+</style></head>
+<body>
+<div class="app">
+<aside class="sidebar" id="sidebar">
+  <div class="sb-head"><div class="sb-logo-ico"><img src="../imagens/fundo.png" alt="Orizon" style="width:44px;height:44px;object-fit:contain"/></div><div class="sb-logo-txt"><div class="sb-logo-name">Orizon <span>Consultoria</span></div><div class="sb-logo-sub">Contratos</div></div></div>
+  <nav class="sb-nav">
+    <div class="sb-sep">Visão Geral</div>
+    <a class="sb-item" href="index.html"><span class="ico">📊</span><span class="lbl">Dashboard</span></a>
+    <div class="sb-sep">Controles</div>
+    <a class="sb-item" href="estagiarios.html"><span class="ico">🎓</span><span class="lbl">Estagiários</span></a>
+    <a class="sb-item" href="clt.html"><span class="ico">💼</span><span class="lbl">CLTs</span></a>
+    <div class="sb-sep">Gestão</div>
+    <a class="sb-item" href="financeiro-mensal.html"><span class="ico">📅</span><span class="lbl">Financeiro Mensal</span></a>
+    <a class="sb-item active" href="relatorios.html"><span class="ico">📈</span><span class="lbl">Relatórios</span></a>
+    <a class="sb-item" href="balanco-financeiro.html"><span class="ico">💰</span><span class="lbl">Balanço Financeiro</span></a>
+    <a class="sb-item" href="despesas-fixas.html"><span class="ico">📌</span><span class="lbl">Despesas Fixas</span></a>
+    <div class="sb-sep">Equipe</div>
+    <a class="sb-item" href="consultores.html"><span class="ico">🏆</span><span class="lbl">Consultores</span></a>
+    <a class="sb-item" href="pipeline.html"><span class="ico">🔄</span><span class="lbl">Pipeline de Projetos</span></a>
+    <div class="sb-sep">Sistema</div>
+    <a class="sb-item" href="configuracoes.html"><span class="ico">⚙️</span><span class="lbl">Configurações</span></a>
+  </nav>
+  <div class="sb-foot"><div class="sb-av"><img src="../imagens/fundo.png" alt="EX" style="width:18px;height:18px;object-fit:contain"/></div><div class="sb-uinfo"><div class="sb-uname" id="user-nome">—</div><div class="sb-urole" id="user-email">—</div></div><button class="sb-toggle" onclick="if(window.ccLogout)window.ccLogout()" title="Sair" style="margin-right:.2rem;opacity:.4">⏻</button><button class="sb-toggle" id="sb-toggle">◀</button></div>
+</aside>
+
+<div class="main">
+  <div class="topbar">
+    <div class="tb-bc"><a href="index.html">Dashboard</a><span class="sep"> / </span><span>Relatórios</span></div>
+    <div class="tb-right"><span id="tb-date" class="tb-date"></span></div>
+  </div>
+  <div class="content">
+    <div class="sec-hd">
+      <div><div class="sec-title">📈 <span>Relatórios</span></div>
+      <div class="sec-sub">Visão por segmento — filtre por agência, empresa cliente ou tipo de origem</div></div>
+    </div>
+
+    <!-- ── FILTROS DE SEGMENTO ───────────────────────────── -->
+    <div class="tbl-wrap" style="padding:1.1rem;margin-bottom:1.2rem">
+      <div style="font-size:.65rem;font-weight:800;text-transform:uppercase;letter-spacing:1.5px;color:var(--muted);margin-bottom:.8rem">🔎 Filtrar por segmento (opcional)</div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:.7rem;align-items:end">
+        <div>
+          <label style="font-size:.62rem;color:var(--muted);font-weight:700;display:block;margin-bottom:.3rem">TIPO</label>
+          <select class="fi" id="fTipo" onchange="atualizarFiltros()" style="font-size:.78rem;padding:.4rem .7rem;width:100%">
+            <option value="">Todos (Estágio + CLT)</option>
+            <option value="estagiario">Só Estagiários</option>
+            <option value="clt">Só CLTs</option>
+          </select>
+        </div>
+        <div>
+          <label style="font-size:.62rem;color:var(--muted);font-weight:700;display:block;margin-bottom:.3rem">AGÊNCIA / ORIGEM</label>
+          <select class="fi" id="fAgencia" style="font-size:.78rem;padding:.4rem .7rem;width:100%">
+            <option value="">Todas as agências</option>
+          </select>
+        </div>
+        <div>
+          <label style="font-size:.62rem;color:var(--muted);font-weight:700;display:block;margin-bottom:.3rem">EMPRESA CLIENTE</label>
+          <select class="fi" id="fEmpresa" style="font-size:.78rem;padding:.4rem .7rem;width:100%">
+            <option value="">Todos os clientes</option>
+          </select>
+        </div>
+        <div>
+          <label style="font-size:.62rem;color:var(--muted);font-weight:700;display:block;margin-bottom:.3rem">TIPO DE ORIGEM</label>
+          <select class="fi" id="fTipoOrigem" style="font-size:.78rem;padding:.4rem .7rem;width:100%">
+            <option value="">Todos</option>
+            <option value="agencia">Agência</option>
+            <option value="direta">Direta</option>
+            <option value="indicacao">Indicação</option>
+            <option value="outros">Outros</option>
+          </select>
+        </div>
+        <div>
+          <label style="font-size:.62rem;color:var(--muted);font-weight:700;display:block;margin-bottom:.3rem">SITUAÇÃO</label>
+          <select class="fi" id="fSituacao" style="font-size:.78rem;padding:.4rem .7rem;width:100%">
+            <option value="">Todos</option>
+            <option value="ativo">Ativos</option>
+            <option value="desligado">Desligados</option>
+            <option value="concluido">Concluídos</option>
+          </select>
+        </div>
+        <div style="display:flex;gap:.4rem">
+          <button class="btn btn-ghost" style="flex:1;font-size:.72rem" onclick="limparFiltros()">✕ Limpar</button>
+        </div>
+      </div>
+      <!-- Chips de filtros ativos -->
+      <div id="filtrosAtivos" style="display:none;margin-top:.8rem;padding-top:.8rem;border-top:1px solid var(--border);display:flex;flex-wrap:wrap;gap:.4rem;align-items:center">
+        <span style="font-size:.6rem;color:var(--muted);font-weight:700">FILTROS:</span>
+        <span id="chipAgencia" style="display:none" class="tag tag-orange"></span>
+        <span id="chipEmpresa" style="display:none" class="tag tag-blue"></span>
+        <span id="chipOrigem"  style="display:none" class="tag tag-green"></span>
+        <span id="chipTipo"    style="display:none" class="tag tag-accent"></span>
+        <span id="chipSit"     style="display:none" class="tag tag-gray"></span>
+      </div>
+    </div>
+
+    <!-- ── CARDS DE RELATÓRIOS ───────────────────────────── -->
+    <div style="font-size:.62rem;font-weight:800;text-transform:uppercase;letter-spacing:1.5px;color:var(--muted);margin-bottom:.6rem">Relatórios Gerais</div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:.8rem;margin-bottom:1.2rem">
+      <div class="tbl-wrap rel-card" onclick="relConsolidado()">
+        <div style="font-size:1.5rem;margin-bottom:.4rem">📊</div>
+        <div class="rel-card-title">Consolidado Geral</div>
+        <div class="rel-card-sub">Todos os contratos filtrados</div>
+        <div class="rel-card-tags"><span class="tag tag-green">CSV</span><span class="tag tag-blue">Word</span></div>
+      </div>
+      <div class="tbl-wrap rel-card" onclick="relEstagiarios()">
+        <div style="font-size:1.5rem;margin-bottom:.4rem">🎓</div>
+        <div class="rel-card-title">Estagiários</div>
+        <div class="rel-card-sub">Bolsas, taxas, períodos e receitas</div>
+        <div class="rel-card-tags"><span class="tag tag-green">CSV</span><span class="tag tag-blue">Word</span></div>
+      </div>
+      <div class="tbl-wrap rel-card" onclick="relCLTs()">
+        <div style="font-size:1.5rem;margin-bottom:.4rem">💼</div>
+        <div class="rel-card-title">CLTs</div>
+        <div class="rel-card-sub">Salários, taxas e receita por colocação</div>
+        <div class="rel-card-tags"><span class="tag tag-green">CSV</span><span class="tag tag-blue">Word</span></div>
+      </div>
+      <div class="tbl-wrap rel-card" onclick="relVencimentos()">
+        <div style="font-size:1.5rem;margin-bottom:.4rem">📅</div>
+        <div class="rel-card-title">Vencimentos</div>
+        <div class="rel-card-sub">Períodos vencendo em 90 dias</div>
+        <div class="rel-card-tags"><span class="tag tag-green">CSV</span><span class="tag tag-blue">Word</span></div>
+      </div>
+      <div class="tbl-wrap rel-card" onclick="relAlertas()">
+        <div style="font-size:1.5rem;margin-bottom:.4rem">🔔</div>
+        <div class="rel-card-title">Alertas</div>
+        <div class="rel-card-sub">Contratos com alerta ativo</div>
+        <div class="rel-card-tags"><span class="tag tag-orange">Urgente</span></div>
+      </div>
+    </div>
+
+    <div style="font-size:.62rem;font-weight:800;text-transform:uppercase;letter-spacing:1.5px;color:var(--muted);margin-bottom:.6rem">Relatórios por Segmento</div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:.8rem;margin-bottom:1.5rem">
+      <div class="tbl-wrap rel-card" onclick="relPorAgencia()">
+        <div style="font-size:1.5rem;margin-bottom:.4rem">🏢</div>
+        <div class="rel-card-title">Por Agência</div>
+        <div class="rel-card-sub">Receita e contratos por agência parceira</div>
+        <div class="rel-card-tags"><span class="tag tag-orange">Agências</span><span class="tag tag-green">CSV</span></div>
+      </div>
+      <div class="tbl-wrap rel-card" onclick="relPorEmpresa()">
+        <div style="font-size:1.5rem;margin-bottom:.4rem">🏭</div>
+        <div class="rel-card-title">Por Empresa Cliente</div>
+        <div class="rel-card-sub">Receita e headcount por cliente</div>
+        <div class="rel-card-tags"><span class="tag tag-blue">Clientes</span><span class="tag tag-green">CSV</span></div>
+      </div>
+      <div class="tbl-wrap rel-card" onclick="relPorOrigem()">
+        <div style="font-size:1.5rem;margin-bottom:.4rem">🔀</div>
+        <div class="rel-card-title">Por Tipo de Origem</div>
+        <div class="rel-card-sub">Direta vs Agência vs Indicação</div>
+        <div class="rel-card-tags"><span class="tag tag-green">CSV</span></div>
+      </div>
+      <div class="tbl-wrap rel-card" onclick="relMinhasComissoes()">
+        <div style="font-size:1.5rem;margin-bottom:.4rem">💰</div>
+        <div class="rel-card-title">Minhas Comissões</div>
+        <div class="rel-card-sub">O que entra no seu bolso por contrato</div>
+        <div class="rel-card-tags"><span class="tag tag-accent">Comissão</span><span class="tag tag-green">CSV</span></div>
+      </div>
+    </div>
+
+    <!-- Preview -->
+    <div id="relPreview" style="display:none">
+      <div class="tbl-wrap" style="padding:1.2rem">
+        <div class="tbl-hd" style="padding:0;padding-bottom:.8rem;margin-bottom:.8rem;border-bottom:1px solid var(--border)">
+          <span class="tbl-title" id="relTitulo">Relatório</span>
+          <div class="tbl-actions" id="relBtns"></div>
+        </div>
+        <div id="relConteudoWrap">
+          <div id="relConteudo" style="overflow-x:auto;overflow-y:visible;scrollbar-width:auto;scrollbar-color:#3b82f6 #1a1a1a;-webkit-overflow-scrolling:touch"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+<div id="toast-ct"></div>
+<script src="assets/cc-auth.js"></script>
+<script src="assets/cc-core.js"></script>
+<script>
+let contratos = CC.getContratos();
+let cfg       = CC.getConfig();
+
+// ─── FILTROS ───────────────────────────────────────────────
+function getFiltros() {
+  return {
+    tipo:       document.getElementById('fTipo')?.value       || '',
+    agencia:    document.getElementById('fAgencia')?.value    || '',
+    empresa:    document.getElementById('fEmpresa')?.value    || '',
+    tipoOrigem: document.getElementById('fTipoOrigem')?.value || '',
+    situacao:   document.getElementById('fSituacao')?.value   || '',
+  };
+}
+
+function aplicarFiltros(lista) {
+  const f = getFiltros();
+  return lista.filter(c => {
+    if (f.tipo       && c.tipo        !== f.tipo)       return false;
+    if (f.agencia    && (c.agencia||'').trim() !== f.agencia) return false;
+    if (f.empresa    && c.empresa     !== f.empresa)    return false;
+    if (f.tipoOrigem && (c.tipoOrigem||'agencia') !== f.tipoOrigem) return false;
+    if (f.situacao   && c.situacao    !== f.situacao)   return false;
+    return true;
+  });
+}
+
+function atualizarFiltros() {
+  const tipo = document.getElementById('fTipo').value;
+  // repopula agências e empresas de acordo com tipo
+  popularSelects(tipo);
+}
+
+function popularSelects(tipo) {
+  contratos = CC.getContratos();
+  const lista = tipo ? contratos.filter(c => c.tipo === tipo) : contratos;
+
+  const agencias = [...new Set(lista.map(c => (c.agencia||'').trim()).filter(Boolean))].sort();
+  const empresas = [...new Set(lista.map(c => c.empresa).filter(Boolean))].sort();
+
+  const selAg = document.getElementById('fAgencia');
+  const selEm = document.getElementById('fEmpresa');
+  const curAg = selAg.value;
+  const curEm = selEm.value;
+
+  selAg.innerHTML = '<option value="">Todas as agências</option>' +
+    agencias.map(a => `<option value="${a}"${a===curAg?' selected':''}>${a}</option>`).join('');
+  selEm.innerHTML = '<option value="">Todos os clientes</option>' +
+    empresas.map(e => `<option value="${e}"${e===curEm?' selected':''}>${e}</option>`).join('');
+
+  atualizarChips();
+}
+
+function atualizarChips() {
+  const f = getFiltros();
+  const wrap = document.getElementById('filtrosAtivos');
+  const algum = f.agencia || f.empresa || f.tipoOrigem || f.tipo || f.situacao;
+  wrap.style.display = algum ? 'flex' : 'none';
+
+  const set = (id, val, label) => {
+    const el = document.getElementById(id);
+    if (val) { el.textContent = label + val; el.style.display = ''; }
+    else el.style.display = 'none';
+  };
+  set('chipAgencia', f.agencia,    '🏢 ');
+  set('chipEmpresa', f.empresa,    '🏭 ');
+  set('chipOrigem',  f.tipoOrigem, '🔀 ');
+  set('chipTipo',    f.tipo === 'estagiario' ? 'Estagiários' : f.tipo === 'clt' ? 'CLTs' : '', '');
+  set('chipSit',     f.situacao,   '');
+}
+
+function limparFiltros() {
+  ['fTipo','fAgencia','fEmpresa','fTipoOrigem','fSituacao'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.value = '';
+  });
+  atualizarChips();
+}
+
+// ─── HELPERS ───────────────────────────────────────────────
+function brl(v) { return Fmt.brl(v); }
+
+function descOrigem(c) {
+  const mapa = {agencia:'Agência',direta:'Direta',indicacao:'Indicação',outros:'Outros'};
+  return (c.agencia ? c.agencia + ' · ' : '') + (mapa[c.tipoOrigem] || '—');
+}
+
+function calcComissaoRec(c) {
+  const rec = Calc.receita(c);
+  if (c.tipoComissao === 'pct' || c.tipoComissao === 'percentual') return rec * ((c.comissaoRec||0)/100);
+  if (c.tipoComissao === 'fixo') return c.comissaoFixo || 0;
+  if (!c.tipoComissao && (c.comissaoRec||0) > 0) return rec * (c.comissaoRec/100);
+  return 0;
+}
+
+function labelFiltro() {
+  const f = getFiltros();
+  const parts = [];
+  if (f.agencia)    parts.push(`Agência: ${f.agencia}`);
+  if (f.empresa)    parts.push(`Cliente: ${f.empresa}`);
+  if (f.tipoOrigem) parts.push({agencia:'Via Agência',direta:'Direta',indicacao:'Indicação',outros:'Outros'}[f.tipoOrigem]);
+  if (f.tipo)       parts.push(f.tipo === 'estagiario' ? 'Estagiários' : 'CLTs');
+  if (f.situacao)   parts.push(f.situacao);
+  return parts.length ? ` — ${parts.join(' · ')}` : '';
+}
+
+// ─── SHOW REL ──────────────────────────────────────────────
+function showRel(titulo, html, csvFn, wordFn) {
+  document.getElementById('relTitulo').textContent = titulo;
+  document.getElementById('relConteudo').innerHTML = html;
+  const btns = [`<button class="btn btn-success btn-sm" onclick="window.print()">🖨️ Imprimir</button>`];
+  if (csvFn)  btns.push(`<button class="btn btn-ghost btn-sm" onclick="(${csvFn.toString()})()">📊 CSV</button>`);
+  if (wordFn) btns.push(`<button class="btn btn-blue btn-sm"  onclick="(${wordFn.toString()})()">📄 Word</button>`);
+  document.getElementById('relBtns').innerHTML = btns.join('');
+  document.getElementById('relPreview').style.display = 'block';
+  document.getElementById('relPreview').scrollIntoView({behavior:'smooth'});
+}
+
+// ─── CONSOLIDADO ───────────────────────────────────────────
+function relConsolidado() {
+  contratos = CC.getContratos();
+  const lista = aplicarFiltros(contratos);
+  const est = lista.filter(c=>c.tipo==='estagiario');
+  const clt = lista.filter(c=>c.tipo==='clt');
+  const recEstMensal = est.filter(c=>c.situacao==='ativo').reduce((s,c)=>s+Calc.receita(c),0);
+  const recCltTotal  = clt.reduce((s,c)=>s+Calc.receita(c),0);
+  const html = `
+    <div style="margin-bottom:.8rem;display:flex;gap:1.5rem;flex-wrap:wrap;font-size:.8rem">
+      <span>Receita mensal estagiários (ativos): <strong class="c-accent">${brl(recEstMensal)}/mês</strong></span>
+      <span>Colocações CLT (histórico): <strong class="c-green">${brl(recCltTotal)}</strong></span>
+      <span style="color:var(--muted)">${lista.length} contratos${labelFiltro()}</span>
+    </div>
+    <table><thead><tr><th>Nome</th><th>Tipo</th><th>Empresa Cliente</th><th>Agência / Origem</th><th>Valor Base</th><th>Taxa</th><th>Receita Bruta</th><th>Minha Comissão</th><th>Frequência</th><th>Situação</th></tr></thead>
+    <tbody>
+      ${est.map(c=>`<tr>
+        <td>${c.nome}</td><td><span class="tag tag-accent">Estágio</span></td>
+        <td>${c.empresa}</td><td style="font-size:.72rem">${descOrigem(c)||'—'}</td>
+        <td>${brl(c.bolsa)}</td><td>${c.taxa}%</td>
+        <td class="c-accent fw8">${brl(Calc.receita(c))}</td>
+        <td class="c-orange fw8">${calcComissaoRec(c)>0?brl(calcComissaoRec(c)):'-'}</td>
+        <td style="font-size:.7rem;color:var(--muted)">mensal</td><td>${c.situacao}</td></tr>`).join('')}
+      ${clt.map(c=>`<tr>
+        <td>${c.nome}</td><td><span class="tag tag-blue">CLT</span></td>
+        <td>${c.empresa}</td><td style="font-size:.72rem">${descOrigem(c)||'—'}</td>
+        <td>${brl(c.salario||0)}</td><td>${c.taxa}%</td>
+        <td class="c-green fw8">${brl(Calc.receita(c))}</td>
+        <td class="c-orange fw8">${calcComissaoRec(c)>0?brl(calcComissaoRec(c)):'-'}</td>
+        <td style="font-size:.7rem;color:var(--muted)">único</td><td>${c.situacao}</td></tr>`).join('')}
+    </tbody></table>`;
+  showRel(`Consolidado${labelFiltro()} (${lista.length})`, html,
+    function(){Export.csv(
+      ['Nome','Tipo','Empresa','Agência/Origem','Base','Taxa%','Receita Bruta','Minha Comissão','Frequência','Situação'],
+      [...est.map(c=>[c.nome,'Estagiário',c.empresa,descOrigem(c),brl(c.bolsa),c.taxa+'%',brl(Calc.receita(c)),calcComissaoRec(c)>0?brl(calcComissaoRec(c)):'-','mensal',c.situacao]),
+       ...clt.map(c=>[c.nome,'CLT',c.empresa,descOrigem(c),brl(c.salario||0),c.taxa+'%',brl(Calc.receita(c)),calcComissaoRec(c)>0?brl(calcComissaoRec(c)):'-','único',c.situacao])]
+      ,'consolidado.csv')},
+    function(){Export.word(`<h2>Consolidado Geral${labelFiltro()}</h2>${document.getElementById('relConteudo').innerHTML}`,'consolidado.doc')});
+}
+
+// ─── ESTAGIÁRIOS ───────────────────────────────────────────
+function relEstagiarios() {
+  contratos = CC.getContratos();
+  const lista = aplicarFiltros(contratos.filter(c=>c.tipo==='estagiario'));
+  const total = lista.filter(c=>c.situacao==='ativo').reduce((s,c)=>s+Calc.receita(c),0);
+  const html = `
+    <p style="margin-bottom:.8rem;font-size:.8rem">Receita mensal total (ativos): <strong class="c-accent">${brl(total)}</strong>${labelFiltro()}</p>
+    <table><thead><tr><th>Nome</th><th>Empresa Cliente</th><th>Agência / Origem</th><th>Bolsa</th><th>Taxa</th><th>Receita Bruta/mês</th><th>Minha Comissão/mês</th><th>Período</th><th>Início</th><th>Fim Contrato</th><th>Situação</th></tr></thead>
+    <tbody>${lista.map(c=>`<tr>
+      <td>${c.nome}</td><td>${c.empresa}</td>
+      <td style="font-size:.72rem">${descOrigem(c)||'—'}</td>
+      <td>${brl(c.bolsa)}</td><td>${c.taxa}%</td>
+      <td class="c-accent fw8">${brl(Calc.receita(c))}</td>
+      <td class="c-orange fw8">${calcComissaoRec(c)>0?brl(calcComissaoRec(c)):'-'}</td>
+      <td>${c.periodoAtual}º</td>
+      <td>${Fmt.dt(c.inicio1)}</td><td>${Fmt.dt(Calc.addMeses(c.inicio1,24))}</td>
+      <td>${c.situacao}</td></tr>`).join('')}
+    </tbody></table>`;
+  showRel(`Estagiários${labelFiltro()} (${lista.length})`, html,
+    function(){Export.csv(['Nome','Empresa','Agência/Origem','Bolsa','Taxa%','Receita Bruta','Minha Comissão','Período','Início','Fim','Situação'],lista.map(c=>[c.nome,c.empresa,descOrigem(c),brl(c.bolsa),c.taxa+'%',brl(Calc.receita(c)),calcComissaoRec(c)>0?brl(calcComissaoRec(c)):'-',c.periodoAtual+'º',Fmt.dt(c.inicio1),Fmt.dt(Calc.addMeses(c.inicio1,24)),c.situacao]),'estagiarios_rel.csv')},
+    function(){Export.word(`<h2>Estagiários${labelFiltro()}</h2>${document.getElementById('relConteudo').innerHTML}`,'estagiarios_rel.doc')});
+}
+
+// ─── CLTs ──────────────────────────────────────────────────
+function relCLTs() {
+  contratos = CC.getContratos();
+  const lista = aplicarFiltros(contratos.filter(c=>c.tipo==='clt'));
+  const hoje = new Date();
+  const mesAtual = `${hoje.getFullYear()}-${String(hoje.getMonth()+1).padStart(2,'0')}`;
+  const colMes   = lista.filter(c=>c.admissao&&c.admissao.slice(0,7)===mesAtual).reduce((s,c)=>s+Calc.receita(c),0);
+  const colTotal = lista.reduce((s,c)=>s+Calc.receita(c),0);
+  const comTotal = lista.reduce((s,c)=>s+calcComissaoRec(c),0);
+  const html = `
+    <div style="margin-bottom:.8rem;display:flex;gap:1.5rem;flex-wrap:wrap;font-size:.8rem">
+      <span>Colocações este mês: <strong class="c-accent">${brl(colMes)}</strong></span>
+      <span>Total histórico (bruto): <strong class="c-green">${brl(colTotal)}</strong></span>
+      <span>Minhas comissões total: <strong class="c-orange">${brl(comTotal)}</strong></span>
+    </div>
+    <table><thead><tr><th>Nome</th><th>Empresa Cliente</th><th>Agência / Origem</th><th>Cargo</th><th>Salário</th><th>Taxa</th><th>Receita Bruta (único)</th><th>Minha Comissão</th><th>Admissão</th><th>Situação</th></tr></thead>
+    <tbody>${lista.map(c=>{const m=Calc.mesesTrabalhados(c.admissao);return`<tr>
+      <td>${c.nome}</td><td>${c.empresa}</td>
+      <td style="font-size:.72rem">${descOrigem(c)||'—'}</td>
+      <td style="font-size:.76rem">${c.cargo||'—'}</td>
+      <td>${brl(c.salario||0)}</td><td>${c.taxa}%</td>
+      <td class="c-accent fw8">${brl(Calc.receita(c))}</td>
+      <td class="c-orange fw8">${calcComissaoRec(c)>0?brl(calcComissaoRec(c)):'-'}</td>
+      <td>${Fmt.dt(c.admissao)}</td><td>${c.situacao}</td></tr>`}).join('')}
+    </tbody></table>`;
+  showRel(`CLTs${labelFiltro()} (${lista.length})`, html,
+    function(){Export.csv(['Nome','Empresa','Agência/Origem','Cargo','Salário','Taxa%','Receita Bruta','Minha Comissão','Admissão','Situação'],lista.map(c=>[c.nome,c.empresa,descOrigem(c),c.cargo||'',brl(c.salario||0),c.taxa+'%',brl(Calc.receita(c)),calcComissaoRec(c)>0?brl(calcComissaoRec(c)):'-',Fmt.dt(c.admissao),c.situacao]),'clt_rel.csv')},
+    function(){Export.word(`<h2>CLTs${labelFiltro()}</h2>${document.getElementById('relConteudo').innerHTML}`,'clt_rel.doc')});
+}
+
+// ─── POR AGÊNCIA ───────────────────────────────────────────
+function relPorAgencia() {
+  contratos = CC.getContratos();
+  const lista = aplicarFiltros(contratos);
+  // Agrupar por agência (sem agência = "Direto/Sem Agência")
+  const mapa = {};
+  lista.forEach(c => {
+    const ag = (c.agencia||'').trim() || '— Sem agência cadastrada';
+    if (!mapa[ag]) mapa[ag] = { contratos:[], recBruta:0, comissao:0, est:0, clt:0 };
+    mapa[ag].contratos.push(c);
+    mapa[ag].recBruta += Calc.receita(c);
+    mapa[ag].comissao += calcComissaoRec(c);
+    if (c.tipo==='estagiario') mapa[ag].est++;
+    else mapa[ag].clt++;
+  });
+  const sorted = Object.entries(mapa).sort((a,b)=>b[1].recBruta-a[1].recBruta);
+  const maxVal = sorted[0]?.[1].recBruta || 1;
+
+  const cards = sorted.map(([ag, d]) => `
+    <div style="margin-bottom:1.2rem;padding:1rem;background:rgba(59,130,246,.04);border:1px solid rgba(59,130,246,.1);border-radius:12px">
+      <div class="seg-header">
+        <div>
+          <div class="seg-title">🏢 ${ag}</div>
+          <div class="seg-sub">${d.est} estagiário(s) · ${d.clt} CLT(s) · ${d.contratos.length} total</div>
+        </div>
+        <div style="text-align:right">
+          <div class="seg-val">${brl(d.recBruta)}</div>
+          <div class="seg-sub">Receita bruta · Comissão: <strong style="color:#f39c12">${brl(d.comissao)}</strong></div>
+        </div>
+      </div>
+      <div class="seg-bar"><div class="seg-bar-fill" style="width:${Math.round(d.recBruta/maxVal*100)}%"></div></div>
+      <table style="margin-top:.6rem;font-size:.72rem"><thead><tr><th>Nome</th><th>Tipo</th><th>Empresa Cliente</th><th>Receita Bruta</th><th>Minha Comissão</th><th>Situação</th></tr></thead>
+      <tbody>${d.contratos.map(c=>`<tr>
+        <td>${c.nome}</td>
+        <td><span class="tag ${c.tipo==='estagiario'?'tag-accent':'tag-blue'}">${c.tipo==='estagiario'?'Estágio':'CLT'}</span></td>
+        <td>${c.empresa}</td>
+        <td class="c-accent fw8">${brl(Calc.receita(c))}${c.tipo==='estagiario'?'/mês':' único'}</td>
+        <td class="c-orange">${calcComissaoRec(c)>0?brl(calcComissaoRec(c)):'-'}</td>
+        <td>${c.situacao}</td></tr>`).join('')}
+      </tbody></table>
+    </div>`).join('');
+
+  const resumo = `
+    <div style="margin-bottom:1rem;display:flex;gap:1.5rem;flex-wrap:wrap;font-size:.8rem">
+      <span><strong>${sorted.length}</strong> agência(s)/origens distintas</span>
+      <span>Receita bruta total: <strong class="c-accent">${brl(lista.reduce((s,c)=>s+Calc.receita(c),0))}</strong></span>
+      <span>Minhas comissões: <strong class="c-orange">${brl(lista.reduce((s,c)=>s+calcComissaoRec(c),0))}</strong></span>
+    </div>`;
+
+  showRel(`Por Agência${labelFiltro()} (${sorted.length} origens)`, resumo + cards,
+    function(){Export.csv(
+      ['Agência/Origem','Estagiários','CLTs','Receita Bruta','Minhas Comissões'],
+      sorted.map(([ag,d])=>[ag,d.est,d.clt,brl(d.recBruta),brl(d.comissao)])
+    ,'por_agencia.csv')}, null);
+}
+
+// ─── POR EMPRESA CLIENTE ────────────────────────────────────
+function relPorEmpresa() {
+  contratos = CC.getContratos();
+  const lista = aplicarFiltros(contratos);
+  const mapa = {};
+  lista.forEach(c => {
+    const emp = c.empresa || '— Sem empresa';
+    if (!mapa[emp]) mapa[emp] = { contratos:[], recBruta:0, comissao:0, est:0, clt:0, agencias:new Set() };
+    mapa[emp].contratos.push(c);
+    mapa[emp].recBruta += Calc.receita(c);
+    mapa[emp].comissao += calcComissaoRec(c);
+    if (c.tipo==='estagiario') mapa[emp].est++;
+    else mapa[emp].clt++;
+    if (c.agencia) mapa[emp].agencias.add(c.agencia.trim());
+  });
+  const sorted = Object.entries(mapa).sort((a,b)=>b[1].recBruta-a[1].recBruta);
+  const maxVal = sorted[0]?.[1].recBruta || 1;
+
+  const cards = sorted.map(([emp, d]) => `
+    <div style="margin-bottom:1.2rem;padding:1rem;background:rgba(52,152,219,.04);border:1px solid rgba(52,152,219,.1);border-radius:12px">
+      <div class="seg-header">
+        <div>
+          <div class="seg-title">🏭 ${emp}</div>
+          <div class="seg-sub">${d.est} estagiário(s) · ${d.clt} CLT(s)${d.agencias.size?` · via: ${[...d.agencias].join(', ')}`:''}
+          </div>
+        </div>
+        <div style="text-align:right">
+          <div class="seg-val">${brl(d.recBruta)}</div>
+          <div class="seg-sub">Receita bruta · Comissão: <strong style="color:#f39c12">${brl(d.comissao)}</strong></div>
+        </div>
+      </div>
+      <div class="seg-bar" style="--fill-color:rgba(52,152,219,.6)"><div class="seg-bar-fill" style="width:${Math.round(d.recBruta/maxVal*100)}%;background:linear-gradient(90deg,#1e40af,#3498db)"></div></div>
+      <table style="margin-top:.6rem;font-size:.72rem"><thead><tr><th>Nome</th><th>Tipo</th><th>Agência/Origem</th><th>Receita Bruta</th><th>Minha Comissão</th><th>Situação</th></tr></thead>
+      <tbody>${d.contratos.map(c=>`<tr>
+        <td>${c.nome}</td>
+        <td><span class="tag ${c.tipo==='estagiario'?'tag-accent':'tag-blue'}">${c.tipo==='estagiario'?'Estágio':'CLT'}</span></td>
+        <td style="font-size:.68rem">${descOrigem(c)||'—'}</td>
+        <td class="c-accent fw8">${brl(Calc.receita(c))}${c.tipo==='estagiario'?'/mês':' único'}</td>
+        <td class="c-orange">${calcComissaoRec(c)>0?brl(calcComissaoRec(c)):'-'}</td>
+        <td>${c.situacao}</td></tr>`).join('')}
+      </tbody></table>
+    </div>`).join('');
+
+  const resumo = `
+    <div style="margin-bottom:1rem;display:flex;gap:1.5rem;flex-wrap:wrap;font-size:.8rem">
+      <span><strong>${sorted.length}</strong> empresa(s) cliente(s)</span>
+      <span>Receita bruta total: <strong class="c-accent">${brl(lista.reduce((s,c)=>s+Calc.receita(c),0))}</strong></span>
+      <span>Minhas comissões: <strong class="c-orange">${brl(lista.reduce((s,c)=>s+calcComissaoRec(c),0))}</strong></span>
+    </div>`;
+
+  showRel(`Por Empresa Cliente${labelFiltro()} (${sorted.length} clientes)`, resumo + cards,
+    function(){Export.csv(
+      ['Empresa Cliente','Estagiários','CLTs','Agências','Receita Bruta','Minhas Comissões'],
+      sorted.map(([emp,d])=>[emp,d.est,d.clt,[...d.agencias].join('/')||'—',brl(d.recBruta),brl(d.comissao)])
+    ,'por_empresa.csv')}, null);
+}
+
+// ─── POR TIPO DE ORIGEM ─────────────────────────────────────
+function relPorOrigem() {
+  contratos = CC.getContratos();
+  const lista = aplicarFiltros(contratos);
+  const label = {agencia:'Via Agência',direta:'Direta',indicacao:'Indicação',outros:'Outros'};
+  const mapa = {agencia:{},direta:{},indicacao:{},outros:{}};
+  lista.forEach(c => {
+    const orig = c.tipoOrigem || 'agencia';
+    if (!mapa[orig]) mapa[orig] = {};
+    if (!mapa[orig]._list) mapa[orig]._list = [];
+    mapa[orig]._list = mapa[orig]._list || [];
+    mapa[orig]._list.push(c);
+  });
+
+  const totBruta = lista.reduce((s,c)=>s+Calc.receita(c),0);
+  const totCom   = lista.reduce((s,c)=>s+calcComissaoRec(c),0);
+
+  const blocos = Object.entries(label).map(([key, lbl]) => {
+    const grupo = lista.filter(c=>(c.tipoOrigem||'agencia')===key);
+    if (!grupo.length) return '';
+    const bruta = grupo.reduce((s,c)=>s+Calc.receita(c),0);
+    const com   = grupo.reduce((s,c)=>s+calcComissaoRec(c),0);
+    const pct   = totBruta ? Math.round(bruta/totBruta*100) : 0;
+    const agUnicas = [...new Set(grupo.map(c=>(c.agencia||'').trim()).filter(Boolean))];
+    return `
+      <div style="margin-bottom:1.2rem;padding:1rem;background:rgba(255,255,255,.02);border:1px solid rgba(255,255,255,.07);border-radius:12px">
+        <div class="seg-header">
+          <div>
+            <div class="seg-title">${lbl}</div>
+            <div class="seg-sub">${grupo.length} contrato(s)${agUnicas.length?` · ${agUnicas.join(', ')}`:''}</div>
+          </div>
+          <div style="text-align:right">
+            <div class="seg-val">${brl(bruta)}</div>
+            <div class="seg-sub">${pct}% do total · Comissão: <strong style="color:#f39c12">${brl(com)}</strong></div>
+          </div>
+        </div>
+        <div class="seg-bar"><div class="seg-bar-fill" style="width:${pct}%"></div></div>
+      </div>`;
+  }).join('');
+
+  const resumo = `<div style="margin-bottom:1rem;display:flex;gap:1.5rem;flex-wrap:wrap;font-size:.8rem">
+    <span>Receita bruta total: <strong class="c-accent">${brl(totBruta)}</strong></span>
+    <span>Minhas comissões: <strong class="c-orange">${brl(totCom)}</strong></span>
+  </div>`;
+
+  showRel(`Por Tipo de Origem${labelFiltro()}`, resumo + blocos,
+    function(){
+      const rows = [];
+      Object.entries(label).forEach(([key, lbl]) => {
+        const grupo = lista.filter(c=>(c.tipoOrigem||'agencia')===key);
+        grupo.forEach(c => rows.push([lbl,c.agencia||'—',c.nome,c.empresa,c.tipo==='estagiario'?'Estágio':'CLT',brl(Calc.receita(c)),calcComissaoRec(c)>0?brl(calcComissaoRec(c)):'-',c.situacao]));
+      });
+      Export.csv(['Tipo Origem','Agência','Nome','Empresa','Tipo','Receita Bruta','Minha Comissão','Situação'],rows,'por_origem.csv');
+    }, null);
+}
+
+// ─── MINHAS COMISSÕES ───────────────────────────────────────
+function relMinhasComissoes() {
+  contratos = CC.getContratos();
+  const lista = aplicarFiltros(contratos).filter(c => calcComissaoRec(c) > 0 || c.tipoComissao);
+  const totalCom = lista.reduce((s,c)=>s+calcComissaoRec(c),0);
+  const totalBruta = lista.reduce((s,c)=>s+Calc.receita(c),0);
+  const recorrente = lista.filter(c=>c.tipo==='estagiario'&&c.situacao==='ativo').reduce((s,c)=>s+calcComissaoRec(c),0);
+  const unico      = lista.filter(c=>c.tipo==='clt').reduce((s,c)=>s+calcComissaoRec(c),0);
+
+  const html = `
+    <div style="display:flex;gap:1.2rem;flex-wrap:wrap;margin-bottom:1rem">
+      <div style="background:rgba(243,156,18,.08);border:1px solid rgba(243,156,18,.2);border-radius:10px;padding:.8rem 1.2rem">
+        <div style="font-size:1.2rem;font-weight:900;color:#f39c12">${brl(totalCom)}</div>
+        <div style="font-size:.62rem;color:var(--muted)">TOTAL COMISSÕES</div>
+      </div>
+      <div style="background:rgba(59,130,246,.08);border:1px solid rgba(59,130,246,.18);border-radius:10px;padding:.8rem 1.2rem">
+        <div style="font-size:1.2rem;font-weight:900;color:var(--accent)">${brl(recorrente)}/mês</div>
+        <div style="font-size:.62rem;color:var(--muted)">RECORRENTE (ESTÁGIO ATIVOS)</div>
+      </div>
+      <div style="background:rgba(46,204,113,.08);border:1px solid rgba(46,204,113,.18);border-radius:10px;padding:.8rem 1.2rem">
+        <div style="font-size:1.2rem;font-weight:900;color:#2ecc71">${brl(unico)}</div>
+        <div style="font-size:.62rem;color:var(--muted)">ÚNICO (CLTs HISTÓRICO)</div>
+      </div>
+      <div style="background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);border-radius:10px;padding:.8rem 1.2rem">
+        <div style="font-size:1.2rem;font-weight:900">${totalBruta>0?(totalCom/totalBruta*100).toFixed(1):0}%</div>
+        <div style="font-size:.62rem;color:var(--muted)">DA RECEITA BRUTA</div>
+      </div>
+    </div>
+    <table><thead><tr><th>Nome</th><th>Tipo</th><th>Empresa Cliente</th><th>Agência/Origem</th><th>Receita Bruta</th><th>Tipo Comissão</th><th>💰 Minha Comissão</th><th>Situação</th></tr></thead>
+    <tbody>${lista.map(c=>{
+      const com = calcComissaoRec(c);
+      const tipoCom = c.tipoComissao==='pct'?`${c.comissaoRec}% s/ bruto`:c.tipoComissao==='fixo'?`R$ fixo`:'-';
+      return`<tr>
+        <td><strong>${c.nome}</strong></td>
+        <td><span class="tag ${c.tipo==='estagiario'?'tag-accent':'tag-blue'}">${c.tipo==='estagiario'?'Estágio':'CLT'}</span></td>
+        <td>${c.empresa}</td>
+        <td style="font-size:.72rem">${descOrigem(c)||'—'}</td>
+        <td>${brl(Calc.receita(c))}${c.tipo==='estagiario'?'<span style="font-size:.6rem;opacity:.5">/mês</span>':'<span style="font-size:.6rem;opacity:.5"> único</span>'}</td>
+        <td style="font-size:.72rem;color:var(--muted)">${tipoCom}</td>
+        <td class="fw8" style="color:#f39c12;font-size:.9rem">${brl(com)}${c.tipo==='estagiario'?'<span style="font-size:.6rem;opacity:.6">/mês</span>':''}</td>
+        <td>${c.situacao}</td></tr>`;
+    }).join('')}
+    </tbody></table>`;
+
+  showRel(`Minhas Comissões${labelFiltro()} (${lista.length} contratos)`, html,
+    function(){Export.csv(
+      ['Nome','Tipo','Empresa','Agência/Origem','Receita Bruta','Tipo Comissão','Minha Comissão','Situação'],
+      lista.map(c=>[c.nome,c.tipo==='estagiario'?'Estágio':'CLT',c.empresa,descOrigem(c)||'—',brl(Calc.receita(c)),c.tipoComissao||'-',brl(calcComissaoRec(c)),c.situacao])
+    ,'minhas_comissoes.csv')}, null);
+}
+
+// ─── VENCIMENTOS ───────────────────────────────────────────
+function relVencimentos() {
+  contratos = CC.getContratos();
+  cfg = CC.getConfig();
+  const base = aplicarFiltros(contratos.filter(c=>c.tipo==='estagiario'&&c.situacao==='ativo'));
+  const prox=[];
+  base.forEach(c=>{ Calc.periodos(c,cfg).forEach(p=>{ if((p.status==='ativo'||p.status==='warn')&&p.dias<=90) prox.push({c,p}); }); });
+  prox.sort((a,b)=>a.p.dias-b.p.dias);
+  const html=`<table><thead><tr><th>Estagiário</th><th>Empresa Cliente</th><th>Agência/Origem</th><th>Período</th><th>Fim do Período</th><th>Dias Restantes</th><th>Status</th></tr></thead>
+    <tbody>${prox.map(({c,p})=>`<tr>
+      <td>${c.nome}</td><td>${c.empresa}</td>
+      <td style="font-size:.72rem">${descOrigem(c)||'—'}</td>
+      <td>${p.num}º</td><td>${Fmt.dt(p.fim)}</td>
+      <td><b style="color:${p.dias<=30?'#f39c12':'#2ecc71'}">${p.dias} dias</b></td>
+      <td><span class="tag ${p.status==='warn'?'tag-orange':'tag-green'}">${p.status==='warn'?'Vencendo':'Ativo'}</span></td></tr>`).join('')}
+    </tbody></table>`;
+  showRel(`Vencimentos próximos 90 dias${labelFiltro()} (${prox.length})`,html,
+    function(){Export.csv(['Nome','Empresa','Agência/Origem','Período','Fim','Dias'],prox.map(({c,p})=>[c.nome,c.empresa,descOrigem(c)||'—',p.num+'º',Fmt.dt(p.fim),p.dias]),'vencimentos.csv')},
+    function(){Export.word(`<h2>Próximos Vencimentos${labelFiltro()}</h2>${document.getElementById('relConteudo').innerHTML}`,'vencimentos.doc')});
+}
+
+// ─── ALERTAS ───────────────────────────────────────────────
+function relAlertas() {
+  contratos = CC.getContratos();
+  cfg = CC.getConfig();
+  const base = aplicarFiltros(contratos.filter(c=>c.tipo==='estagiario'&&c.situacao==='ativo'));
+  const items=[];
+  base.forEach(c=>{ Calc.periodos(c,cfg).forEach(p=>{ if(p.status==='warn'||p.status==='vencido') items.push({c,p}); }); });
+  const html=items.length===0
+    ?`<div class="empty"><span class="ico">✅</span><p>Nenhum alerta ativo</p></div>`
+    :`<table><thead><tr><th>Estagiário</th><th>Empresa Cliente</th><th>Agência/Origem</th><th>Período</th><th>Vencimento</th><th>Dias</th><th>Urgência</th></tr></thead>
+    <tbody>${items.map(({c,p})=>`<tr>
+      <td><b>${c.nome}</b></td><td>${c.empresa}</td>
+      <td style="font-size:.72rem">${descOrigem(c)||'—'}</td>
+      <td>${p.num}º</td><td>${Fmt.dt(p.fim)}</td>
+      <td class="${p.dias<0?'c-red':'c-orange'} fw8">${p.dias<0?Math.abs(p.dias)+'d atrás':p.dias+'d'}</td>
+      <td><span class="tag ${p.status==='vencido'?'tag-red':'tag-orange'}">${p.status==='vencido'?'VENCIDO':'VENCENDO'}</span></td></tr>`).join('')}
+    </tbody></table>`;
+  showRel(`Alertas Ativos${labelFiltro()} (${items.length})`,html,
+    function(){Export.csv(['Nome','Empresa','Agência/Origem','Período','Vencimento','Dias','Status'],items.map(({c,p})=>[c.nome,c.empresa,descOrigem(c)||'—',p.num+'º',Fmt.dt(p.fim),p.dias,p.status]),'alertas.csv')},
+    function(){Export.word(`<h2>Alertas Ativos${labelFiltro()}</h2>${document.getElementById('relConteudo').innerHTML}`,'alertas.doc')});
+}
+
+// ─── INIT ──────────────────────────────────────────────────
+document.addEventListener('DOMContentLoaded', async () => {
+  await new Promise(resolve => {
+    if (window._ccAccessToken !== undefined) { resolve(); return; }
+    const t = setInterval(() => { if (window._ccAccessToken !== undefined) { clearInterval(t); resolve(); } }, 50);
+    setTimeout(() => { clearInterval(t); resolve(); }, 5000);
+  });
+  cfg = CC.getConfig();
+  try {
+    contratos = await CC.getContratosAsync();
+    CC.set('contratos', contratos);
+  } catch(e) {
+    contratos = CC.getContratos();
+    UI.toast('Usando dados locais (sem conexão)', 'wrn');
+  }
+  popularSelects('');
+
+  // atualiza chips ao mudar qualquer filtro
+  ['fAgencia','fEmpresa','fTipoOrigem','fSituacao'].forEach(id => {
+    document.getElementById(id)?.addEventListener('change', atualizarChips);
+  });
+});
+</script>
+</body>
+</html>
