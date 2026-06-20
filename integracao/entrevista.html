@@ -5444,14 +5444,6 @@ function coletarDados() {
   };
 }
 
-// ── helper: converte qualquer valor em número ou null (nunca string como "Não respondido") ──
-function numOrNull(v) {
-  if (v === null || v === undefined) return null;
-  if (typeof v === 'number' && !isNaN(v)) return v;
-  const n = parseFloat(String(v).replace(',', '.'));
-  return isNaN(n) ? null : n;
-}
-
 // ── SALVAR ──
 async function salvar(dados, ia) {
   const _sv = new URLSearchParams(window.location.search);
@@ -5485,7 +5477,7 @@ async function salvar(dados, ia) {
   const payload = {
     // ── campos originais ──────────────────────────────────────────────────
     entrevista_json:      JSON.stringify(dados.entrevista),
-    fit_score:            numOrNull(ia.fit_score),
+    fit_score:            String(ia.fit_score),
     fit_nivel:            ia.nivel,
     resumo_ia:            ia.resumo_candidato,
     resumo_admin:         ia.resumo_admin,
@@ -5498,18 +5490,18 @@ async function salvar(dados, ia) {
     atualizado_em:        _agora,
 
     // ── campos novos — score breakdown (notas 0-10 por dimensão) ─────────
-    score_experiencia:    numOrNull(_bd.experiencia),
-    score_competencias:   numOrNull(_bd.competencias),
-    score_motivacao:      numOrNull(_bd.motivacao),
-    score_disc:           numOrNull(_bd.disc),
+    score_experiencia:    _bd.experiencia   ?? null,
+    score_competencias:   _bd.competencias  ?? null,
+    score_motivacao:      _bd.motivacao     ?? null,
+    score_disc:           _bd.disc          ?? null,
 
     // ── notas individuais STAR ────────────────────────────────────────────
-    nota_comunicacao:     numOrNull(_nc.comunicacao),
-    nota_resiliencia:     numOrNull(_nc.resiliencia),
-    nota_equipe:          numOrNull(_nc.equipe),
-    nota_resultados:      numOrNull(_nc.resultados),
-    nota_proatividade:    numOrNull(_nc.proatividade),
-    nota_adaptabilidade:  numOrNull(_nc.adaptabilidade),
+    nota_comunicacao:     _nc.comunicacao    ?? null,
+    nota_resiliencia:     _nc.resiliencia    ?? null,
+    nota_equipe:          _nc.equipe         ?? null,
+    nota_resultados:      _nc.resultados     ?? null,
+    nota_proatividade:    _nc.proatividade   ?? null,
+    nota_adaptabilidade:  _nc.adaptabilidade ?? null,
 
     // ── análise qualitativa STAR (Completo/Parcial/Vago/Não respondido) ───
     star_comunicacao:     _sa.comunicacao    || null,
@@ -5534,18 +5526,18 @@ async function salvar(dados, ia) {
     // ── keywords do currículo vs vaga ─────────────────────────────────────
     keywords_encontradas: (ia.keywords_encontradas||[]).length ? (ia.keywords_encontradas||[]).join(' | ') : null,
     keywords_ausentes:    (ia.keywords_ausentes||[]).length    ? (ia.keywords_ausentes||[]).join(' | ')    : null,
-    kw_score:             numOrNull(ia.kw_score),
-    score_curriculo:      numOrNull(ia.score_curriculo_usado ?? ia.score_curriculo ?? (dados?.curriculo_fit_analise?.score_curriculo ?? null)),
+    kw_score:             ia.kw_score      ?? null,
+    score_curriculo:      ia.score_curriculo_usado ?? ia.score_curriculo ?? (dados?.curriculo_fit_analise?.score_curriculo ?? null),
     nivel_curriculo:      ia.nivel_curriculo  || dados?.curriculo_fit_analise?.nivel_curriculo || null,
 
     // ── score por etapa (entrevista separado do final ponderado) ──────────
-    score_entrevista:      numOrNull(ia.fit_score),
+    score_entrevista:      ia.fit_score                ?? null,
     nivel_entrevista:      ia.nivel                    || null,
     resumo_entrevista:     ia.resumo_entrevista        || null,
-    nota_trajetoria:       numOrNull(ia.notas_competencias?.trajetoria),
-    nota_competencias_ent: numOrNull(ia.notas_competencias?.competencias_ent),
-    nota_motivacao_ent:    numOrNull(ia.notas_competencias?.motivacao_ent),
-    fit_score_ia:          numOrNull(ia.fit_score),
+    nota_trajetoria:       ia.notas_competencias?.trajetoria        ?? null,
+    nota_competencias_ent: ia.notas_competencias?.competencias_ent  ?? null,
+    nota_motivacao_ent:    ia.notas_competencias?.motivacao_ent     ?? null,
+    fit_score_ia:          ia.fit_score                ?? null,
     metodo_calculo:        ia._meta?.model             || null,
   };
   // Inclui email no PATCH para atualizar registros vindos do DISC que ainda não tinham email
@@ -5621,35 +5613,18 @@ async function salvar(dados, ia) {
 
     if (_existingId) {
       // Registro encontrado → atualiza com dados da entrevista (incluindo nova vaga)
-      const _r = await fetch(
+      await fetch(
         `${SB}/rest/v1/disc_historico?id=eq.${_existingId}`,
         { method: 'PATCH', headers: { ..._hdrs, 'Content-Type': 'application/json', 'Prefer': 'return=minimal' }, body: JSON.stringify(payload) }
       );
-      if (!_r.ok) {
-        const _txt = await _r.text().catch(()=> '');
-        console.error('❌❌❌ ENTREVISTA NAO SALVOU (PATCH) — status', _r.status, '—', _txt);
-        try { localStorage.setItem('ultimo_erro_salvar_entrevista', JSON.stringify({ status:_r.status, body:_txt, ts:Date.now() })); } catch(e){}
-      } else {
-        console.log('✅✅✅ Entrevista salva no Supabase (PATCH id=' + _existingId + ')');
-      }
     } else {
       // Registro NÃO existe → cria candidato novo
-      const _r = await fetch(
+      await fetch(
         `${SB}/rest/v1/disc_historico`,
         { method: 'POST', headers: { ..._hdrs, 'Content-Type': 'application/json', 'Prefer': 'return=representation' }, body: JSON.stringify(payloadInsert) }
       );
-      if (!_r.ok) {
-        const _txt = await _r.text().catch(()=> '');
-        console.error('❌❌❌ ENTREVISTA NAO SALVOU (POST) — status', _r.status, '—', _txt);
-        try { localStorage.setItem('ultimo_erro_salvar_entrevista', JSON.stringify({ status:_r.status, body:_txt, ts:Date.now() })); } catch(e){}
-      } else {
-        console.log('✅✅✅ Entrevista salva no Supabase (POST novo registro)');
-      }
     }
-  } catch(e) {
-    console.error('❌❌❌ ENTREVISTA NAO SALVOU (exception):', e);
-    try { localStorage.setItem('ultimo_erro_salvar_entrevista', JSON.stringify({ status:'exception', body:String(e), ts:Date.now() })); } catch(_e){}
-  }
+  } catch(e) { console.warn('Supabase entrevista erro:', e); }
   try { localStorage.setItem(`entrevista_${NOME}_${VAGA}`, JSON.stringify({ ...dados, analise: ia, ts: Date.now() })); } catch(e) {}
 
   // ── Supabase é a fonte única de verdade — email removido ──
@@ -6145,26 +6120,17 @@ async function enviarAnalisseECandidatura() {
     window._lastFitScore = ia.fit_score || 0;
     window._lastFitNivel = ia.nivel || '';
 
+    // Salva no Supabase + envia email em background
+    window._entrevistaSalvarPromise = salvar(dados, ia).catch(e => console.warn('salvar:', e));
+
     toast('✅ Análise enviada! Redirecionando para candidatura...', 'ok');
   } catch(e) {
     console.warn('enviarAnalisseECandidatura erro análise:', e);
-    toast('⚠️ Análise com fallback, salvando e redirecionando...', 'ok');
-    // Garante ia mínimo para salvar mesmo com IA falhando
-    if (!dados.analise) dados.analise = { fit_score: null, nivel: null, resumo_candidato: 'Análise indisponível' };
+    toast('⚠️ Análise falhou, seguindo para candidatura...', 'ok');
   }
 
-  // Salva no Supabase FORA do try/catch da análise — garante que salva mesmo se IA falhar
-  window._entrevistaSalvarPromise = salvar(dados, dados.analise || {}).catch(e => console.warn('salvar:', e));
-
-  // Espera o salvamento no Supabase terminar de verdade antes de sair da página
-  try {
-    await Promise.race([
-      window._entrevistaSalvarPromise,
-      new Promise(resolve => setTimeout(resolve, 8000)) // teto de segurança 8s
-    ]);
-  } catch(e) { console.warn('Aguardando salvar() falhou:', e); }
-
-  irParaCandidatura();
+  // Redireciona para candidatura após pequeno delay
+  setTimeout(() => irParaCandidatura(), 1500);
 }
 
 function fechar(){
