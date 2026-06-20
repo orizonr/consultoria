@@ -3284,7 +3284,7 @@ async function carregarKPIs(){
   }catch(e){}
   // lista negra — chave própria do módulo + fallback localStorage (ambos sempre verificados)
   try{
-    const LN_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inp4aXZkbGpicGRwd2lqdHBvcmZmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODE4OTEyNjEsImV4cCI6MjA5NzQ2NzI2MX0.hTbkdMCzdT-NjqpK7jVSykZ6ucdhucrLhISoC1_kDs0';
+    const LN_KEY = 'sb_publishable_pEbfDDewFmXfBWXg4HtGNw_gb_nOMxb';
     let lnSb = 0, lnLs = 0;
     try{
       const rLN = await fetch(`${SUPABASE_URL}/rest/v1/lista_negra?select=id`,
