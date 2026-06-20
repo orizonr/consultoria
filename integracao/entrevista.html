@@ -1890,8 +1890,8 @@ async function buscarDiscCandidato(nome, email, vaga) {
 }
 
 // Supabase
-const SB  = 'https://yunoxkembhskpnprffoi.supabase.co';
-const KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inl1bm94a2VtYmhza3BucHJmZm9pIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg5Nzg2MzksImV4cCI6MjA5NDU1NDYzOX0.WhkzrBCHThvJaMuLeo6oVPjrWvc_MvfCoyz9B90-Yms';
+const SB  = 'https://zxivdljbpdpwijtporff.supabase.co';
+const KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inp4aXZkbGpicGRwd2lqdHBvcmZmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODE4OTEyNjEsImV4cCI6MjA5NzQ2NzI2MX0.hTbkdMCzdT-NjqpK7jVSykZ6ucdhucrLhISoC1_kDs0';
 
 // Estado global
 let conquistas = [];
@@ -6146,8 +6146,16 @@ async function enviarAnalisseECandidatura() {
     toast('⚠️ Análise falhou, seguindo para candidatura...', 'ok');
   }
 
-  // Redireciona para candidatura após pequeno delay
-  setTimeout(() => irParaCandidatura(), 1500);
+  // Espera o salvamento no Supabase terminar de verdade antes de sair da página
+  // (antes saía em 1.5s fixo e cancelava o PATCH/POST que ainda estava em andamento)
+  try {
+    await Promise.race([
+      window._entrevistaSalvarPromise,
+      new Promise(resolve => setTimeout(resolve, 8000)) // teto de segurança 8s
+    ]);
+  } catch(e) { console.warn('Aguardando salvar() falhou:', e); }
+
+  irParaCandidatura();
 }
 
 function fechar(){
